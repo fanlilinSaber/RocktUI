@@ -9,6 +9,7 @@ import { RKTPage, RKTNavBar } from '@zjos/rocketUI'
 import RKTLoadingDemo from '../demo/RKTLoadingDemo'
 import RKTNavBarDemo from '../demo/RKTNavBarDemo';
 import promptAction from '@ohos.promptAction'
+import RKTItemInputTextDemo from '../demo/RKTItemInputTextDemo';
 
 interface DemoParams{
   title?: string
@@ -36,6 +37,8 @@ struct DetailsPage02 {
           RKTLoadingDemo()
         } else if (this.value == 'RKTNavBarDemo') {
           RKTNavBarDemo()
+        } else if (this.value == 'RKTItemInputTextDemo') {
+          RKTItemInputTextDemo()
         }
       }
 

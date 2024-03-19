@@ -7,7 +7,6 @@
 import { RKTProgress, RKTProgressStyle } from "@zjos/rocketUI"
 import RKTUtil from '@zjos/rocketUI/src/main/ets/utils/RKTUtil';
 
-@Entry
 @Component
 export default struct RKTLoadingDemo {
   @State count: number = 0;

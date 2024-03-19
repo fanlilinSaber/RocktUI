@@ -12,7 +12,8 @@ let demos: Demo[]=[
   {text:"使用RKTPage加载Loading",value:"RKTLoadingDemo"},
   {text:"消息提示Toast",value:"RKTToastDemo"},
   {text:"弹出窗口Popup",value:"RKTPopupDemo"},
-  {text:"RKTNavBar使用",value:"RKTNavBarDemo"}
+  {text:"RKTNavBar使用",value:"RKTNavBarDemo"},
+  {text:"ItemInputText",value:"RKTItemInputTextDemo"}
 ];
 
 @Entry
