@@ -1,6 +1,6 @@
 export { add } from "./utils/Calc"
 
-export { RKTProgress, RKTProgressStyle } from "./components/RKTProgress"
+export { RKTProgress, RKTProgressStyle, RKTProgressUtil } from "./components/RKTProgress"
 
 export { RKTPage } from "./pageFrames/RKTPage"
 

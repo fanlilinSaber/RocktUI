@@ -15,22 +15,6 @@ export class RKTUtil {
     // let context = getContext(x).createModuleContext('rocketUI') as common.UIAbilityContext
   }
 
-  /**
-   * 加载
-   * @param style
-   * @param message
-   */
-  public static showLoading(style?: RKTProgressStyle, message?: string) {
-    let data = {
-      "style": style,
-      "message": message
-    }
-    RKTEventBus.emit("showLoading", data)
-  }
-
-  public static hideLoading() {
-    RKTEventBus.emit("hideLoading")
-  }
 }
 
 export default RKTUtil

@@ -19,7 +19,7 @@ export interface RKTEvent {
   // 事件名称
   eventName: string
   // 事件优先级
-  priority?: emitter.EventPriority;
+  priority?: emitter.EventPriority
   // 响应事件时的回调, 可通过 RKTEventBus.on 第2个参数设置
   callback?: (eventData: RKTEventData) => void
   // 谁来响应 谁on就写谁的this
@@ -54,7 +54,7 @@ export class RKTEventBus {
         let data = JSON.parse(dataStr)
         eventData.data = data
       }
-      this.onEvent(eventData);
+      this.onEvent(eventData)
     });
   }
 
@@ -62,7 +62,7 @@ export class RKTEventBus {
     if(!RKTEventBus.instance){
       RKTEventBus.instance = new RKTEventBus()
     }
-    return RKTEventBus.instance;
+    return RKTEventBus.instance
   }
 
   /**
@@ -75,7 +75,7 @@ export class RKTEventBus {
     let eventName = eventData.eventName
     if(!eventName || !this.subscribes.has(eventName)) { return }
 
-    let subs = this.subscribes.get(eventName);
+    let subs = this.subscribes.get(eventName)
     for (let [key, value] of subs) {
       try {
         value.callback && value.callback(eventData);
@@ -92,20 +92,20 @@ export class RKTEventBus {
    * @param event 事件对象
    * @param callback 响应事件时的回调，也可通过事件对象构建
    */
-  public on(event: RKTEvent, callback?: (data: RKTEventData) => void) {
+  public on(event: RKTEvent, callback?: (next: RKTEventData) => void) {
     try {
-      let eventName = event.eventName;
+      let eventName = event.eventName
       if (callback) { event.callback = callback }
       if (!this.subscribes.has(eventName)) {
-        this.subscribes.set(eventName, new Map());
+        this.subscribes.set(eventName, new Map())
       }
 
-      let eventTarget = event.target;
-      let subs = this.subscribes.get(eventName);
+      let eventTarget = event.target
+      let subs = this.subscribes.get(eventName)
       // 如果外部传了 target 则使用 target 作为key来管理消息事件，如果没有则分配随机key管理
       var subKey = eventTarget ? eventTarget : eventName + "." + subs.size
       if (!subs.has(subKey)) {
-        subs.set(subKey, event);
+        subs.set(subKey, event)
       }
       hilog.info(RKT_LOG_DOMAIN , `RocketUI`, `RKTEventBus.on() 注册事件${eventName}成功`)
     } catch (error) {
@@ -115,11 +115,12 @@ export class RKTEventBus {
 
   /**
    * 发送事件消息
-   * @param eventData 事件消息体
+   * @param eventName 事件名称
+   * @param data 传送的数据
    */
   public emit(eventName: string, data?: any){
     try {
-      let routerState = router.getState();
+      let routerState = router.getState()
       var newData = {
         'pathName': routerState.path + routerState.name,
         'eventName': eventName
@@ -135,7 +136,7 @@ export class RKTEventBus {
   }
 
   /**
-   * 取消注册事件
+   * 关闭事件（注册地销毁事件也要跟随销毁，不然有内存泄露）
    * @param eventName 要取消的事件名称
    * @param target 要取消该事件的目标（this）
    */
@@ -144,14 +145,14 @@ export class RKTEventBus {
     // 如果没有指定 target；取消注册该事件的所有目标
     if (!target) {
       this.subscribes.delete(eventName)
-      hilog.info(RKT_LOG_DOMAIN, `RocketUI`, "RKTEventBus.off() 取消注册事件" + eventName)
+      hilog.info(RKT_LOG_DOMAIN, `RocketUI`, "RKTEventBus.off() 关闭事件" + eventName)
     }
 
     // 如果指定了 target；则单独取消注册该事件的目标
-    let subs = this.subscribes.get(eventName);
+    let subs = this.subscribes.get(eventName)
     if (subs.has(target)) {
       subs.delete(target);
-      hilog.info(RKT_LOG_DOMAIN, `RocketUI`, "RKTEventBus.off() 取消注册事件" + eventName + target)
+      hilog.info(RKT_LOG_DOMAIN, `RocketUI`, "RKTEventBus.off() 关闭事件" + eventName + target)
     }
   }
 }

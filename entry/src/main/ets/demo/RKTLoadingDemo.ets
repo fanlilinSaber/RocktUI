@@ -4,7 +4,7 @@
  * Descrobe:
  */
 
-import { RKTProgress, RKTProgressStyle } from "@zjos/rocketUI"
+import { RKTProgressUtil, RKTProgressStyle } from "@zjos/rocketUI"
 import RKTUtil from '@zjos/rocketUI/src/main/ets/utils/RKTUtil';
 
 @Entry
@@ -14,20 +14,10 @@ export default struct RKTLoadingDemo {
 
   build() {
     Column() {
-      // Text(`loading 测试：click times: ${this.count}`)
-      //   .fontSize(30)
-      //   .fontWeight(FontWeight.Bold)
-      //   .onClick(() => {
-      //   })
-      //   .margin({
-      //     top: 10
-      //   })
-      //
-      // Button(`click times: ${this.count}`)
-      //   .onClick(() => {
-      //     this.count += 1;
-      //   })
       this.test01()
+      this.test02()
+      this.test03()
+      this.test04()
     }
     .width('100%')
     .height('100%')
@@ -38,10 +28,62 @@ export default struct RKTLoadingDemo {
       .fontSize(30)
       .fontWeight(FontWeight.Bold)
       .onClick(() => {
-        RKTUtil.showLoading()
+
+        RKTProgressUtil.showLoading()
 
         setTimeout(()=>{
-          RKTUtil.hideLoading()
+          RKTProgressUtil.hideLoading()
+        },3000)
+      })
+      .margin({
+        top: 10
+      })
+  }
+
+  @Builder test02() {
+    Text("沙漏动画loding")
+      .fontSize(30)
+      .fontWeight(FontWeight.Bold)
+      .onClick(() => {
+
+        RKTProgressUtil.showLoading(RKTProgressStyle.sandClock, '正在抓取数据请稍后...')
+
+        setTimeout(()=>{
+          RKTProgressUtil.hideLoading()
+        },3000)
+      })
+      .margin({
+        top: 10
+      })
+  }
+
+  @Builder test03() {
+    Text("'经营帮'字跳舞loding")
+      .fontSize(30)
+      .fontWeight(FontWeight.Bold)
+      .onClick(() => {
+
+        RKTProgressUtil.showLoading(RKTProgressStyle.wordDance)
+
+        setTimeout(()=>{
+          RKTProgressUtil.hideLoading()
+        },3000)
+      })
+      .margin({
+        top: 10
+      })
+  }
+
+  @Builder test04() {
+    Text("全局loding")
+      .fontSize(30)
+      .fontWeight(FontWeight.Bold)
+      .onClick(() => {
+
+        RKTProgressUtil.showLoading()
+
+        setTimeout(()=>{
+          RKTProgressUtil.hideLoading()
         },3000)
       })
       .margin({

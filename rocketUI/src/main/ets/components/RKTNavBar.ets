@@ -54,6 +54,7 @@ export struct RKTNavBar {
   // 自定义右菜单（受内部约束影响，不想被约束就使用`customTitle`）
   @BuilderParam customRightMemus?: CustomBuilder = null
 
+  // MARK: - 布局UI
   build() {
     Column() {
       // 这是留个占位；可能要适配 挖孔屏、刘海屏、瀑布屏等不可用屏幕区域信息

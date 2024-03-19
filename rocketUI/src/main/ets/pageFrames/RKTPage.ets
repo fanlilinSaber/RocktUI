@@ -47,6 +47,7 @@ export struct RKTPage {
   // 尾随闭包初始化 (此场景下自定义组件内有且仅有一个使用@BuilderParam装饰的属性。)
   @BuilderParam closer: () => void
 
+  // MARK: -布局UI
   build() {
     Column() {
       if (this.navBar) {
@@ -66,17 +67,13 @@ export struct RKTPage {
       if (this.loadingAbility) {
         RKTProgress({ show: false })
       }
+
+      if (this.toastAbility) {
+
+      }
     }
     .width('100%')
     .height('100%')
     .backgroundColor('#F1F3F5')
-  }
-
-  @Builder leftBackBar() {
-    Column() {
-      Text("加载loding")
-        .fontSize(50)
-        .fontWeight(FontWeight.Bold)
-    }
   }
 }

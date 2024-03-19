@@ -80,9 +80,9 @@ export default struct RKTLoadingDemo {
     RKTEventBus.on({
       eventName: '测试showLoading',
       target: this},
-      (data: RKTEventData) => {
+      (next: RKTEventData) => {
 
-      hilog.info(0xFFFF00 , `RocketUI`, "测试showLoading事件" + JSON.stringify(data))
+      hilog.info(0xFFFF00 , `RocketUI`, "测试showLoading事件" + JSON.stringify(next))
     })
   }
 

@@ -10,6 +10,7 @@ import common from '@ohos.app.ability.common'
 import router from '@ohos.router'
 import hilog from '@ohos.hilog'
 import RKTEventBus, { RKTEventData } from '../utils/RKTEventBus'
+import thermal from '@ohos.thermal'
 
 /**
  * 样式
@@ -25,75 +26,70 @@ export enum RKTProgressStyle {
   forward
 }
 
+/**
+ * RKTProgress 组件快速调用接口（需要配合RKTPage使用）
+ */
+export class RKTProgressUtil {
+  /**
+   * 加载loding
+   * @param style 样式
+   * @param message 文本
+   */
+  public static showLoading(style: RKTProgressStyle = RKTProgressStyle.rotate, message?: string) {
+    let data = {
+      "style": style,
+      "message": message
+    }
+    RKTEventBus.emit("showLoading", data)
+  }
+
+  /**
+   * 隐藏当前loding
+   */
+  public static hideLoading() {
+    RKTEventBus.emit("hideLoading")
+  }
+
+  /**
+   * 隐藏所有loding
+   */
+  public static hideAllLoading() {
+    RKTEventBus.emit("hideAllLoading")
+  }
+}
+
 @Component
 @CustomDialog
 export struct RKTProgress {
   controller: CustomDialogController
   message?: string = ''
   style: RKTProgressStyle = RKTProgressStyle.rotate
+
   // 是否显示
   @State show: boolean = true
-  @State refreshFlag: number = 1
+  @State refreshFlag: boolean = true
 
   private renderingSettings: RenderingContextSettings = new RenderingContextSettings(true)
   private canvasRenderingContext: CanvasRenderingContext2D = new CanvasRenderingContext2D(this.renderingSettings)
   private animateItem: AnimationItem | null = null
   private mLottieData: object | null = null
   private animateName: string = "rocketProgress"
-  private animateSize: SizeOptions = { width: 50, height: 50 }
 
+  private animateSize: SizeOptions = { width: 50, height: 50 }
   private boxBorderSize: SizeOptions = { width: 80, height: 80 }
   private boxBorderRadius: Length = 10
   private boxBackgroundColor: ResourceColor = '0x88000000'
 
   // 当前是否已经加载
   private isLoaded: boolean = false
-  private onReady: Boolean = false
+  private onReady: boolean = false
   // 当前页面路径, 只有当前页面中的loading才会响应,其他页面的事件不响应
   private currentPagePath: string = ""
 
   // MARK: - 组件即将出现时
   async aboutToAppear() {
     this.registerEvent()
-
-    let resStr = util.TextDecoder.create('utf-8', { ignoreBOM: true });
-    let context = getContext(this).createModuleContext('rocketUI') as common.UIAbilityContext
-
-    let animatePath = '';
-    switch (this.style) {
-      case RKTProgressStyle.sandClock:
-        animatePath = 'loading_shalou.json'
-        this.animateSize = { width: 62, height: 62 }
-        this.boxBorderSize = { width: 100, height: 100 }
-        this.boxBorderRadius = 10
-        this.boxBackgroundColor = '#80000000'
-        break;
-      case RKTProgressStyle.wordDance:
-        animatePath = 'loading_7.json'
-        this.animateSize = { width: 200, height: 200 }
-        this.boxBorderSize = { width: 220, height: 220 }
-        this.boxBorderRadius = 0
-        this.boxBackgroundColor = Color.Transparent
-        break;
-      case RKTProgressStyle.rotate:
-      default:
-        animatePath = 'loading_2.json'
-        this.animateSize = { width: 80, height: 80 }
-        this.boxBorderSize = { width: 80, height: 80 } // 因动画属性有内动画边距这里保持一致
-        this.boxBorderRadius = 10
-        this.boxBackgroundColor = '#80000000'
-        break;
-    }
-
-    // 这里是一个异步方法，可能在build - Canvas - onReady会先执行
-    let buffer = await context.resourceManager.getRawFileContent(animatePath)
-    if(buffer === null || buffer === undefined){ return; }
-
-    let lottieStr = resStr.decodeWithStream(new Uint8Array(buffer))
-    this.mLottieData = JSON.parse(lottieStr);
-    if (!this.isLoaded) {
-      this.startAnimation()
-    }
+    this.reloadConfig()
   }
 
   // MARK: - 组件即将消失
@@ -101,20 +97,23 @@ export struct RKTProgress {
     lottie.destroy(this.animateName)
     RKTEventBus.off('showLoading', this)
     RKTEventBus.off('hideLoading', this)
+    RKTEventBus.off('hideAllLoading', this)
     hilog.info(0xFFFF00 , `RocketUI`, "RKTProgress lottie动画销毁了" )
   }
 
   // MARK: -布局UI
   build() {
     Column() {
-      if (this.refreshFlag) {
+      if (this.show) {
         Column() {
           Canvas(this.canvasRenderingContext)
             .size(this.animateSize)
             .alignSelf(ItemAlign.Center).align(Alignment.Center)
             .onReady(() => {
-              // 可在此生命回调周期中加载动画，可以保证动画尺寸正确
+              this.onReady = true
+              // 在此生命回调周期中加载动画，可以保证动画尺寸正确
               this.startAnimation()
+              hilog.info(0xFFFF00 , `RocketUI`, "RKTProgress onReady")
             })
             .onDisAppear(() => {
               lottie.destroy(this.animateName);
@@ -142,12 +141,13 @@ export struct RKTProgress {
       y: 0,
     })
     .zIndex(9999)
-    .visibility(this.show ? Visibility.Visible : Visibility.None);
+    .visibility(this.show ? Visibility.Visible : Visibility.None)
   }
 
   // MARK: - 加载配置
-  async loadConfig() {
-    let resStr = util.TextDecoder.create('utf-8', { ignoreBOM: true });
+  async reloadConfig() {
+    this.mLottieData = null
+    let resStr = util.TextDecoder.create('utf-8', { ignoreBOM: true })
     let context = getContext(this).createModuleContext('rocketUI') as common.UIAbilityContext
 
     let animatePath = '';
@@ -178,7 +178,7 @@ export struct RKTProgress {
 
     // 这里是一个异步方法，可能在build - Canvas - onReady会先执行
     let buffer = await context.resourceManager.getRawFileContent(animatePath)
-    if(buffer === null || buffer === undefined){ return; }
+    if(buffer === null || buffer === undefined){ return }
 
     let lottieStr = resStr.decodeWithStream(new Uint8Array(buffer))
     this.mLottieData = JSON.parse(lottieStr);
@@ -189,6 +189,7 @@ export struct RKTProgress {
 
   // MARK: - 开始动画
   startAnimation() {
+    if (!this.onReady) { return }
     if (this.animateItem == null && this.mLottieData != null) {
       let contexts = getContext(this).createModuleContext('rocketUI') as common.UIAbilityContext
       if (contexts == null) { return }
@@ -209,8 +210,11 @@ export struct RKTProgress {
 
   // 销毁当前动画
   destroyAnimation() {
-    this.animateItem = null
     lottie.destroy(this.animateName)
+    this.animateItem = null
+    this.isLoaded = false
+    this.onReady = false
+    this.refreshFlag = false
   }
 
   // MARK: - 注册事件
@@ -222,42 +226,53 @@ export struct RKTProgress {
       // 注册显示事件
       RKTEventBus.on({
         eventName: "showLoading",
-        target: this, callback: (data: RKTEventData) => {
+        target: this, callback: (next: RKTEventData) => {
           // 不是当前页面发来的不处理
-          if (data.pathName != this.currentPagePath) { return }
+          if (next.pathName != this.currentPagePath) { return }
 
-          let message = data["message"] as string
+          let message = next.data["message"] as string
           if (typeof message != 'undefined' && message.length > 0) {
             this.message = message
           } else {
-            this.message = this.message
+            this.message = null
           }
 
-          let style = data["style"] as RKTProgressStyle
-          if (typeof style != 'undefined' && style != this.style) {
+          let style = next.data["style"] as RKTProgressStyle
+          if (style != this.style) {
             this.style = style
             this.destroyAnimation()
-            this.loadConfig()
-            this.refreshFlag += 1
+            this.reloadConfig()
+          } else {
+            this.startAnimation()
           }
 
-          this.destroyAnimation()
           this.show = true
-          this.refreshFlag += 1
-          this.startAnimation()
+          this.refreshFlag = true
         }
       })
 
       // 注册隐藏事件
       RKTEventBus.on({
         eventName: "hideLoading",
-        target: this, callback: (data: RKTEventData) => {
+        target: this, callback: (next: RKTEventData) => {
           // 不是当前页面发来的不处理
-          if (data.pathName != this.currentPagePath) { return }
+          if (next.pathName != this.currentPagePath) { return }
 
           this.show = false
+          this.destroyAnimation()
         }
       })
+
+      // 注册隐藏事件
+      RKTEventBus.on({
+        eventName: "hideAllLoading",
+        target: this, callback: (next: RKTEventData) => {
+
+          this.show = false
+          this.destroyAnimation()
+        }
+      })
+
     } catch (error) {
       hilog.info(0xFFFF00 , `RocketUI`, "RKTProgress registerEvent" + error)
     }

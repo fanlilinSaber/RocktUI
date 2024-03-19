@@ -7,6 +7,5 @@
   "license": "",
   "dependencies": {
     "@zjos/rocketUI": "file:../rocketUI",
-//    "@zjos/eelibrary": "file:../eelibrary"
   }
 }
