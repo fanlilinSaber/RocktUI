@@ -1,5 +1,11 @@
 import promptAction from '@ohos.promptAction'
-import { RKTItemInputTextView, RKTItemInputTextViewObserved, RKTOrientation } from '@zjos/rocketUI'
+import {
+  RKTFieldEntity,
+  RKTItemAddFieldView,
+  RKTItemInputTextView,
+  RKTItemInputTextViewObserved,
+  RKTOrientation
+} from '@zjos/rocketUI'
 
 @Component
 export default struct RKTItemInputTextDemo {
@@ -10,7 +16,7 @@ export default struct RKTItemInputTextDemo {
     leftImage: $r("app.media.icon"),
     leftContent: "水平样式",
     rightContent: "去第二页",
-    leftContentFontColor: "#FFFF0000",
+    leftContentFontColor: "#FFFF0000"
   })
 
   //水平样式(可输入)
@@ -33,6 +39,10 @@ export default struct RKTItemInputTextDemo {
     orientation: RKTOrientation.checkBox,
     leftContent: "勾选样式"
   })
+
+
+  //新增字段，最多5条
+  @State fieldList: Array<RKTFieldEntity> = []
 
   build() {
     Column() {
@@ -84,6 +94,11 @@ export default struct RKTItemInputTextDemo {
 
       //
       RKTItemInputTextView({ mObserved: this.mCheckBoxOb }).margin({ top: 20 })
+
+      //新增字段组件 【+新增】
+      Text("新增字段组件 【+新增】").padding({ top: 20, bottom: 10 })
+      RKTItemAddFieldView({ fieldList: $fieldList })
+
     }
   }
 

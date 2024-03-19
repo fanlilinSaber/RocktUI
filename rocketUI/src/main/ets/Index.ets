@@ -16,5 +16,10 @@ export { RKTUtil } from "./utils/RKTUtil"
 //
 // export default { RKTPage }
 
-export { RKTItemInputTextView,RKTOrientation } from './components/itemInputText/RKTItemInputTextView'
+export { RKTItemInputTextView, RKTOrientation } from './components/itemInputText/RKTItemInputTextView'
+
 export { RKTItemInputTextViewObserved } from './components/itemInputText/RKTItemInputTextViewObserved'
+
+export { RKTItemAddFieldView } from './components/field/RKTItemAddFieldView'
+
+export { RKTFieldEntity } from './components/field/RKTFieldEntity'
