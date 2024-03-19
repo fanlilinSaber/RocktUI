@@ -17,7 +17,6 @@ export interface DemoTabItem {
   desc?: string
 }
 
-@Entry
 @Component
 export default struct RKTLoadingDemo {
 

@@ -8,7 +8,6 @@ import { RKTProgress, RKTProgressStyle } from "@zjos/rocketUI"
 import Prompt from '@system.prompt'
 // import { RKTProgressStyle } from '@zjos/rocketUI/src/main/ets/components/RKTProgress';
 
-@Entry
 @Component
 export default struct LoadingDemo {
 
