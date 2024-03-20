@@ -1,5 +1,5 @@
 import Prompt from '@system.prompt'
-import { RKTFieldEntity } from './RKTFieldEntity'
+import { RKTItemAddFieldEntity } from './RKTItemAddFieldEntity'
 import { RKTItemAddFieldChildView } from './RKTItemAddFieldChildView'
 
 /**
@@ -9,7 +9,7 @@ import { RKTItemAddFieldChildView } from './RKTItemAddFieldChildView'
  */
 @Component
 export struct RKTItemAddFieldView {
-  @Link fieldList: Array<RKTFieldEntity>
+  @Link fieldList: Array<RKTItemAddFieldEntity>
   @State listHeight: number = 0
   @State bottomLine: boolean = false
 
@@ -49,7 +49,7 @@ export struct RKTItemAddFieldView {
                 }
               }
             }
-            this.fieldList.push(new RKTFieldEntity())
+            this.fieldList.push(new RKTItemAddFieldEntity())
           })
       }
       .width("100%")
@@ -59,7 +59,7 @@ export struct RKTItemAddFieldView {
       List() {
         ForEach(this.fieldList, (item, index) => {
           ListItem() {
-            RKTItemAddFieldChildView({ itemData: item, onDateChange: (itemData: RKTFieldEntity) => {
+            RKTItemAddFieldChildView({ itemData: item, onDateChange: (itemData: RKTItemAddFieldEntity) => {
               this.fieldList[index] = itemData
             },
               clickAction: () => {

@@ -22,4 +22,4 @@ export { RKTItemInputTextViewObserved } from './components/itemInputText/RKTItem
 
 export { RKTItemAddFieldView } from './components/field/RKTItemAddFieldView'
 
-export { RKTFieldEntity } from './components/field/RKTFieldEntity'
+export { RKTItemAddFieldEntity } from './components/field/RKTItemAddFieldEntity'
