@@ -1,11 +1,14 @@
 import {
-  RKTProgressUtil, RKTRefreshActionEvent, RKTRefreshComponent, RKTRefreshEnum, RKTRefreshObserved
+  RKTProgressUtil,
+  RKTRefreshActionEvent,
+  RKTRefreshComponent,
+  RKTRefreshEnum,
+  RKTRefreshObserved
 } from '@zjos/rocketUI'
 import promptAction from '@ohos.promptAction'
 
 @Component
 export default struct RKTRefreshDemo {
-
   @State mLiveData: ListItemEntity[] = []
   //控制事件（例如点击、刷新等）
   @Watch("onActionChange") @State mActionEvent: RKTRefreshActionEvent = new RKTRefreshActionEvent()
@@ -26,7 +29,7 @@ export default struct RKTRefreshDemo {
           this.getListData(mObserved)
         }
       })
-    }.backgroundColor("#FFFFFFFF")
+    }.backgroundColor("#FFFFFFFF").zIndex(-1)
   }
 
   @Builder listItemContent($$: {
@@ -48,24 +51,24 @@ export default struct RKTRefreshDemo {
   }
 
   getListData(mObserved: RKTRefreshObserved) {
-      let mLiveData: ListItemEntity[] = []
-      for (let i = 1; i < (mObserved.currentPage > 2 ? 6 : 11); i++) {
-        let item = new ListItemEntity()
-        item.name = "第" + mObserved.currentPage + "页-第" + i + "条数据"
-        mLiveData.push(item)
-      }
-      if (mLiveData.length === mObserved.pageSize) {
-        mObserved.hasMore = true;
-        mObserved.currentPage++;
-      } else {
-        mObserved.hasMore = false;
-      }
-      if (mObserved.isRefreshing) {
-        this.mLiveData = mLiveData
-      } else {
-        this.mLiveData = this.mLiveData.concat(mLiveData)
-      }
-      RKTProgressUtil.hideLoading()
+    let mLiveData: ListItemEntity[] = []
+    for (let i = 1; i < (mObserved.currentPage > 2 ? 6 : 11); i++) {
+      let item = new ListItemEntity()
+      item.name = "第" + mObserved.currentPage + "页-第" + i + "条数据"
+      mLiveData.push(item)
+    }
+    if (mLiveData.length === mObserved.pageSize) {
+      mObserved.hasMore = true;
+      mObserved.currentPage++;
+    } else {
+      mObserved.hasMore = false;
+    }
+    if (mObserved.isRefreshing) {
+      this.mLiveData = mLiveData
+    } else {
+      this.mLiveData = this.mLiveData.concat(mLiveData)
+    }
+    RKTProgressUtil.hideLoading()
   }
 }
 
@@ -73,6 +76,7 @@ export default struct RKTRefreshDemo {
 @Component
 export struct ListItemComponent {
   entity: ListItemEntity
+
   build() {
     Column() {
       Text(this.entity.name).width("100%").height(100)
