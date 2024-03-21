@@ -38,4 +38,7 @@ export { RKTRefreshComponent,
   RKTRefreshEnum,
   RKTRefreshLayout } from './components/refresh/RKTRefreshComponent'
 
+export { RKTCategoryTitleEntity, RKTCategoryTitleView } from './components/category/RKTCategoryTitleView'
+
+export { RKTGridMenuPopupView } from './components/category/RKTGridMenuPopupView'
 
