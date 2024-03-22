@@ -42,3 +42,4 @@ export { RKTCategoryTitleEntity, RKTCategoryTitleView } from './components/categ
 
 export { RKTGridMenuPopupView } from './components/category/RKTGridMenuPopupView'
 
+export { RKTDateTimePicker, RKTDateTimePickerType } from './components/datePicker/RKTDateTimePicker'
