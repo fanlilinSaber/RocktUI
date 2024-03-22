@@ -12,6 +12,7 @@ import promptAction from '@ohos.promptAction'
 import RKTItemInputTextDemo from '../demo/RKTItemInputTextDemo';
 import RKTRefreshDemo from '../demo/RKTRefreshDemo';
 import { RKTPopupDemo } from '../demo/RKTPopupDemo';
+import RKTDialogDemo from '../demo/RKTDialogDemo';
 
 interface DemoParams{
   title?: string
@@ -45,6 +46,8 @@ struct DetailsPage02 {
           RKTRefreshDemo()
         } else if (this.value == 'RKTPopupDemo') {
           RKTPopupDemo()
+        } else if (this.value == 'RKTDialogDemo') {
+          RKTDialogDemo()
         }
       }
 
