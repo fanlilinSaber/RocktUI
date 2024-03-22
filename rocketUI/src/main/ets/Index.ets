@@ -41,4 +41,5 @@ export { RKTRefreshComponent,
 export { RKTCategoryTitleEntity, RKTCategoryTitleView } from './components/category/RKTCategoryTitleView'
 
 export { RKTGridMenuPopupView } from './components/category/RKTGridMenuPopupView'
+export { RKTOptionsPickerDialog } from './components/RKTOptionsPickerDialog'
 
