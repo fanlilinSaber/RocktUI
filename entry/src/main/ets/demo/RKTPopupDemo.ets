@@ -1,8 +1,7 @@
-import {
-  RKTCategoryTitleEntity,
-  RKTCategoryTitleView
-} from '@zjos/rocketUI'
+import { RKTCategoryTitleEntity, RKTCategoryTitleView } from '@zjos/rocketUI'
 import { RKTGridMenuPopupView } from '@zjos/rocketUI'
+import { RKTDateTimePicker } from '@zjos/rocketUI'
+import hilog from '@ohos.hilog'
 
 enum CategoryPopupType {
   Default, //默认
@@ -41,7 +40,19 @@ export struct RKTPopupDemo {
         this.categoryEntityArray[0].isSelect = false
       } })
         .visibility(this.popupType == CategoryPopupType.Menu1 ? Visibility.Visible : Visibility.Hidden)
-    }
 
+      RKTDateTimePicker({
+        titleName: "日期选择器",
+        onEnter: (date) => {
+          hilog.info(0x00, 'RKTDateTimePicker', `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`)
+
+          this.popupType = CategoryPopupType.Default
+          this.categoryEntityArray[1].isSelect = false
+        }, onCancel: () => {
+          this.popupType = CategoryPopupType.Default
+          this.categoryEntityArray[1].isSelect = false
+        } })
+        .visibility(this.popupType == CategoryPopupType.Menu2 ? Visibility.Visible : Visibility.Hidden)
+    }
   }
 }

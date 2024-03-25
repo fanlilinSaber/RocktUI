@@ -44,3 +44,4 @@ export { RKTGridMenuPopupView } from './components/category/RKTGridMenuPopupView
 export { RKTOptionsPickerDialog } from './components/dialog/RKTOptionsPickerDialog'
 export { RKTCommonObservedDialog ,RKTCommonDialogObserved , RKTCommonDialog } from './components/dialog/RKTCommonDialog'
 
+export { RKTDateTimePicker, RKTDateTimePickerType } from './components/datePicker/RKTDateTimePicker'
