@@ -15,7 +15,8 @@ let demos: Demo[]=[
   {text:"RKTNavBar使用",value:"RKTNavBarDemo"},
   {text:"ItemInputText",value:"RKTItemInputTextDemo"},
   {text:"下拉刷新/上拉加载更多",value:"RKTRefreshDemo"},
-  {text:"其它弹窗demo",value:"RKTDialogDemo"}
+  {text:"其它弹窗demo",value:"RKTDialogDemo"},
+  {text:"选择图片/视频demo",value:"RKTSelectPicturesDemo"}
 ];
 
 @Entry

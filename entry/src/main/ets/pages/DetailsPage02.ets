@@ -13,6 +13,7 @@ import RKTItemInputTextDemo from '../demo/RKTItemInputTextDemo';
 import RKTRefreshDemo from '../demo/RKTRefreshDemo';
 import { RKTPopupDemo } from '../demo/RKTPopupDemo';
 import RKTDialogDemo from '../demo/RKTDialogDemo';
+import { RKTSelectPicturesDemo } from '../demo/RKTSelectPicturesDemo';
 
 interface DemoParams{
   title?: string
@@ -48,6 +49,8 @@ struct DetailsPage02 {
           RKTPopupDemo()
         } else if (this.value == 'RKTDialogDemo') {
           RKTDialogDemo()
+        } else if (this.value == 'RKTSelectPicturesDemo') {
+          RKTSelectPicturesDemo()
         }
       }
 
