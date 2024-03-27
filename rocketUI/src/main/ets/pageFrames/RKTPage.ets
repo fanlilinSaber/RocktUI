@@ -4,8 +4,8 @@
  * Descrobe:
  */
 
-import { RKTProgress } from '../components/RKTProgress'
-import { RKTNavBar, RKTNavBarMenuItem } from '../components/RKTNavBar'
+import { RKTProgress } from '../components/progress/RKTProgress'
+import { RKTNavBar, RKTNavBarMenuItem } from '../components/navBar/RKTNavBar'
 import promptAction from '@ohos.promptAction';
 import RKTUtil from '../utils/RKTUtil';
 
@@ -71,6 +71,7 @@ export struct RKTPage {
       if (this.toastAbility) {
 
       }
+
     }
     .width('100%')
     .height('100%')

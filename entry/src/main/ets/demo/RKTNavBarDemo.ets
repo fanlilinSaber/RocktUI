@@ -76,6 +76,8 @@ export default struct RKTLoadingDemo {
     //   // emitter.off(110)
     // })
 
+    // emitter.off(110)
+
     RKTEventBus.on({
       eventName: '测试showLoading',
       target: this},

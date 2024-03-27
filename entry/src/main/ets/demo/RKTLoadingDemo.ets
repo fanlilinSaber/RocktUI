@@ -4,12 +4,32 @@
  * Descrobe:
  */
 
-import { RKTProgressUtil, RKTProgressStyle } from "@zjos/rocketUI"
-import RKTUtil from '@zjos/rocketUI/src/main/ets/utils/RKTUtil';
+import { RKTProgressUtil, RKTProgressStyle, RKTProgressItem } from "@zjos/rocketUI"
+import util from '@ohos.util'
+import common from '@ohos.app.ability.common'
+import promptAction from '@ohos.promptAction'
 
 @Component
 export default struct RKTLoadingDemo {
   @State count: number = 0;
+  progressItem: RKTProgressItem = new RKTProgressItem({ animateSize: { width: 200, height: 200 }, boxBorderSize: { width: 220, height: 220 }, boxBorderRadius: 10, boxBackgroundColor: Color.Red})
+
+
+  async aboutToAppear() {
+
+    let animatePath = 'loading_6.json';
+
+    let resStr = util.TextDecoder.create('utf-8', { ignoreBOM: true })
+    let context = getContext(this) as common.UIAbilityContext
+    // 这里是一个异步方法，可能在build - Canvas - onReady之后执行
+    let buffer = await context.resourceManager.getRawFileContent(animatePath)
+    if(buffer === null || buffer === undefined){ return }
+
+    let lottieStr = resStr.decodeWithStream(new Uint8Array(buffer))
+
+    this.progressItem.lottieData = JSON.parse(lottieStr);
+    promptAction.showToast({ message: 'json动画资源加载完成' })
+  }
 
   build() {
     Column() {
@@ -17,6 +37,7 @@ export default struct RKTLoadingDemo {
       this.test02()
       this.test03()
       this.test04()
+      this.test05()
     }
     .width('100%')
     .height('100%')
@@ -80,6 +101,23 @@ export default struct RKTLoadingDemo {
       .onClick(() => {
 
         RKTProgressUtil.showLoading()
+
+        setTimeout(()=>{
+          RKTProgressUtil.hideLoading()
+        },3000)
+      })
+      .margin({
+        top: 10
+      })
+  }
+
+  @Builder test05() {
+    Text("自定义loding动画")
+      .fontSize(30)
+      .fontWeight(FontWeight.Bold)
+      .onClick(() => {
+
+        RKTProgressUtil.showCustomLoading(this.progressItem)
 
         setTimeout(()=>{
           RKTProgressUtil.hideLoading()

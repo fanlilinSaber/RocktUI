@@ -13,7 +13,7 @@ const RKT_EVENT_ID = 2024313;
 const RKT_LOG_DOMAIN = 0x00503;
 
 /**
- * 事件对象
+ * 订阅事件接口
  */
 export interface RKTEvent {
   // 事件名称
@@ -26,6 +26,9 @@ export interface RKTEvent {
   target?: any
 }
 
+/**
+ * 接收事件接口
+ */
 export interface RKTEventData {
   // 事件名称
   eventName: string
