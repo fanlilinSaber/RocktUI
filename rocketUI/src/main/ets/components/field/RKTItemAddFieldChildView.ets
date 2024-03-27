@@ -1,5 +1,5 @@
 
-import { RKTFieldEntity } from './RKTFieldEntity'
+import { RKTItemAddFieldEntity } from './RKTItemAddFieldEntity'
 
 /**
  * 新增字段组件 【+新增】
@@ -8,10 +8,10 @@ import { RKTFieldEntity } from './RKTFieldEntity'
  */
 @Component
 export struct RKTItemAddFieldChildView {
-  itemData: RKTFieldEntity
+  itemData: RKTItemAddFieldEntity
   clickAction: Function = (result?: string) => {
   }
-  onDateChange: Function = (itemData?: RKTFieldEntity) => {
+  onDateChange: Function = (itemData?: RKTItemAddFieldEntity) => {
   }
 
   build() {

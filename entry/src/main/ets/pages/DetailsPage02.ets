@@ -10,6 +10,10 @@ import RKTLoadingDemo from '../demo/RKTLoadingDemo'
 import RKTNavBarDemo from '../demo/RKTNavBarDemo';
 import promptAction from '@ohos.promptAction'
 import RKTItemInputTextDemo from '../demo/RKTItemInputTextDemo';
+import RKTRefreshDemo from '../demo/RKTRefreshDemo';
+import { RKTPopupDemo } from '../demo/RKTPopupDemo';
+import RKTDialogDemo from '../demo/RKTDialogDemo';
+import { RKTSelectPicturesDemo } from '../demo/RKTSelectPicturesDemo';
 
 interface DemoParams{
   title?: string
@@ -39,6 +43,14 @@ struct DetailsPage02 {
           RKTNavBarDemo()
         } else if (this.value == 'RKTItemInputTextDemo') {
           RKTItemInputTextDemo()
+        } else if (this.value == 'RKTRefreshDemo') {
+          RKTRefreshDemo()
+        } else if (this.value == 'RKTPopupDemo') {
+          RKTPopupDemo()
+        } else if (this.value == 'RKTDialogDemo') {
+          RKTDialogDemo()
+        } else if (this.value == 'RKTSelectPicturesDemo') {
+          RKTSelectPicturesDemo()
         }
       }
 

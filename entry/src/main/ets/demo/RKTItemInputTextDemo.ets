@@ -1,6 +1,6 @@
 import promptAction from '@ohos.promptAction'
 import {
-  RKTFieldEntity,
+  RKTItemAddFieldEntity,
   RKTItemAddFieldView,
   RKTItemInputTextView,
   RKTItemInputTextViewObserved,
@@ -42,7 +42,7 @@ export default struct RKTItemInputTextDemo {
 
 
   //新增字段，最多5条
-  @State fieldList: Array<RKTFieldEntity> = []
+  @State fieldList: Array<RKTItemAddFieldEntity> = []
 
   build() {
     Column() {
