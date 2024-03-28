@@ -2,7 +2,9 @@ import router from '@ohos.router';
 import RKTEventBus, { RKTEventData } from '../../utils/RKTEventBus'
 import { RKTCommonDialogObserved, RKTCommonObservedDialog } from './RKTCommonDialog';
 
+//显示弹窗广播事件常量
 const EVENT_ALERTDIALOG_OPEN: string = "EVENT_ALERTDIALOG_OPEN"
+//隐藏弹窗广播事件常量
 const EVENT_ALERTDIALOG_CLOSE: string = "EVENT_ALERTDIALOG_CLOSE"
 
 /**
@@ -13,10 +15,13 @@ const EVENT_ALERTDIALOG_CLOSE: string = "EVENT_ALERTDIALOG_CLOSE"
  * @time 2024.03.28
  */
 export class RKTAlertDialog {
+  //确定按钮
   onClickEnter: Function = null
+  //取消按钮
   onClickCancel: Function = null
+  //单例模式
   private static mInstance: RKTAlertDialog
-
+  //获取对象
   public static getInstance() {
     if (null == this.mInstance) {
       this.mInstance = new RKTAlertDialog()
@@ -24,6 +29,12 @@ export class RKTAlertDialog {
     return this.mInstance;
   }
 
+  /**
+   * 显示弹窗
+   * @param message 信息
+   * @param onClickEnter 确定按钮点击回调函数
+   * @param onClickCancel 取消按钮点击回调函数
+   */
   static show(message?: string | RKTAlertDialogElement,
               onClickEnter?: Function,
               onClickCancel?: Function
@@ -53,6 +64,9 @@ export class RKTAlertDialog {
     RKTEventBus.emit(EVENT_ALERTDIALOG_OPEN, data)
   }
 
+  /**
+   * 隐藏弹窗
+   */
   static dismiss() {
     RKTEventBus.emit(EVENT_ALERTDIALOG_CLOSE)
   }
@@ -73,6 +87,11 @@ export declare type RKTAlertDialogElement = {
   isOneBtn?: boolean
 }
 
+/**
+ * 自定义弹窗控件
+ * 1、添加自定义弹窗
+ * 2、注册广播事件（包括显示弹窗广播事件、隐藏弹窗广播事件）
+ */
 @Component
 export struct RKTAlertComponent {
 
