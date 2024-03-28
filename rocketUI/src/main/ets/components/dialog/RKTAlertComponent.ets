@@ -23,7 +23,7 @@ export class RKTAlertDialog {
   private static mInstance: RKTAlertDialog
   //获取对象
   public static getInstance() {
-    if (null == this.mInstance) {
+    if (this.mInstance == null || this.mInstance == undefined) {
       this.mInstance = new RKTAlertDialog()
     }
     return this.mInstance;
