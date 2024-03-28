@@ -1,4 +1,9 @@
-import { RKTCommonDialogObserved, RKTCommonObservedDialog, RKTOptionsPickerDialog } from '@zjos/rocketUI'
+import {
+  RKTAlertDialog,
+  RKTCommonDialogObserved,
+  RKTCommonObservedDialog,
+  RKTOptionsPickerDialog
+} from '@zjos/rocketUI'
 import promptAction from '@ohos.promptAction'
 import RKTPDFViewerDemo from './RKTPDFViewerDemo'
 
@@ -97,6 +102,76 @@ export default struct RKTDialogDemo {
             this.mCommonDialogObserved.contentTextColor = "#333333"
             this.mCommonDialogObserved.isOneBtn = false
             this.mMessageDialog.open()
+          })
+
+      }.width("100%").padding(10).justifyContent(FlexAlign.Start)
+
+      Row() {
+        Shape().layoutWeight(1).height(1).backgroundColor("#F5F5F5").margin({ top: 10, bottom: 10 })
+      }
+
+      Row() {
+        Text("设置颜色")
+          .margin({ left: 5 })
+          .padding(5)
+          .fontSize(15)
+          .backgroundColor("#1A333333")
+          .borderRadius(2)
+          .fontColor("#FF333333")
+          .onClick(() => {
+            RKTAlertDialog.show({ content: "默认详细描述等等。。。",
+              contentTextColor: "#FF0000"
+            }, () => {
+              promptAction.showToast({ message: "click" })
+            })
+          })
+
+        Text("设置文案")
+          .margin({ left: 5 })
+          .padding(5)
+          .fontSize(15)
+          .backgroundColor("#1A333333")
+          .borderRadius(2)
+          .fontColor("#FF333333")
+          .onClick(() => {
+            RKTAlertDialog.show("设置文案设置文案设置文案", () => {
+              promptAction.showToast({ message: "click" })
+            })
+          })
+
+        Text("一个按钮")
+          .margin({ left: 5 })
+          .padding(5)
+          .fontSize(15)
+          .backgroundColor("#1A333333")
+          .borderRadius(2)
+          .fontColor("#FF333333")
+          .onClick(() => {
+            RKTAlertDialog.show({ content: "一个按钮",
+              contentTextColor: "#333333"
+            }, () => {
+              promptAction.showToast({ message: "click" })
+            })
+          })
+
+        Text("两个按钮")
+          .margin({ left: 5 })
+          .padding(5)
+          .fontSize(15)
+          .backgroundColor("#1A333333")
+          .borderRadius(2)
+          .fontColor("#FF333333")
+          .onClick(() => {
+
+            RKTAlertDialog.show({ content: "两个按钮",
+              contentTextColor: "#333333",
+              isOneBtn: false
+            }, () => {
+              promptAction.showToast({ message: "点击确定" })
+            }, () => {
+              promptAction.showToast({ message: "点击取消" })
+            })
+
           })
 
       }.width("100%").padding(10).justifyContent(FlexAlign.Start)

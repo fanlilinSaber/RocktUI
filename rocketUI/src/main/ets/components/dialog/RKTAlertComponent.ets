@@ -1,0 +1,189 @@
+import router from '@ohos.router';
+import RKTEventBus, { RKTEventData } from '../../utils/RKTEventBus'
+import { RKTCommonDialogObserved, RKTCommonObservedDialog } from './RKTCommonDialog';
+
+const EVENT_ALERTDIALOG_OPEN: string = "EVENT_ALERTDIALOG_OPEN"
+const EVENT_ALERTDIALOG_CLOSE: string = "EVENT_ALERTDIALOG_CLOSE"
+
+/**
+ * 自定义的提示弹窗工具类
+ * 通过单例的方式实现，使用单例模式是为了实现按钮点击的回调
+ * 注意，这个工具类需要配合RKTPage基类使用
+ * @author shengjie
+ * @time 2024.03.28
+ */
+export class RKTAlertDialog {
+  onClickEnter: Function = null
+  onClickCancel: Function = null
+  private static mInstance: RKTAlertDialog
+
+  public static getInstance() {
+    if (null == this.mInstance) {
+      this.mInstance = new RKTAlertDialog()
+    }
+    return this.mInstance;
+  }
+
+  static show(message?: string | RKTAlertDialogElement,
+              onClickEnter?: Function,
+              onClickCancel?: Function
+  ) {
+    let mInstance = this.getInstance()
+    mInstance.onClickEnter = onClickEnter
+    mInstance.onClickCancel = onClickCancel
+
+    let data = {}
+    if (typeof message === 'string') {
+      data = {
+        "content": message
+      }
+    } else {
+      data = {
+        "content": message.content,
+        "contentTextColor": message.contentTextColor,
+        "enterTextColor": message.enterTextColor,
+        "cancelTextColor": message.cancelTextColor,
+        "enterText": message.enterText,
+        "cancelText": message.cancelText,
+        "title": message.title,
+        "tag": message.tag,
+        "isOneBtn": message.isOneBtn??true,
+      }
+    }
+    RKTEventBus.emit(EVENT_ALERTDIALOG_OPEN, data)
+  }
+
+  static dismiss() {
+    RKTEventBus.emit(EVENT_ALERTDIALOG_CLOSE)
+  }
+}
+
+/**
+ * 支持修改的参数
+ */
+export declare type RKTAlertDialogElement = {
+  content?: string
+  contentTextColor?: string
+  enterTextColor?: string
+  cancelTextColor?: string
+  enterText?: string
+  cancelText?: string
+  title?: string
+  tag?: string
+  isOneBtn?: boolean
+}
+
+@Component
+export struct RKTAlertComponent {
+
+  //弹窗state
+  @State mCommonDialogObserved: RKTCommonDialogObserved = new RKTCommonDialogObserved({
+    content: "",
+    //默认字体颜色
+    contentTextColor: "#FF123123",
+    isOneBtn: false
+  })
+
+  aboutToAppear() {
+    this.registerEvent()
+  }
+
+  build() {
+  }
+
+  //弹窗
+  mMessageDialog: CustomDialogController = new CustomDialogController({
+    builder: RKTCommonObservedDialog({
+      mObserved: this.mCommonDialogObserved,
+      onClickEnter: (tag: string) => {
+        if (RKTAlertDialog.getInstance().onClickEnter) {
+          RKTAlertDialog.getInstance().onClickEnter(tag)
+        }
+      },
+      onClickCancel: (tag: string) => {
+        if (RKTAlertDialog.getInstance().onClickCancel) {
+          RKTAlertDialog.getInstance().onClickCancel(tag)
+        }
+      }
+    }),
+    alignment: DialogAlignment.Default,
+    customStyle: true
+  })
+
+  aboutToDisappear() {
+    this.unregisterEvent()
+  }
+
+  registerEvent() {
+    try {
+      let routerState = router.getState();
+      let currentPagePath = routerState.path + routerState.name
+
+      // 注册显示提示框事件
+      RKTEventBus.on({
+        eventName: EVENT_ALERTDIALOG_OPEN,
+        target: this, callback: (next: RKTEventData) => {
+          // 不是当前页面发来的不处理
+          if (next.pathName != currentPagePath) {
+            return
+          }
+          let mCommonDialogObserved: RKTCommonDialogObserved = new RKTCommonDialogObserved()
+          let content = next.data["content"]
+          let contentTextColor = next.data["contentTextColor"]
+          let enterTextColor = next.data["enterTextColor"]
+          let cancelTextColor = next.data["cancelTextColor"]
+          let enterText = next.data["enterText"]
+          let cancelText = next.data["cancelText"]
+          let title = next.data["title"]
+          let tag = next.data["tag"]
+          let isOneBtn = next.data["isOneBtn"]
+          if (content) {
+            mCommonDialogObserved.content = content
+          }
+          if (contentTextColor) {
+            mCommonDialogObserved.contentTextColor = contentTextColor
+          }
+          if (enterTextColor) {
+            mCommonDialogObserved.enterTextColor = enterTextColor
+          }
+          if (cancelTextColor) {
+            mCommonDialogObserved.cancelTextColor = cancelTextColor
+          }
+          if (enterText) {
+            mCommonDialogObserved.enterText = enterText
+          }
+          if (cancelText) {
+            mCommonDialogObserved.cancelText = cancelText
+          }
+          if (title) {
+            mCommonDialogObserved.title = title
+          }
+          if (tag) {
+            mCommonDialogObserved.tag = tag
+          }
+          mCommonDialogObserved.isOneBtn = isOneBtn??true
+          this.mCommonDialogObserved = mCommonDialogObserved
+          this.mMessageDialog.open()
+        }
+      })
+
+      // 注册关闭提示框事件
+      RKTEventBus.on({
+        eventName: EVENT_ALERTDIALOG_CLOSE,
+        target: this, callback: (next: RKTEventData) => {
+          // 不是当前页面发来的不处理
+          if (next.pathName != currentPagePath) {
+            return
+          }
+          this.mMessageDialog.close()
+        }
+      })
+    } catch (err) {
+    }
+  }
+
+  unregisterEvent() {
+    RKTEventBus.off(EVENT_ALERTDIALOG_OPEN, this)
+    RKTEventBus.off(EVENT_ALERTDIALOG_CLOSE, this)
+  }
+}
