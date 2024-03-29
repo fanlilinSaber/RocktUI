@@ -2,21 +2,22 @@ import { RKTProgress } from "@zjos/rocketUI"
 import Prompt from '@system.prompt'
 import router from '@ohos.router'
 
-interface Demo{
+interface Demo {
   text: string;
   value: string;
 }
 
-let demos: Demo[]=[
-  {text:"加载Loading",value:"LoadingDemo"},
-  {text:"使用RKTPage加载Loading",value:"RKTLoadingDemo"},
-  {text:"消息提示Toast",value:"RKTToastDemo"},
-  {text:"弹出窗口Popup",value:"RKTPopupDemo"},
-  {text:"RKTNavBar使用",value:"RKTNavBarDemo"},
-  {text:"ItemInputText",value:"RKTItemInputTextDemo"},
-  {text:"下拉刷新/上拉加载更多",value:"RKTRefreshDemo"},
-  {text:"其它弹窗demo",value:"RKTDialogDemo"},
-  {text:"选择图片/视频demo",value:"RKTSelectPicturesDemo"}
+let demos: Demo[] = [
+  { text: "加载Loading", value: "LoadingDemo" },
+  { text: "使用RKTPage加载Loading", value: "RKTLoadingDemo" },
+  { text: "消息提示Toast", value: "RKTToastDemo" },
+  { text: "弹出窗口Popup", value: "RKTPopupDemo" },
+  { text: "RKTNavBar使用", value: "RKTNavBarDemo" },
+  { text: "ItemInputText", value: "RKTItemInputTextDemo" },
+  { text: "下拉刷新/上拉加载更多", value: "RKTRefreshDemo" },
+  { text: "其它弹窗demo", value: "RKTDialogDemo" },
+  { text: "选择图片/视频demo", value: "RKTSelectPicturesDemo" },
+  { text: "条件筛选框", value: "RKTConditionalFilteringDemo" }
 ];
 
 @Entry
@@ -54,12 +55,13 @@ struct Index {
     .width('100%')
   }
 
-  @Builder buildContent(){
+  @Builder
+  buildContent() {
     Text("RocketUI Demo示列")
       .height(64)
       .fontSize(25)
 
-    List({ space: 10}) {
+    List({ space: 10 }) {
       ForEach(demos, (item: Demo, index: number) => {
         ListItem() {
           Row() {
@@ -72,7 +74,8 @@ struct Index {
             bottom: 4,
             left: 16,
             right: 16
-          }).margin({
+          })
+          .margin({
             bottom: 4,
           })
           .onClick(() => {
@@ -92,17 +95,19 @@ struct Index {
     })
   }
 
-  onDemoClick(item:Demo){
+  onDemoClick(item: Demo) {
     let url = 'pages/DetailsPage02'
     if (item.text == '加载Loading') {
       url = 'pages/DetailsPage01'
+    } else if (item.text == "条件筛选框") {
+      url = 'pages/DetailsPage03'
     }
 
     router.pushUrl({
       url: url,
-      params:{
-        value:item.value,
-        title:item.text
+      params: {
+        value: item.value,
+        title: item.text
       }
     })
 
