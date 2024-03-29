@@ -70,9 +70,16 @@ export struct DetailsPage03 {
 }
 
 build() {
-  Row() {
-    GoodsFilterBoxComponent()
+  Navigation(){
+    Row() {
+      GoodsFilterBoxComponent()
+    }
   }
+  .navBarWidth("100%")
+  .backButtonIcon($r("app.media.btn_more"))
+  .titleMode(NavigationTitleMode.Mini)
+  .title("筛选组件")
   .width("100%")
+
 }
 }
