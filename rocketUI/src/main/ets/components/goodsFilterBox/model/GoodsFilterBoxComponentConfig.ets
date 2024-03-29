@@ -1,7 +1,5 @@
 import { GoodsFilterBoxComponent } from '../components/GoodsFilterBoxComponent'
 import { GoodsFilterBoxComponentButtonType } from '../viewModel/GoodsFilterBoxViewModel'
-
-@Observed
 export class GoodsFilterBoxComponentConfig {
   /*下标*/
   index: number
@@ -15,11 +13,10 @@ export class GoodsFilterBoxComponentConfig {
   canExpand: boolean = false
   /*是否被点击,标志着是否处于点击状态*/
   isClick: boolean = false
-  /*是否被选中*/
+  /*是否被选中,选中之后就会高亮*/
   isSelected: boolean = false
   /*互斥分组id，当传入相同的id的时候，这个是显示为互斥的，只对不能展开的按钮生效*/
   mutableId?: string
-
 
   constructor(
     param: {

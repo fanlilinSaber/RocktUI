@@ -17,9 +17,13 @@ export struct GoodsFilterBoxComponentSub {
         Text(this.goodsFilterBoxViewModel.dataArr[this.index].text)
           .textAlign(TextAlign.Center)
           .fontColor(this.goodsFilterBoxViewModel.dataArr[this.index].type ==
-          GoodsFilterBoxComponentButtonType.normal ? (this.goodsFilterBoxViewModel.dataArr[this
-          .index].isSelected == true ? $r("app.color.color_FFEF4033") : Color.Black) : (this.goodsFilterBoxViewModel.dataArr[this
-          .index].isClick == true ? $r("app.color.color_FFEF4033") : Color.Black))
+          GoodsFilterBoxComponentButtonType.normal
+            ? (this.goodsFilterBoxViewModel.dataArr[this
+          .index].isSelected == true
+              ? $r("app.color.color_FFEF4033") : Color.Black)
+            : (this.goodsFilterBoxViewModel.dataArr[this
+          .index].isSelected == true
+              ? $r("app.color.color_FFEF4033") : Color.Black))
         Blank().width(5)
         if (this.goodsFilterBoxViewModel.dataArr[this.index].isClick == true && this
           .goodsFilterBoxViewModel.dataArr[this.index].isSelected == false) {
