@@ -34,6 +34,7 @@ export struct GoodsFilterBoxComponent {
             ForEach(this.goodsFilterBoxViewModel.dataArr, (item: GoodsFilterBoxComponentConfig, index) => {
               GoodsFilterBoxComponentSub({ index: index })
                 .onClick((event) => {
+                  this.goodsFilterBoxViewModel.clickGoodsFilterBoxComponentConfig = item
                   /*获取点击模块,用画布作动画用*/
                   this.clickEvent = event
                   /*获取偏移值*/
@@ -48,6 +49,7 @@ export struct GoodsFilterBoxComponent {
                     if (originSelectedItemIndex != -1) {
                       /*获取到了，将这个按钮关闭*/
                       this.goodsFilterBoxViewModel.dataArr[originSelectedItemIndex].isClick = false
+                      this.goodsFilterBoxViewModel.dataArr = this.goodsFilterBoxViewModel.dataArr.slice()
                     }
                     /*当前的按钮状态改变*/
                     // item.isSelected = !item.isSelected
@@ -80,14 +82,6 @@ export struct GoodsFilterBoxComponent {
 
                   /*触发model里面的回调*/
                   this.goodsFilterBoxViewModel.dataArr[index].clickCallBack(this.goodsFilterBoxViewModel.dataArr[index])
-
-                  /*深拷贝数组，触发viewmodel改变状态,深拷贝之后，对象的方法会消失*/
-                  // let string = JSON.stringify(this.goodsFilterBoxViewModel.dataArr)
-                  // let newItemJson = JSON.stringify(item)
-                  // let newItem: GoodsFilterBoxComponentConfig = JSON.parse(newItemJson)
-                  // let configs: GoodsFilterBoxComponentConfig[] = JSON.parse(string)
-                  // configs[index] = newItem
-                  // this.goodsFilterBoxViewModel.dataArr = configs
                   this.goodsFilterBoxViewModel.dataArr = this.goodsFilterBoxViewModel.dataArr.slice()
 
                 })
@@ -101,17 +95,10 @@ export struct GoodsFilterBoxComponent {
         .backgroundColor(Color.White)
         .align(Alignment.Start)
         .onScroll(() => {
-          for (let index = 0; index < this.goodsFilterBoxViewModel.dataArr.length; index++) {
-            const config: GoodsFilterBoxComponentConfig = this.goodsFilterBoxViewModel.dataArr[index]
-            if (config.isClick == true) {
-              config.isClick = false
-              this.goodsFilterBoxViewModel.dataArr.filter(item => {
-                return item.canExpand
-              }).forEach(canExpandItem => {
-                canExpandItem.isClick = false
-              })
-            }
-          }
+          this.goodsFilterBoxViewModel.dataArr.forEach(item => {
+            item.isClick = false
+          })
+          this.goodsFilterBoxViewModel.dataArr = this.goodsFilterBoxViewModel.dataArr.slice()
         })
 
         /*展开模式绘制一个背景*/

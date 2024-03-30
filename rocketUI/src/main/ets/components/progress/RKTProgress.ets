@@ -176,7 +176,7 @@ export struct RKTProgress {
 
   // 是否显示
   @State show: boolean = true
-
+  // 动画item
   @State progressItem: RKTProgressItem = new RKTProgressItem()
 
   private renderingSettings: RenderingContextSettings = new RenderingContextSettings(true)

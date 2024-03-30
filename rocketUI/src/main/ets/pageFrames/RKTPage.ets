@@ -9,6 +9,7 @@ import { RKTNavBar, RKTNavBarMenuItem } from '../components/navBar/RKTNavBar'
 import promptAction from '@ohos.promptAction';
 import RKTUtil from '../utils/RKTUtil';
 import { RKTAlertComponent } from '../components/dialog/RKTAlertComponent';
+import { RKTToast } from '../components/toast/RKTToast';
 
 @Builder
 function empty() {
@@ -45,7 +46,7 @@ export struct RKTPage {
   // toast能力；默认 = true
   toastAbility: boolean = true
   // 常用提示弹窗
-  rktAlertAbility: boolean = true
+  alertAbility: boolean = true
 
   // 尾随闭包初始化 (此场景下自定义组件内有且仅有一个使用@BuilderParam装饰的属性。)
   @BuilderParam closer: () => void
@@ -75,7 +76,7 @@ export struct RKTPage {
 
       }
 
-      if (this.rktAlertAbility) {
+      if (this.alertAbility) {
         RKTAlertComponent()
       }
 
