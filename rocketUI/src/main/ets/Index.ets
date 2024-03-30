@@ -6,6 +6,11 @@ export { RKTPage } from "./pageFrames/RKTPage"
 
 export { RKTNavBar, RKTNavBarMenuItem } from "./components/navBar/RKTNavBar"
 
+export { GoodsFilterBoxComponent } from
+"./components/goodsFilterBox/components/GoodsFilterBoxComponent"
+export { GoodsFilterBoxComponentConfig } from
+  "./components/goodsFilterBox/model/GoodsFilterBoxComponentConfig"
+
 export { RKTEvent, RKTEventBus, RKTEventData } from "./utils/RKTEventBus"
 
 export { RKTUtil } from "./utils/RKTUtil"
