@@ -20,4 +20,6 @@ export enum GoodsFilterBoxComponentButtonType {
 export class GoodsFilterBoxViewModel {
   /*数据源*/
   dataArr: GoodsFilterBoxComponentConfig[] = []
+  /*当前点击的下标*/
+  clickGoodsFilterBoxComponentConfig: GoodsFilterBoxComponentConfig
 }
