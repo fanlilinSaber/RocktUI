@@ -48,9 +48,7 @@ export default struct RKTLoadingDemo {
       .fontSize(30)
       .fontWeight(FontWeight.Bold)
       .onClick(() => {
-
         RKTProgressUtil.showLoading()
-
         setTimeout(()=>{
           RKTProgressUtil.hideLoading()
         },3000)
@@ -65,9 +63,7 @@ export default struct RKTLoadingDemo {
       .fontSize(30)
       .fontWeight(FontWeight.Bold)
       .onClick(() => {
-
-        RKTProgressUtil.showLoading(RKTProgressStyle.sandClock, '正在抓取数据请稍后...')
-
+        RKTProgressUtil.showLoading({ style: RKTProgressStyle.sandClock, message: '正在抓取数据请稍后...'})
         setTimeout(()=>{
           RKTProgressUtil.hideLoading()
         },3000)
@@ -82,9 +78,7 @@ export default struct RKTLoadingDemo {
       .fontSize(30)
       .fontWeight(FontWeight.Bold)
       .onClick(() => {
-
         RKTProgressUtil.showLoading(RKTProgressStyle.wordDance)
-
         setTimeout(()=>{
           RKTProgressUtil.hideLoading()
         },3000)
@@ -99,9 +93,7 @@ export default struct RKTLoadingDemo {
       .fontSize(30)
       .fontWeight(FontWeight.Bold)
       .onClick(() => {
-
         RKTProgressUtil.showLoading()
-
         setTimeout(()=>{
           RKTProgressUtil.hideLoading()
         },3000)
@@ -116,9 +108,7 @@ export default struct RKTLoadingDemo {
       .fontSize(30)
       .fontWeight(FontWeight.Bold)
       .onClick(() => {
-
-        RKTProgressUtil.showCustomLoading(this.progressItem)
-
+        RKTProgressUtil.showLoading(this.progressItem)
         setTimeout(()=>{
           RKTProgressUtil.hideLoading()
         },3000)

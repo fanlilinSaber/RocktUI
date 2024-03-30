@@ -149,6 +149,7 @@ export class RKTEventBus {
     if (!target) {
       this.subscribes.delete(eventName)
       hilog.info(RKT_LOG_DOMAIN, `RocketUI`, "RKTEventBus.off() 关闭事件" + eventName)
+      return
     }
 
     // 如果指定了 target；则单独取消注册该事件的目标

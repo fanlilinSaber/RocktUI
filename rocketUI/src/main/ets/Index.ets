@@ -39,4 +39,7 @@ export { RKTOptionsPickerDialog } from './components/dialog/RKTOptionsPickerDial
 export { RKTCommonObservedDialog ,RKTCommonDialogObserved , RKTCommonDialog } from './components/dialog/RKTCommonDialog'
 
 export { RKTDateTimePicker, RKTDateTimePickerType } from './components/datePicker/RKTDateTimePicker'
+
+export { RKTToast } from './components/toast/RKTToast'
+
 export { RKTAlertDialog ,RKTAlertComponent} from './components/dialog/RKTAlertComponent'
