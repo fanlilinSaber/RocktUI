@@ -1,14 +1,14 @@
-import { GoodsFilterExpandComponentConfig } from '../model/GoodsFilterExpandComponentConfig'
-import { GoodsFilterBoxViewModel } from '../viewModel/GoodsFilterBoxViewModel'
-import { GoodsFilterExpandViewModel } from '../viewModel/GoodsFilterExpandViewModel'
+import { RKTFilterExpandComponentConfig } from '../model/RKTFilterExpandComponentConfig'
+import { RKTFilterBoxViewModel } from '../viewModel/RKTFilterBoxViewModel'
+import { RKTFilterExpandViewModel } from '../viewModel/RKTFilterExpandViewModel'
 
 /*这个组件是显示单选多选选项的组件*/
 @Component
-export struct GoodsAllItemComponent {
+export struct RKTFilterAllItemComponent {
   /*条件筛选的viewModel*/
-  @Consume @Watch("filterChange") goodsFilterBoxViewModel: GoodsFilterBoxViewModel
+  @Consume @Watch("filterChange") RKTFilterBoxViewModel: RKTFilterBoxViewModel
   /*展开组件的viewModel*/
-  @Consume goodsFilterExpandViewModel: GoodsFilterExpandViewModel
+  @Consume RKTFilterExpandViewModel: RKTFilterExpandViewModel
   /*list的高度*/
   @State listHeight: number = 0
   /*按钮的高度*/
@@ -29,7 +29,7 @@ export struct GoodsAllItemComponent {
   fontSize: number = 14
 
   filterChange() {
-    let index = this.goodsFilterBoxViewModel.dataArr.findIndex(item => {
+    let index = this.RKTFilterBoxViewModel.dataArr.findIndex(item => {
       return item.isClick == true && item.canExpand
     })
     index > -1 ? this.show() : this.hide()
@@ -60,7 +60,7 @@ export struct GoodsAllItemComponent {
     Column() {
       if (this.listHeight > 0) {
         Grid() {
-          ForEach(this.goodsFilterExpandViewModel.dataArr, (item: GoodsFilterExpandComponentConfig, index) => {
+          ForEach(this.RKTFilterExpandViewModel.dataArr, (item: RKTFilterExpandComponentConfig, index) => {
             GridItem() {
               Text(item.text)
                 .fontColor(item.isSelected ? this.selTextColor : this.textColor)
@@ -75,13 +75,13 @@ export struct GoodsAllItemComponent {
                   radius: 5
                 })
                 .onClick(() => {
-                  if (this.goodsFilterExpandViewModel.isSingle) {
-                    this.goodsFilterExpandViewModel.dataArr.forEach(item => {
+                  if (this.RKTFilterExpandViewModel.isSingle) {
+                    this.RKTFilterExpandViewModel.dataArr.forEach(item => {
                       item.isSelected = false
                     })
                   }
                   item.isSelected = !item.isSelected
-                  this.goodsFilterExpandViewModel.dataArr = this.goodsFilterExpandViewModel.dataArr.slice()
+                  this.RKTFilterExpandViewModel.dataArr = this.RKTFilterExpandViewModel.dataArr.slice()
                 })
             };
           })
@@ -117,7 +117,7 @@ export struct GoodsAllItemComponent {
           .borderRadius(5)
           .onClick(() => {
             this.hide()
-            this.goodsFilterExpandViewModel.makeSureCallBack(this.goodsFilterExpandViewModel.dataArr.filter(item => item.isSelected))
+            this.RKTFilterExpandViewModel.makeSureCallBack(this.RKTFilterExpandViewModel.dataArr.filter(item => item.isSelected))
           })
       }
       .padding({ top: this.buttonHeight > 0 ? 8 : 0, bottom: this.buttonHeight > 0 ? 8 : 0 })
@@ -132,10 +132,10 @@ export struct GoodsAllItemComponent {
         .opacity(this.blankTransparency)
         .onClick(() => {
           this.hide()
-          this.goodsFilterBoxViewModel.dataArr.forEach(item => {
+          this.RKTFilterBoxViewModel.dataArr.forEach(item => {
             item.isClick = false
           })
-          this.goodsFilterBoxViewModel.dataArr = this.goodsFilterBoxViewModel.dataArr.slice()
+          this.RKTFilterBoxViewModel.dataArr = this.RKTFilterBoxViewModel.dataArr.slice()
         })
     }
   }
