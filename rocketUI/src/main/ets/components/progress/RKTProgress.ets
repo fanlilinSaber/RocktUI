@@ -1,7 +1,7 @@
 /**
  * Author:fanlilin
  * Date:2024/1/10
- * Descrobe:
+ * Descrobe:用于显示加载动效和进度条组件
  */
 import lottie from '@ohos/lottie'
 import { AnimationItem } from '@ohos/lottie'
@@ -11,47 +11,68 @@ import router from '@ohos.router'
 import hilog from '@ohos.hilog'
 import RKTEventBus, { RKTEventData } from '../../utils/RKTEventBus'
 
+
+// show loading event name
+const EVENT_SHOW_LOADING: string = "showLoading"
+// hide current loading event name
+const EVENT_HIDE_LOADING: string = "hideLoading"
+// hide all loading event name
+const EVENT_HIDE_All_LOADING: string = "hideAllLoading"
+// show progress event name
+const RKT_EVENT_SHOW_PROGRESS: string = "showProgress"
+
 /**
  * RKTProgress 组件快速调用接口（需要配合RKTPage使用）
  */
-export class RKTProgressUtil {
-  /**
-   * 加载loding
-   * @param style 样式
-   * @param message 文本
-   */
-  public static showLoading(style: RKTProgressStyle = RKTProgressStyle.rotate, message?: string) {
-    var data = {
-      "style": style,
-      "message": message
-    }
-    RKTEventBus.emit("showLoading", data)
+export namespace RKTProgressUtil {
+
+  export interface RKTProgressOptions {
+    style?: RKTProgressStyle
+    message?: string
   }
 
   /**
-   * 加载自定义loding动画
-   * @param progressItem 动画配置
+   * 加载loding
+   * @param value 样式 | 可选参数 | 自定义动画参数
    */
-  public static showCustomLoading(progressItem?: RKTProgressItem) {
-    var data = {
-      "style": RKTProgressStyle.custom,
-      "progressItem": progressItem
+  export function showLoading(value?: RKTProgressStyle | RKTProgressOptions | RKTProgressElement) {
+    var data = {"style": RKTProgressStyle.rotate}
+    if (typeof value === 'number') {
+      data['style'] = value
+    } else if (typeof value === 'object') {
+      let options = value as RKTProgressOptions
+      if (options.style === undefined) {
+        data['style'] = RKTProgressStyle.custom
+        data['progressItem'] = value
+      } else {
+        data['style'] = options.style
+        data['message'] = options.message
+      }
     }
-    RKTEventBus.emit("showCustomLoading", data)
+    RKTEventBus.emit(EVENT_SHOW_LOADING, data)
   }
+
+  /**
+   * 显示进度器（用于下载或者需要操作处理进度的）
+   * @param value 当前进度；总的为1
+   */
+  export function showProgress(value: number) {
+
+  }
+
 
   /**
    * 隐藏当前loding
    */
-  public static hideLoading() {
-    RKTEventBus.emit("hideLoading")
+  export function hideLoading() {
+    RKTEventBus.emit(EVENT_HIDE_LOADING)
   }
 
   /**
    * 隐藏所有loding
    */
-  public static hideAllLoading() {
-    RKTEventBus.emit("hideAllLoading")
+  export function hideAllLoading() {
+    RKTEventBus.emit(EVENT_HIDE_All_LOADING)
   }
 }
 
@@ -72,7 +93,7 @@ export enum RKTProgressStyle {
 }
 
 /**
- * 配置描述接口
+ * 配置动画参数
  */
 export interface RKTProgressElement {
   // 动画大小
@@ -155,7 +176,7 @@ export struct RKTProgress {
 
   // 是否显示
   @State show: boolean = true
-
+  // 动画item
   @State progressItem: RKTProgressItem = new RKTProgressItem()
 
   private renderingSettings: RenderingContextSettings = new RenderingContextSettings(true)
@@ -221,10 +242,7 @@ export struct RKTProgress {
     .justifyContent(FlexAlign.Center).alignItems(HorizontalAlign.Center).align(Alignment.Center)
     .backgroundColor(Color.Transparent)
     .width('100%').height('100%')
-    .position({
-      x: 0,
-      y: 0,
-    })
+    .position({ x: 0, y: 0 })
     .zIndex(9999)
     .visibility(this.show ? Visibility.Visible : Visibility.None)
   }
@@ -316,10 +334,24 @@ export struct RKTProgress {
 
       // 注册显示Loading事件
       RKTEventBus.on({
-        eventName: "showLoading",
+        eventName: EVENT_SHOW_LOADING,
         target: this, callback: (next: RKTEventData) => {
           // 不是当前页面发来的不处理
           if (next.pathName != this.currentPagePath) { return }
+
+          // 因为鸿蒙的消息机制限制，这里接收到的对象不具备class能力，需要赋值更新
+          let progressItem = next.data["progressItem"] as RKTProgressItem
+          if (progressItem) {
+            this.style = next.data["style"] as RKTProgressStyle
+            this.progressItem.animateSize = progressItem.animateSize
+            this.progressItem.boxBorderSize = progressItem.boxBorderSize
+            this.progressItem.boxBorderRadius = progressItem.boxBorderRadius
+            this.progressItem.boxBackgroundColor = progressItem.boxBackgroundColor
+            this.progressItem.lottieData = progressItem.lottieData
+            this.progressItem.message = progressItem.message
+            this.reloadAnimation()
+            this.show = true
+          }
 
           let message = next.data["message"] as string
           if (typeof message != 'undefined' && message.length > 0) {
@@ -344,32 +376,9 @@ export struct RKTProgress {
         }
       })
 
-      // 注册显示自定义Loading事件
-      RKTEventBus.on({
-        eventName: "showCustomLoading",
-        target: this, callback: (next: RKTEventData) => {
-          // 不是当前页面发来的不处理
-          if (next.pathName != this.currentPagePath) { return }
-
-          // 因为鸿蒙的消息机制限制，这里接收到的对象不具备class能力，需要赋值更新
-          let progressItem = next.data["progressItem"] as RKTProgressItem
-          if (progressItem) {
-            this.style = next.data["style"] as RKTProgressStyle
-            this.progressItem.animateSize = progressItem.animateSize
-            this.progressItem.boxBorderSize = progressItem.boxBorderSize
-            this.progressItem.boxBorderRadius = progressItem.boxBorderRadius
-            this.progressItem.boxBackgroundColor = progressItem.boxBackgroundColor
-            this.progressItem.lottieData = progressItem.lottieData
-            this.progressItem.message = progressItem.message
-            this.reloadAnimation()
-            this.show = true
-          }
-        }
-      })
-
       // 注册隐藏Loading事件
       RKTEventBus.on({
-        eventName: "hideLoading",
+        eventName: EVENT_HIDE_LOADING,
         target: this, callback: (next: RKTEventData) => {
           // 不是当前页面发来的不处理
           if (next.pathName != this.currentPagePath) { return }
@@ -381,7 +390,7 @@ export struct RKTProgress {
 
       // 注册隐藏所有Loading事件
       RKTEventBus.on({
-        eventName: "hideAllLoading",
+        eventName: EVENT_HIDE_All_LOADING,
         target: this, callback: (next: RKTEventData) => {
 
           this.show = false
@@ -392,5 +401,12 @@ export struct RKTProgress {
     } catch (error) {
       hilog.info(0xFFFF00 , `RocketUI`, "RKTProgress registerEvent" + error)
     }
+  }
+
+  // MARK: - 注销事件
+  unregisterEvent() {
+    RKTEventBus.off(EVENT_SHOW_LOADING, this)
+    RKTEventBus.off(EVENT_HIDE_LOADING, this)
+    RKTEventBus.off(EVENT_HIDE_All_LOADING, this)
   }
 }

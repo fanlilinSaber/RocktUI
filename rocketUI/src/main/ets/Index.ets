@@ -61,4 +61,7 @@ export { RKTCommonObservedDialog,
 
 export { RKTDateTimePicker, RKTDateTimePickerType } from './components/datePicker/RKTDateTimePicker'
 
-export { RKTAlertDialog, RKTAlertComponent } from './components/dialog/RKTAlertComponent'
+export { RKTToast } from './components/toast/RKTToast'
+
+export { RKTAlertDialog ,RKTAlertComponent} from './components/dialog/RKTAlertComponent'
+
