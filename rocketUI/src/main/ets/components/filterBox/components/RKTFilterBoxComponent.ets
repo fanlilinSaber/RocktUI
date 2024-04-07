@@ -13,7 +13,7 @@ import { RKTFilterBoxSubComponent } from './RKTFilterBoxSubComponent'
  **/
 @Component
 export struct RKTFilterBoxComponent {
-  @Consume RKTFilterBoxViewModel: RKTFilterBoxViewModel
+  @Consume filterBoxViewModel: RKTFilterBoxViewModel
   /*私有属性*/
   //滑动控制器
   scroll: Scroller = new Scroller()
@@ -31,25 +31,25 @@ export struct RKTFilterBoxComponent {
       Stack({ alignContent: Alignment.TopStart }) {
         Scroll(this.scroll) {
           Row({ space: 10 }) {
-            ForEach(this.RKTFilterBoxViewModel.dataArr, (item: RKTFilterBoxComponentConfig, index) => {
+            ForEach(this.filterBoxViewModel.dataArr, (item: RKTFilterBoxComponentConfig, index) => {
               RKTFilterBoxSubComponent({ index: index })
                 .onClick((event) => {
-                  this.RKTFilterBoxViewModel.clickGoodsFilterBoxComponentConfig = item
+                  this.filterBoxViewModel.clickGoodsFilterBoxComponentConfig = item
                   /*获取点击模块,用画布作动画用*/
                   this.clickEvent = event
                   /*获取偏移值*/
                   this.scrollXOffset = Number(Math.ceil(this.scroll.currentOffset().xOffset))
                   if (item.canExpand == true) {
                     /*点击展开的按钮，获取之前已经展开的按钮*/
-                    let originSelectedItemIndex: number = this.RKTFilterBoxViewModel.dataArr
+                    let originSelectedItemIndex: number = this.filterBoxViewModel.dataArr
                       .findIndex
                       ((item, originIndex) => {
                         return item.isClick == true && index != originIndex
                       })
                     if (originSelectedItemIndex != -1) {
                       /*获取到了，将这个按钮关闭*/
-                      this.RKTFilterBoxViewModel.dataArr[originSelectedItemIndex].isClick = false
-                      this.RKTFilterBoxViewModel.dataArr = this.RKTFilterBoxViewModel.dataArr.slice()
+                      this.filterBoxViewModel.dataArr[originSelectedItemIndex].isClick = false
+                      this.filterBoxViewModel.dataArr = this.filterBoxViewModel.dataArr.slice()
                     }
                     /*当前的按钮状态改变*/
                     // item.isSelected = !item.isSelected
@@ -61,7 +61,7 @@ export struct RKTFilterBoxComponent {
                     if (item
                       .mutableId !== null && item.mutableId !== undefined) {
                       /*点击的按钮是有互斥的，获取所有同样mutableId的按钮*/
-                      let originArr = this.RKTFilterBoxViewModel.dataArr.filter(originItem => {
+                      let originArr = this.filterBoxViewModel.dataArr.filter(originItem => {
                         return originItem.mutableId !== null && item !== originItem && item
                           .mutableId !== undefined && originItem.canExpand == false && originItem
                           .mutableId == item.mutableId
@@ -73,7 +73,7 @@ export struct RKTFilterBoxComponent {
                       })
                     }
                     /*每次点击一般样式的按钮，就要关闭所有的展开状态*/
-                    this.RKTFilterBoxViewModel.dataArr.filter(expandItem => {
+                    this.filterBoxViewModel.dataArr.filter(expandItem => {
                       return expandItem.canExpand == true
                     }).forEach(item => {
                       item.isClick = false
@@ -81,8 +81,8 @@ export struct RKTFilterBoxComponent {
                   }
 
                   /*触发model里面的回调*/
-                  this.RKTFilterBoxViewModel.dataArr[index].clickCallBack(this.RKTFilterBoxViewModel.dataArr[index])
-                  this.RKTFilterBoxViewModel.dataArr = this.RKTFilterBoxViewModel.dataArr.slice()
+                  this.filterBoxViewModel.dataArr[index].clickCallBack(this.filterBoxViewModel.dataArr[index])
+                  this.filterBoxViewModel.dataArr = this.filterBoxViewModel.dataArr.slice()
 
                 })
             })
@@ -95,15 +95,15 @@ export struct RKTFilterBoxComponent {
         .backgroundColor(Color.White)
         .align(Alignment.Start)
         .onScroll(() => {
-          this.RKTFilterBoxViewModel.dataArr.forEach(item => {
+          this.filterBoxViewModel.dataArr.forEach(item => {
             item.isClick = false
           })
-          this.RKTFilterBoxViewModel.dataArr = this.RKTFilterBoxViewModel.dataArr.slice()
+          this.filterBoxViewModel.dataArr = this.filterBoxViewModel.dataArr.slice()
         })
 
         /*展开模式绘制一个背景*/
         // 在canvas中调用CanvasRenderingContext2D对象。
-        if (this.RKTFilterBoxViewModel.dataArr.findIndex(item => {
+        if (this.filterBoxViewModel.dataArr.findIndex(item => {
           return item.isClick == true && item.canExpand == true
         }) != -1) {
           Canvas(this.context)

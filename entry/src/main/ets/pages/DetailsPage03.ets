@@ -1,25 +1,20 @@
-import { RKTFilterAllItemComponent, RKTFilterBoxComponent } from '@zjos/rocketUI'
-import {
-  RKTFilterBoxComponentConfig
-} from '@zjos/rocketUI/src/main/ets/components/goodsFilterBox/model/RKTFilterBoxComponentConfig'
-import {
-  RKTFilterExpandComponentConfig
-} from '@zjos/rocketUI/src/main/ets/components/goodsFilterBox/model/RKTFilterExpandComponentConfig'
+import { RKTFilterAllItemComponent, RKTFilterBoxComponent,
+  RKTFilterBoxComponentConfig,
+  RKTFilterExpandComponentConfig,
+  RKTFilterExpandViewModel } from '@zjos/rocketUI'
 import {
   RKTFilterBoxComponentButtonType,
   RKTFilterBoxViewModel
-} from '@zjos/rocketUI/src/main/ets/components/goodsFilterBox/viewModel/RKTFilterBoxViewModel'
-import {
-  RKTFilterExpandViewModel
-} from '@zjos/rocketUI/src/main/ets/components/goodsFilterBox/viewModel/RKTFilterExpandViewModel'
+} from '@zjos/rocketUI/src/main/ets/components/filterBox/viewModel/RKTFilterBoxViewModel'
 
 @Entry
 @Component
 export struct DetailsPage03 {
-  /*外部引用GoodsFilterBoxViewModel，并且@Provide装饰器修饰*/
-  @Provide @Watch("change") RKTFilterBoxViewModel: RKTFilterBoxViewModel = new RKTFilterBoxViewModel()
-  @Provide RKTFilterExpandViewModel: RKTFilterExpandViewModel = new RKTFilterExpandViewModel({
-    isSingle: false
+  /*外部引用RKTFilterBoxViewModel，并且@Provide装饰器修饰*/
+  @Provide @Watch("change") filterBoxViewModel: RKTFilterBoxViewModel = new RKTFilterBoxViewModel()
+  /*外部引用RKTFilterExpandViewModel，并且@Provide装饰器修饰*/
+  @Provide filterExpandViewModel: RKTFilterExpandViewModel = new RKTFilterExpandViewModel({
+    isSingle: true
   })
   item1 = [new RKTFilterExpandComponentConfig({
     text: "选项1",
@@ -61,11 +56,11 @@ export struct DetailsPage03 {
   })]
 
   change() {
-    if (this.RKTFilterBoxViewModel.clickGoodsFilterBoxComponentConfig != undefined) {
-      if (this.RKTFilterBoxViewModel.clickGoodsFilterBoxComponentConfig.index == 5 && this.RKTFilterBoxViewModel.clickGoodsFilterBoxComponentConfig.isClick == true) {
-        this.RKTFilterExpandViewModel.dataArr = this.item1
+    if (this.filterBoxViewModel.clickGoodsFilterBoxComponentConfig != undefined) {
+      if (this.filterBoxViewModel.clickGoodsFilterBoxComponentConfig.index == 5 && this.filterBoxViewModel.clickGoodsFilterBoxComponentConfig.isClick == true) {
+        this.filterExpandViewModel.dataArr = this.item1
       } else {
-        this.RKTFilterExpandViewModel.dataArr = this.item2
+        this.filterExpandViewModel.dataArr = this.item2
       }
     }
   }
@@ -77,7 +72,7 @@ export struct DetailsPage03 {
 
   /*配置条件筛选点击的下拉*/
   configExpand() {
-    this.RKTFilterExpandViewModel.makeSureCallBack = (sel) => {
+    this.filterExpandViewModel.makeSureCallBack = (sel) => {
       
     }
   }
@@ -147,7 +142,7 @@ export struct DetailsPage03 {
     })
 
     //初始化
-    this.RKTFilterBoxViewModel.dataArr = [moreOne, moreTwo, two, three, otherButton, otherButton1]
+    this.filterBoxViewModel.dataArr = [moreOne, moreTwo, two, three, otherButton, otherButton1]
   }
 
   build() {
@@ -156,7 +151,6 @@ export struct DetailsPage03 {
         Row() {
           RKTFilterBoxComponent()
         }
-
         RKTFilterAllItemComponent()
       }
     }

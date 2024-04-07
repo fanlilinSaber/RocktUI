@@ -10,15 +10,15 @@ export { RKTPage } from "./pageFrames/RKTPage"
 export { RKTNavBar, RKTNavBarMenuItem } from "./components/navBar/RKTNavBar"
 
 export { RKTFilterBoxComponent
-} from "./components/goodsFilterBox/components/RKTFilterBoxComponent"
+} from "./components/filterBox/components/RKTFilterBoxComponent"
 
 export { RKTFilterBoxComponentConfig
-} from "./components/goodsFilterBox/model/RKTFilterBoxComponentConfig"
+} from "./components/filterBox/model/RKTFilterBoxComponentConfig"
 export { RKTFilterExpandComponentConfig
-} from "./components/goodsFilterBox/model/RKTFilterExpandComponentConfig"
+} from "./components/filterBox/model/RKTFilterExpandComponentConfig"
 export { RKTFilterExpandViewModel
-} from "./components/goodsFilterBox/viewModel/RKTFilterExpandViewModel"
-export { RKTFilterAllItemComponent } from "./components/goodsFilterBox/components/RKTFilterAllItemComponent"
+} from "./components/filterBox/viewModel/RKTFilterExpandViewModel"
+export { RKTFilterAllItemComponent } from "./components/filterBox/components/RKTFilterAllItemComponent"
 
 export { RKTEvent, RKTEventBus, RKTEventData } from "./utils/RKTEventBus"
 

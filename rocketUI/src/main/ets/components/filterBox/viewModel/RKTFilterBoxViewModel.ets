@@ -1,6 +1,6 @@
 import {
   RKTFilterBoxComponentConfig
-} from '../../goodsFilterBox/Model/RKTFilterBoxComponentConfig'
+} from '../Model/RKTFilterBoxComponentConfig'
 
 /*
  * 条件筛选，在需要引用条件筛选的界面
