@@ -6,11 +6,7 @@ export class RKTFilterExpandViewModel {
   /*当前点击的下标*/
   clickIndex: number
   /*是否单选*/
-  isSingle: boolean
+  isSingle: boolean = false
   /*确定的回调*/
   makeSureCallBack: (selected: RKTFilterExpandComponentConfig[]) => void
-
-  constructor(p: { isSingle: boolean }) {
-    this.isSingle = p.isSingle
-  }
 }

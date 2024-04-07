@@ -1,7 +1,10 @@
-import { RKTFilterAllItemComponent, RKTFilterBoxComponent,
+import {
+  RKTFilterAllItemComponent,
+  RKTFilterBoxComponent,
   RKTFilterBoxComponentConfig,
   RKTFilterExpandComponentConfig,
-  RKTFilterExpandViewModel } from '@zjos/rocketUI'
+  RKTFilterExpandViewModel
+} from '@zjos/rocketUI'
 import {
   RKTFilterBoxComponentButtonType,
   RKTFilterBoxViewModel
@@ -13,9 +16,7 @@ export struct DetailsPage03 {
   /*外部引用RKTFilterBoxViewModel，并且@Provide装饰器修饰*/
   @Provide @Watch("change") filterBoxViewModel: RKTFilterBoxViewModel = new RKTFilterBoxViewModel()
   /*外部引用RKTFilterExpandViewModel，并且@Provide装饰器修饰*/
-  @Provide filterExpandViewModel: RKTFilterExpandViewModel = new RKTFilterExpandViewModel({
-    isSingle: true
-  })
+  @Provide filterExpandViewModel: RKTFilterExpandViewModel = new RKTFilterExpandViewModel()
   item1 = [new RKTFilterExpandComponentConfig({
     text: "选项1",
     id: "1"
@@ -58,8 +59,10 @@ export struct DetailsPage03 {
   change() {
     if (this.filterBoxViewModel.clickGoodsFilterBoxComponentConfig != undefined) {
       if (this.filterBoxViewModel.clickGoodsFilterBoxComponentConfig.index == 5 && this.filterBoxViewModel.clickGoodsFilterBoxComponentConfig.isClick == true) {
+        this.filterExpandViewModel.isSingle = false
         this.filterExpandViewModel.dataArr = this.item1
       } else {
+        this.filterExpandViewModel.isSingle = true
         this.filterExpandViewModel.dataArr = this.item2
       }
     }
@@ -73,7 +76,7 @@ export struct DetailsPage03 {
   /*配置条件筛选点击的下拉*/
   configExpand() {
     this.filterExpandViewModel.makeSureCallBack = (sel) => {
-      
+      console.debug("选择内容" + JSON.stringify(sel))
     }
   }
 
@@ -108,6 +111,7 @@ export struct DetailsPage03 {
         console.debug(JSON.stringify(item))
       }
     })
+
     let three: RKTFilterBoxComponentConfig = new RKTFilterBoxComponentConfig({
       text: "互斥2",
       index: 3,
@@ -120,7 +124,7 @@ export struct DetailsPage03 {
     })
 
     let otherButton: RKTFilterBoxComponentConfig = new RKTFilterBoxComponentConfig({
-      text: "状态2",
+      text: "单选下拉",
       index: 4,
       type: RKTFilterBoxComponentButtonType.rightButton,
       canExpand: true,
@@ -131,7 +135,7 @@ export struct DetailsPage03 {
     })
 
     let otherButton1: RKTFilterBoxComponentConfig = new RKTFilterBoxComponentConfig({
-      text: "状态2",
+      text: "多选下拉",
       index: 5,
       type: RKTFilterBoxComponentButtonType.rightButton,
       canExpand: true,
@@ -151,6 +155,7 @@ export struct DetailsPage03 {
         Row() {
           RKTFilterBoxComponent()
         }
+
         RKTFilterAllItemComponent()
       }
     }

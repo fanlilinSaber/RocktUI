@@ -22,7 +22,8 @@ export struct RKTFilterBoxSubComponent {
           .index].isSelected == true
               ? $r("app.color.color_FFEF4033") : Color.Black)
             : (this.filterBoxViewModel.dataArr[this
-          .index].isSelected == true
+          .index].isSelected == true && this.filterBoxViewModel.dataArr[this
+            .index].isClick == false
               ? $r("app.color.color_FFEF4033") : Color.Black))
         Blank().width(5)
         if (this.filterBoxViewModel.dataArr[this.index].isClick == true && this
