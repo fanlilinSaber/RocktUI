@@ -1,3 +1,5 @@
+
+
 export class RKTFilterExpandComponentConfig {
   /*下标*/
   index: number
@@ -13,7 +15,7 @@ export class RKTFilterExpandComponentConfig {
   constructor(
     param: {
       text: string,
-      id:string,
+      id: string,
       isSelected?: boolean,
     }) {
     this.id = param.id

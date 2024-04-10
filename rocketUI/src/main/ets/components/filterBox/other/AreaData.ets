@@ -1,21 +1,21 @@
-interface AreaModel {
+export interface AreaModel {
   id: number
-  simpleName: string
-  shortName: string
-  parentNo: string
-  lat: string
-  level: number
-  areaName: string
-  children: AreaModel[]
+  simpleName?: string
+  shortName?: string
+  parentNo?: string
+  lat?: string
+  level?: number
+  areaName?: string
+  children?: AreaModel[]
   no: string
-  lng: string
-  sort: number
+  lng?: string
+  sort?: number
   name: string
-  parentId: number
+  parentId?: number
 }
 
-class AreaData {
-  getData(): AreaModel[] {
+export class AreaData {
+  static getData(): AreaModel[] {
     return [
       {
         "id": 110000,

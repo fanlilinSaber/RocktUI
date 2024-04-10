@@ -12,13 +12,22 @@ export { RKTNavBar, RKTNavBarMenuItem } from "./components/navBar/RKTNavBar"
 export { RKTFilterBoxComponent
 } from "./components/filterBox/components/RKTFilterBoxComponent"
 
+export { AreaData
+} from "./components/filterBox/other/AreaData"
+
 export { RKTFilterBoxComponentConfig
 } from "./components/filterBox/model/RKTFilterBoxComponentConfig"
+
 export { RKTFilterExpandComponentConfig
 } from "./components/filterBox/model/RKTFilterExpandComponentConfig"
+
 export { RKTFilterExpandViewModel
 } from "./components/filterBox/viewModel/RKTFilterExpandViewModel"
-export { RKTFilterAllItemComponent } from "./components/filterBox/components/RKTFilterAllItemComponent"
+
+export { RKTFilterAllItemComponent,
+} from "./components/filterBox/components/RKTFilterAllItemComponent"
+
+export { RKTFilterAreaComponent, } from "./components/filterBox/components/RKTFilterAreaComponent"
 
 export { RKTEvent, RKTEventBus, RKTEventData } from "./utils/RKTEventBus"
 
@@ -63,5 +72,5 @@ export { RKTDateTimePicker, RKTDateTimePickerType } from './components/datePicke
 
 export { RKTToast } from './components/toast/RKTToast'
 
-export { RKTAlertDialog ,RKTAlertComponent} from './components/dialog/RKTAlertComponent'
+export { RKTAlertDialog, RKTAlertComponent } from './components/dialog/RKTAlertComponent'
 

@@ -1,7 +1,8 @@
-import { RKTFilterBoxComponentConfig } from '../Model/RKTFilterBoxComponentConfig'
 import { RKTFilterExpandComponentConfig } from '../model/RKTFilterExpandComponentConfig'
 import { RKTFilterBoxViewModel } from '../viewModel/RKTFilterBoxViewModel'
-import { RKTFilterExpandViewModel } from '../viewModel/RKTFilterExpandViewModel'
+import {
+  RKTFilterExpandComponentType,
+  RKTFilterExpandViewModel } from '../viewModel/RKTFilterExpandViewModel'
 
 /*这个组件是显示单选多选选项的组件*/
 @Component
@@ -32,10 +33,12 @@ export struct RKTFilterAllItemComponent {
   fontSize: number = 14
 
   filterChange() {
-    let index = this.filterBoxViewModel.dataArr.findIndex(item => {
-      return item.isClick == true && item.canExpand
-    })
-    index > -1 ? this.show() : this.hide()
+    if (this.filterExpandViewModel.type == RKTFilterExpandComponentType.other){
+      let index = this.filterBoxViewModel.dataArr.findIndex((item) => {
+        return item.isClick == true && item.canExpand
+      })
+      index > -1 ? this.show() : this.hide()
+    }
   }
 
   show() {
@@ -91,8 +94,6 @@ export struct RKTFilterAllItemComponent {
           })
         }
         .onAppear(() => {
-          console.debug("初始化" + JSON.stringify(this.filterExpandViewModel.dataArr))
-
           /*我这么写是为了在这个组件内部生成一个私有的数据源，在没点确定按钮的时候，保证外部数据不被改变*/
           this.privateDataArr = JSON.parse(JSON.stringify(this.filterExpandViewModel.dataArr))
         })
@@ -130,9 +131,9 @@ export struct RKTFilterAllItemComponent {
           .onClick(() => {
             this.filterBoxViewModel.clickGoodsFilterBoxComponentConfig.isClick = false
             this.privateDataArr.forEach((privateItem, index) => {
-              this.filterExpandViewModel.dataArr[index].isSelected = privateItem.isSelected
+              (this.filterExpandViewModel.dataArr[index] as RKTFilterExpandComponentConfig).isSelected = privateItem.isSelected
             })
-            let selArray = this.filterExpandViewModel.dataArr.filter(item => item.isSelected)
+            let selArray = (this.filterExpandViewModel.dataArr as RKTFilterExpandComponentConfig[]).filter(item => item.isSelected)
             if (selArray !== null && selArray !== undefined && selArray.length != 0) {
               this.filterBoxViewModel.clickGoodsFilterBoxComponentConfig.isSelected = true
               this.filterExpandViewModel.makeSureCallBack(selArray)

@@ -20,6 +20,6 @@ export enum RKTFilterBoxComponentButtonType {
 export class RKTFilterBoxViewModel {
   /*数据源*/
   dataArr: RKTFilterBoxComponentConfig[] = []
-  /*当前点击的下标*/
+  /*当前点击的模型*/
   clickGoodsFilterBoxComponentConfig: RKTFilterBoxComponentConfig
 }

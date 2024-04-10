@@ -1,5 +1,7 @@
 import {
+  AreaData,
   RKTFilterAllItemComponent,
+  RKTFilterAreaComponent,
   RKTFilterBoxComponent,
   RKTFilterBoxComponentConfig,
   RKTFilterExpandComponentConfig,
@@ -9,6 +11,9 @@ import {
   RKTFilterBoxComponentButtonType,
   RKTFilterBoxViewModel
 } from '@zjos/rocketUI/src/main/ets/components/filterBox/viewModel/RKTFilterBoxViewModel'
+import {
+  RKTFilterExpandComponentType
+} from '@zjos/rocketUI/src/main/ets/components/filterBox/viewModel/RKTFilterExpandViewModel'
 
 @Entry
 @Component
@@ -55,25 +60,66 @@ export struct DetailsPage03 {
     text: "a选项6",
     id: "6"
   })]
+  item3: RKTFilterExpandComponentConfig[][] = this.getAreaData()
 
+  /*获取区域数据*/
+  getAreaData(): RKTFilterExpandComponentConfig[][] {
+    let data = AreaData.getData()
+    /*添加省数据*/
+    let provinceArr = []
+    let cityArr = []
+    let areaArr = []
+
+    data.forEach(province => {
+      let provinceConfig = new RKTFilterExpandComponentConfig({
+        text: province.name,
+        id: province.id.toString()
+      })
+      provinceArr.push(provinceConfig)
+      province.children.forEach(city => {
+        let cityConfig = new RKTFilterExpandComponentConfig({
+          text: city.name,
+          id: city.id.toString()
+        })
+        cityArr.push(cityConfig)
+        city.children.forEach(area => {
+          let areaConfig = new RKTFilterExpandComponentConfig({
+            text: area.name,
+            id: area.id.toString()
+          })
+          areaArr.push(areaConfig)
+        })
+      })
+    })
+    return [provinceArr, cityArr, areaArr]
+  }
+
+  /*改变展开项*/
   change() {
     if (this.filterBoxViewModel.clickGoodsFilterBoxComponentConfig != undefined) {
-      if (this.filterBoxViewModel.clickGoodsFilterBoxComponentConfig.index == 5 && this.filterBoxViewModel.clickGoodsFilterBoxComponentConfig.isClick == true) {
+      if (this.filterBoxViewModel.clickGoodsFilterBoxComponentConfig.index == 4) {
         this.filterExpandViewModel.isSingle = false
         this.filterExpandViewModel.dataArr = this.item1
-      } else {
+        this.filterExpandViewModel.type = RKTFilterExpandComponentType.other
+      } else if (this.filterBoxViewModel.clickGoodsFilterBoxComponentConfig.index == 5) {
         this.filterExpandViewModel.isSingle = true
         this.filterExpandViewModel.dataArr = this.item2
+        this.filterExpandViewModel.type = RKTFilterExpandComponentType.other
+      } else if (this.filterBoxViewModel.clickGoodsFilterBoxComponentConfig.index == 6) {
+        this.filterExpandViewModel.isSingle = true
+        this.filterExpandViewModel.dataArr = this.item3
+        this.filterExpandViewModel.type = RKTFilterExpandComponentType.area
       }
     }
   }
 
+  /*生命周期刚显示界面*/
   aboutToAppear() {
     this.configFilterBox()
     this.configExpand()
   }
 
-  /*配置条件筛选点击的下拉*/
+  /*配置条件筛选点击的下拉菜单的选择毁掉*/
   configExpand() {
     this.filterExpandViewModel.makeSureCallBack = (sel) => {
       console.debug("选择内容" + JSON.stringify(sel))
@@ -145,8 +191,19 @@ export struct DetailsPage03 {
       }
     })
 
+    let areaSelected: RKTFilterBoxComponentConfig = new RKTFilterBoxComponentConfig({
+      text: "选择区域",
+      index: 6,
+      type: RKTFilterBoxComponentButtonType.rightButton,
+      canExpand: true,
+      clickCallBack: (item) => {
+        /*点击回调*/
+        console.debug(JSON.stringify(item))
+      }
+    })
+
     //初始化
-    this.filterBoxViewModel.dataArr = [moreOne, moreTwo, two, three, otherButton, otherButton1]
+    this.filterBoxViewModel.dataArr = [moreOne, moreTwo, two, three, otherButton, otherButton1, areaSelected]
   }
 
   build() {
@@ -156,7 +213,11 @@ export struct DetailsPage03 {
           RKTFilterBoxComponent()
         }
 
+        /*所有可能会显示的下拉框都在这儿*/
+        RKTFilterAreaComponent()
+          .opacity((this.filterBoxViewModel.clickGoodsFilterBoxComponentConfig ? (this.filterBoxViewModel.clickGoodsFilterBoxComponentConfig.index == 6 ? 1 : 0) : 0) )
         RKTFilterAllItemComponent()
+          .opacity((this.filterBoxViewModel.clickGoodsFilterBoxComponentConfig ? (this.filterBoxViewModel.clickGoodsFilterBoxComponentConfig.index != 6 ? 1 : 0) : 0) )
       }
     }
     .navBarWidth("100%")
