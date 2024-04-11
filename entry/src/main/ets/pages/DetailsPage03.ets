@@ -215,9 +215,7 @@ export struct DetailsPage03 {
 
         /*所有可能会显示的下拉框都在这儿*/
         RKTFilterAreaComponent()
-          .opacity((this.filterBoxViewModel.clickGoodsFilterBoxComponentConfig ? (this.filterBoxViewModel.clickGoodsFilterBoxComponentConfig.index == 6 ? 1 : 0) : 0) )
         RKTFilterAllItemComponent()
-          .opacity((this.filterBoxViewModel.clickGoodsFilterBoxComponentConfig ? (this.filterBoxViewModel.clickGoodsFilterBoxComponentConfig.index != 6 ? 1 : 0) : 0) )
       }
     }
     .navBarWidth("100%")

@@ -35,6 +35,9 @@ export struct RKTFilterAreaComponent {
   }
 
   configData() {
+    if (this.provinceDataArr.length > 0){
+      return
+    }
     if (this.filterExpandViewModel.type == RKTFilterExpandComponentType.area) {
       this.provinceDataArr = this.filterExpandViewModel.dataArr[0] as RKTFilterExpandComponentConfig[]
       this.cityDataArr = this.filterExpandViewModel.dataArr[1] as RKTFilterExpandComponentConfig[]
@@ -43,7 +46,7 @@ export struct RKTFilterAreaComponent {
   }
 
   show() {
-    animateTo({ duration: 300, curve: Curve.Linear }, () => {
+    animateTo({ duration: 100, curve: Curve.Linear }, () => {
       this.listHeight = 280
       this.buttonHeight = 48
       this.blankTransparency = 0.3
@@ -52,7 +55,7 @@ export struct RKTFilterAreaComponent {
   }
 
   hide() {
-    animateTo({ duration: 300, curve: Curve.Linear }, () => {
+    animateTo({ duration: 100, curve: Curve.Linear }, () => {
       this.listHeight = 0
       this.buttonHeight = 0
       this.blankTransparency = 0
@@ -129,7 +132,11 @@ export struct RKTFilterAreaComponent {
         .backgroundColor(Color.Black)
         .opacity(this.blankTransparency)
         .onClick(() => {
+          this.filterBoxViewModel.clickGoodsFilterBoxComponentConfig.isClick = false
+          this.filterBoxViewModel.dataArr = this.filterBoxViewModel.dataArr.slice()
+          this.hide()
         })
     }
+    .opacity((this.filterBoxViewModel.clickGoodsFilterBoxComponentConfig ? (this.filterBoxViewModel.clickGoodsFilterBoxComponentConfig.index == 6 ? 1 : 0) : 0) )
   }
 }

@@ -42,7 +42,7 @@ export struct RKTFilterAllItemComponent {
   }
 
   show() {
-    animateTo({ duration: 200, curve: Curve.Linear }, () => {
+    animateTo({ duration: 100, curve: Curve.Linear }, () => {
       this.listHeight = 95
       this.buttonHeight = 40
       this.itemHeight = 35
@@ -53,7 +53,7 @@ export struct RKTFilterAllItemComponent {
 
   hide() {
     /*如果没有选中保存，则清空*/
-    animateTo({ duration: 200, curve: Curve.Linear }, () => {
+    animateTo({ duration: 100, curve: Curve.Linear }, () => {
       this.listHeight = 0
       this.buttonHeight = 0
       this.itemHeight = 0
@@ -160,5 +160,6 @@ export struct RKTFilterAllItemComponent {
           this.hide()
         })
     }
+    .opacity((this.filterBoxViewModel.clickGoodsFilterBoxComponentConfig ? (this.filterBoxViewModel.clickGoodsFilterBoxComponentConfig.index != 6 ? 1 : 0) : 0) )
   }
 }
