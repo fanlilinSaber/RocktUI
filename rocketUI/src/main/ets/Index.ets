@@ -3,7 +3,9 @@ export { add } from "./utils/Calc"
 export { RKTProgress,
   RKTProgressStyle,
   RKTProgressUtil,
-  RKTProgressItem } from "./components/progress/RKTProgress"
+  RKTProgressItem,
+  RKTProgressElement,
+  RKTProgressFastAbility } from "./components/progress/RKTProgress"
 
 export { RKTPage } from "./pageFrames/RKTPage"
 

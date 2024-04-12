@@ -81,7 +81,7 @@ export class RKTEventBus {
     let subs = this.subscribes.get(eventName)
     for (let [key, value] of subs) {
       try {
-        value.callback && value.callback(eventData);
+        value.callback && value.callback(eventData)
         hilog.info(RKT_LOG_DOMAIN , `RocketUI`, `RKTEventBus.onEvent() 事件${eventName}触发成功`)
       } catch (error) {
         hilog.error(RKT_LOG_DOMAIN , `RocketUI`, `RKTEventBus.onEvent() 触发失败` + error)
