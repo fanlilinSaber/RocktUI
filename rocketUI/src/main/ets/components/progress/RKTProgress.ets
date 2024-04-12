@@ -234,7 +234,7 @@ export struct RKTProgress {
   // 动画自动播放(禁用自动播放通过 `progress` 来外部控制进度，以实现需要任务进度条的功能)
   autoplay: boolean = true
   // 是否允许交互
-  interaction: boolean = true
+  interaction: boolean = false
   // 组件唯一tag，用于同一个页面存在多个同一源的组件区分
   tag: string = ''
   // 赋予组件快速能力（如果配置成`all`，组件的所有状态共享，即代表所有快速操作都会共用这一个组件来切换，当一个页面存在多个`RKTProgress`组件时，不想共享状态就为组件配置单个能力）

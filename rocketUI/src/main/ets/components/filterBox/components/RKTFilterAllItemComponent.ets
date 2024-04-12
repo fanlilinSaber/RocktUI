@@ -1,14 +1,18 @@
-import { GoodsFilterExpandComponentConfig } from '../model/GoodsFilterExpandComponentConfig'
-import { GoodsFilterBoxViewModel } from '../viewModel/GoodsFilterBoxViewModel'
-import { GoodsFilterExpandViewModel } from '../viewModel/GoodsFilterExpandViewModel'
+import { RKTFilterExpandComponentConfig } from '../model/RKTFilterExpandComponentConfig'
+import { RKTFilterBoxViewModel } from '../viewModel/RKTFilterBoxViewModel'
+import {
+  RKTFilterExpandComponentType,
+  RKTFilterExpandViewModel } from '../viewModel/RKTFilterExpandViewModel'
 
 /*这个组件是显示单选多选选项的组件*/
 @Component
-export struct GoodsAllItemComponent {
+export struct RKTFilterAllItemComponent {
   /*条件筛选的viewModel*/
-  @Consume @Watch("filterChange") goodsFilterBoxViewModel: GoodsFilterBoxViewModel
+  @Consume @Watch("filterChange") filterBoxViewModel: RKTFilterBoxViewModel
   /*展开组件的viewModel*/
-  @Consume goodsFilterExpandViewModel: GoodsFilterExpandViewModel
+  @Consume filterExpandViewModel: RKTFilterExpandViewModel
+  /*私有化的数据源*/
+  @State private privateDataArr: RKTFilterExpandComponentConfig[] = []
   /*list的高度*/
   @State listHeight: number = 0
   /*按钮的高度*/
@@ -29,14 +33,16 @@ export struct GoodsAllItemComponent {
   fontSize: number = 14
 
   filterChange() {
-    let index = this.goodsFilterBoxViewModel.dataArr.findIndex(item => {
-      return item.isClick == true && item.canExpand
-    })
-    index > -1 ? this.show() : this.hide()
+    if (this.filterExpandViewModel.type == RKTFilterExpandComponentType.other){
+      let index = this.filterBoxViewModel.dataArr.findIndex((item) => {
+        return item.isClick == true && item.canExpand
+      })
+      index > -1 ? this.show() : this.hide()
+    }
   }
 
   show() {
-    animateTo({ duration: 200, curve: Curve.Linear }, () => {
+    animateTo({ duration: 100, curve: Curve.Linear }, () => {
       this.listHeight = 95
       this.buttonHeight = 40
       this.itemHeight = 35
@@ -47,7 +53,7 @@ export struct GoodsAllItemComponent {
 
   hide() {
     /*如果没有选中保存，则清空*/
-    animateTo({ duration: 200, curve: Curve.Linear }, () => {
+    animateTo({ duration: 100, curve: Curve.Linear }, () => {
       this.listHeight = 0
       this.buttonHeight = 0
       this.itemHeight = 0
@@ -60,7 +66,7 @@ export struct GoodsAllItemComponent {
     Column() {
       if (this.listHeight > 0) {
         Grid() {
-          ForEach(this.goodsFilterExpandViewModel.dataArr, (item: GoodsFilterExpandComponentConfig, index) => {
+          ForEach(this.privateDataArr, (item: RKTFilterExpandComponentConfig, index) => {
             GridItem() {
               Text(item.text)
                 .fontColor(item.isSelected ? this.selTextColor : this.textColor)
@@ -75,17 +81,22 @@ export struct GoodsAllItemComponent {
                   radius: 5
                 })
                 .onClick(() => {
-                  if (this.goodsFilterExpandViewModel.isSingle) {
-                    this.goodsFilterExpandViewModel.dataArr.forEach(item => {
+                  if (this.filterExpandViewModel.isSingle) {
+                    this.privateDataArr.forEach(item => {
                       item.isSelected = false
                     })
                   }
                   item.isSelected = !item.isSelected
-                  this.goodsFilterExpandViewModel.dataArr = this.goodsFilterExpandViewModel.dataArr.slice()
+                  this.privateDataArr.splice(index, 1, item)
+                  this.privateDataArr = this.privateDataArr.slice()
                 })
             };
           })
         }
+        .onAppear(() => {
+          /*我这么写是为了在这个组件内部生成一个私有的数据源，在没点确定按钮的时候，保证外部数据不被改变*/
+          this.privateDataArr = JSON.parse(JSON.stringify(this.filterExpandViewModel.dataArr))
+        })
         .width("100%")
         .height(this.listHeight)
         .padding({ left: 12, right: 12, top: 15, bottom: 20 })
@@ -105,6 +116,8 @@ export struct GoodsAllItemComponent {
           .height(this.buttonHeight)
           .borderRadius(5)
           .onClick(() => {
+            this.privateDataArr.forEach(item => item.isSelected = false)
+            this.privateDataArr = this.privateDataArr.slice()
           })
 
         Text("确定")
@@ -116,8 +129,19 @@ export struct GoodsAllItemComponent {
           .height(this.buttonHeight)
           .borderRadius(5)
           .onClick(() => {
+            this.filterBoxViewModel.clickGoodsFilterBoxComponentConfig.isClick = false
+            this.privateDataArr.forEach((privateItem, index) => {
+              (this.filterExpandViewModel.dataArr[index] as RKTFilterExpandComponentConfig).isSelected = privateItem.isSelected
+            })
+            let selArray = (this.filterExpandViewModel.dataArr as RKTFilterExpandComponentConfig[]).filter(item => item.isSelected)
+            if (selArray !== null && selArray !== undefined && selArray.length != 0) {
+              this.filterBoxViewModel.clickGoodsFilterBoxComponentConfig.isSelected = true
+              this.filterExpandViewModel.makeSureCallBack(selArray)
+            } else {
+              this.filterBoxViewModel.clickGoodsFilterBoxComponentConfig.isSelected = false
+            }
+            this.filterBoxViewModel.dataArr = this.filterBoxViewModel.dataArr.slice()
             this.hide()
-            this.goodsFilterExpandViewModel.makeSureCallBack(this.goodsFilterExpandViewModel.dataArr.filter(item => item.isSelected))
           })
       }
       .padding({ top: this.buttonHeight > 0 ? 8 : 0, bottom: this.buttonHeight > 0 ? 8 : 0 })
@@ -131,12 +155,11 @@ export struct GoodsAllItemComponent {
         .backgroundColor(Color.Black)
         .opacity(this.blankTransparency)
         .onClick(() => {
+          this.filterBoxViewModel.clickGoodsFilterBoxComponentConfig.isClick = false
+          this.filterBoxViewModel.dataArr = this.filterBoxViewModel.dataArr.slice()
           this.hide()
-          this.goodsFilterBoxViewModel.dataArr.forEach(item => {
-            item.isClick = false
-          })
-          this.goodsFilterBoxViewModel.dataArr = this.goodsFilterBoxViewModel.dataArr.slice()
         })
     }
+    .opacity((this.filterBoxViewModel.clickGoodsFilterBoxComponentConfig ? (this.filterBoxViewModel.clickGoodsFilterBoxComponentConfig.index != 6 ? 1 : 0) : 0) )
   }
 }
