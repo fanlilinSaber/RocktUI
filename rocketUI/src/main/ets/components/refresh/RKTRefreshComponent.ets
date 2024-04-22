@@ -77,7 +77,7 @@ export struct RKTRefreshComponent {
         Image($r('app.media.rkt_ic_net_err'))
           .height(187)
           .width(144)
-          .margin({ top: 100 })
+          .margin({ top: 116 })
         Text("网络连接失败")
           .fontSize(16)
           .fontColor($r('app.color.color_FF333333'))
