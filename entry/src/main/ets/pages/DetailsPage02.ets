@@ -14,6 +14,7 @@ import RKTRefreshDemo from '../demo/RKTRefreshDemo';
 import { RKTPopupDemo } from '../demo/RKTPopupDemo';
 import RKTDialogDemo from '../demo/RKTDialogDemo';
 import { RKTSelectPicturesDemo } from '../demo/RKTSelectPicturesDemo';
+import RKTToastDemo from '../demo/RKTToastDemo'
 
 interface DemoParams{
   title?: string
@@ -51,6 +52,8 @@ struct DetailsPage02 {
           RKTDialogDemo()
         } else if (this.value == 'RKTSelectPicturesDemo') {
           RKTSelectPicturesDemo()
+        } else if (this.value == 'RKTToastDemo') {
+          RKTToastDemo()
         }
       }
 

@@ -1,7 +1,7 @@
 /**
  * Author:fanlilin
  * Date:2024/1/10
- * Descrobe:
+ * Descrobe:用于显示加载动效和进度条组件
  */
 import lottie from '@ohos/lottie'
 import { AnimationItem } from '@ohos/lottie'
@@ -11,48 +11,113 @@ import router from '@ohos.router'
 import hilog from '@ohos.hilog'
 import RKTEventBus, { RKTEventData } from '../../utils/RKTEventBus'
 
+
+// show loading event name
+const EVENT_SHOW_LOADING: string = "showLoading"
+// hide current loading event name
+const EVENT_HIDE_LOADING: string = "hideLoading"
+// show progress event name
+const EVENT_SHOW_PROGRESS: string = "showProgress"
+// hide progress event name
+const EVENT_HIDE_PROGRESS: string = "hideProgress"
+// hide RKTProgress event name
+const EVENT_HIDE_RKT_PROGRESS: string = "hideRKTProgress"
+
 /**
  * RKTProgress 组件快速调用接口（需要配合RKTPage使用）
  */
-export class RKTProgressUtil {
+export namespace RKTProgressUtil {
+
+  export interface RKTProgressOptions {
+    style?: RKTProgressStyle
+    message?: string
+  }
+
   /**
    * 加载loding
-   * @param style 样式
-   * @param message 文本
+   * @param value 样式 | 可选参数 | 自定义动画参数
+   * @param tag 指定组件唯一tag
    */
-  public static showLoading(style: RKTProgressStyle = RKTProgressStyle.rotate, message?: string) {
-    var data = {
-      "style": style,
-      "message": message
+  export function showLoading(value?: RKTProgressStyle | RKTProgressOptions | RKTProgressElement, tag?: string) {
+    var data = { 'style': RKTProgressStyle.rotate, 'tag': tag }
+    if (typeof value === 'number') {
+      data['style'] = value
+    } else if (typeof value === 'object') {
+      let any = value as RKTProgressElement
+      if (any.animateSize != undefined && any.boxBorderSize != undefined) {
+        data['style'] = RKTProgressStyle.custom
+        data['progressElement'] = any
+      } else {
+        let any = value as RKTProgressOptions
+        data['style'] = any.style ?? RKTProgressStyle.rotate
+        data['message'] = any.message
+      }
     }
-    RKTEventBus.emit("showLoading", data)
+    RKTEventBus.emit(EVENT_SHOW_LOADING, data)
   }
 
   /**
-   * 加载自定义loding动画
-   * @param progressItem 动画配置
+   * 显示进度（用于下载或者需要任务处理进度的）
+   * @param value 任务进度0~1
+   * @param options 可选参数 | 自定义动画参数
+   * @param tag 指定组件唯一tag
    */
-  public static showCustomLoading(progressItem?: RKTProgressItem) {
-    var data = {
-      "style": RKTProgressStyle.custom,
-      "progressItem": progressItem
+  export function showProgress(value: number, options?: RKTProgressOptions | RKTProgressElement, tag?: string) {
+    var data = { 'progress': value, 'tag': tag }
+    if (options === undefined) {
+      data['style'] = RKTProgressStyle.forward
+    } else if (typeof options === 'object') {
+      let any = options as RKTProgressElement
+      if (any.animateSize != undefined && any.boxBorderSize != undefined) {
+        data['style'] = RKTProgressStyle.custom
+        data['progressElement'] = any
+      } else {
+        let any = options as RKTProgressOptions
+        data['style'] = any.style ?? RKTProgressStyle.forward
+        data['message'] = any.message
+      }
     }
-    RKTEventBus.emit("showCustomLoading", data)
+    RKTEventBus.emit(EVENT_SHOW_PROGRESS, data)
   }
 
   /**
-   * 隐藏当前loding
+   * @param all all = true 隐藏所有页面的
+   * @param tag 指定组件唯一tag
    */
-  public static hideLoading() {
-    RKTEventBus.emit("hideLoading")
+  export function hideLoading(all: boolean = false, tag?: string) {
+    var data = { 'type': all ? 'all' : 'current', 'tag': tag }
+    RKTEventBus.emit(EVENT_HIDE_LOADING, data)
   }
 
   /**
-   * 隐藏所有loding
+   * 隐藏任务进度
+   * @param all all = true 隐藏所有页面的
+   * @param tag 指定组件唯一tag
    */
-  public static hideAllLoading() {
-    RKTEventBus.emit("hideAllLoading")
+  export function hideProgress(all: boolean = false, tag?: string) {
+    var data = { 'type': all ? 'all' : 'current', 'tag': tag }
+    RKTEventBus.emit(EVENT_HIDE_PROGRESS, data)
   }
+
+  /**
+   * 隐藏当前的RKTProgress组件（注意：如果同时存在 `Loading` 和 `Progress`显示 会隐藏所有）
+   * @param all all = true 隐藏所有页面的
+   * @param tag 指定组件唯一tag
+   */
+  export function hide(all: boolean = false, tag?: string) {
+    var data = { 'type': all ? 'all' : 'current', 'tag': tag }
+    RKTEventBus.emit(EVENT_HIDE_RKT_PROGRESS, data)
+  }
+}
+
+/**
+ * 组件快速能力
+ */
+export enum RKTProgressFastAbility {
+  None = 0,
+  Loading = 1 << 0,
+  Progress = 1 << 1,
+  All = Loading | Progress
 }
 
 /**
@@ -65,28 +130,30 @@ export enum RKTProgressStyle {
   sandClock,
   // '经营帮'字跳舞
   wordDance,
-  // 前进进度条 - 预留的 暂不支持
+  // 线条百分比动画（暂时的）
   forward,
   // 自定义动画样式
   custom
 }
 
 /**
- * 配置描述接口
+ * 配置动画参数
  */
 export interface RKTProgressElement {
   // 动画大小
-  animateSize?: SizeOptions
+  animateSize: SizeOptions
   // 画布大小
-  boxBorderSize?: SizeOptions
+  boxBorderSize: SizeOptions
   // 画布圆角
   boxBorderRadius?: Length
   // 画布背景色
   boxBackgroundColor?: ResourceColor
   // json格式的动画数据, 仅限json格式（配合 style = custom 可以自定义动画）
-  lottieData?: object | null
+  lottieData?: object | null | string
   // 显示文本
-  message?: string
+  text?: string
+  // 文本颜色
+  textColor?: ResourceColor
 }
 
 /**
@@ -98,23 +165,26 @@ export class RKTProgressItem implements RKTProgressElement {
   boxBorderSize: SizeOptions = { width: 80, height: 80 }
   boxBorderRadius: Length = 10
   boxBackgroundColor: ResourceColor = `#80000000`
-  lottieData: object | null
-  message?: string
+  lottieData: object | null | string
+  text?: string
+  textColor?: ResourceColor = `#FFFFFFFF`
 
   constructor(t?: RKTProgressElement) {
-    this.animateSize = t?.animateSize
-    this.boxBorderSize = t?.boxBorderSize
-    this.boxBorderRadius = t?.boxBorderRadius
-    this.boxBackgroundColor = t?.boxBackgroundColor
-    this.lottieData = t?.lottieData
-    this.message = t?.message
+    this.animateSize = t?.animateSize ?? this.animateSize
+    this.boxBorderSize = t?.boxBorderSize ?? this.boxBorderSize
+    this.boxBorderRadius = t?.boxBorderRadius ?? this.boxBorderRadius
+    this.boxBackgroundColor = t?.boxBackgroundColor ?? this.boxBackgroundColor
+    this.lottieData = t?.lottieData ?? this.lottieData
+    this.text = t?.text ?? this.text
+    this.textColor = t?.textColor ?? this.textColor
   }
 
   /**
    * 重载动画默认样式相关配置
-   * @param 样式
+   * @param style 样式
+   * @param text 文本
    */
-  public reload(style: RKTProgressStyle, message?: string) {
+  public reload(style: RKTProgressStyle, text?: string) {
     switch (style) {
       case RKTProgressStyle.custom:
         // 自定义动画在外面配置
@@ -124,14 +194,23 @@ export class RKTProgressItem implements RKTProgressElement {
         this.boxBorderSize = { width: 100, height: 100 }
         this.boxBorderRadius = 10
         this.boxBackgroundColor = '#80000000'
-        this.message = message
+        this.text = text
+        this.textColor = '#FFFFFFFF'
         break;
       case RKTProgressStyle.wordDance:
         this.animateSize = { width: 200, height: 200 }
         this.boxBorderSize = { width: 220, height: 220 }
         this.boxBorderRadius = 0
         this.boxBackgroundColor = Color.Transparent
-        this.message = message
+        this.text = text
+        break;
+      case RKTProgressStyle.forward:
+        this.animateSize = { width: 300, height: 20 }
+        this.boxBorderSize = { width: 310, height: 30 }
+        this.boxBorderRadius = 0
+        this.boxBackgroundColor = '#80000000'
+        this.text = text
+        this.textColor = '#FFEF4033'
         break;
       case RKTProgressStyle.rotate:
       default:
@@ -139,7 +218,8 @@ export class RKTProgressItem implements RKTProgressElement {
         this.boxBorderSize = { width: 80, height: 80 } // 因动画属性有内动画边距这里保持一致
         this.boxBorderRadius = 10
         this.boxBackgroundColor = '#80000000'
-        this.message = message
+        this.text = text
+        this.textColor = '#FFFFFFFF'
         break;
     }
   }
@@ -149,26 +229,38 @@ export class RKTProgressItem implements RKTProgressElement {
 @CustomDialog
 export struct RKTProgress {
   controller: CustomDialogController
-  message?: string = ''
   // 外部自定义样式配合 progressItem 使用
   style: RKTProgressStyle = RKTProgressStyle.rotate
-
+  // 动画自动播放(禁用自动播放通过 `progress` 来外部控制进度，以实现需要任务进度条的功能)
+  autoplay: boolean = true
+  // 是否允许交互
+  interaction: boolean = false
+  // 组件唯一tag，用于同一个页面存在多个同一源的组件区分
+  tag: string = ''
+  // 赋予组件快速能力（如果配置成`all`，组件的所有状态共享，即代表所有快速操作都会共用这一个组件来切换，当一个页面存在多个`RKTProgress`组件时，不想共享状态就为组件配置单个能力）
+  fastAbility: RKTProgressFastAbility = RKTProgressFastAbility.None
+  // 附带消息内容
+  @Prop @Watch('onMessageUpdated') message: string = ''
+  // 动画播放进度 progress / 1.0
+  @Prop @Watch('onProgressUpdated') progress: number = 0
   // 是否显示
   @State show: boolean = true
-
+  // 动画item
   @State progressItem: RKTProgressItem = new RKTProgressItem()
 
   private renderingSettings: RenderingContextSettings = new RenderingContextSettings(true)
   private canvasRenderingContext: CanvasRenderingContext2D = new CanvasRenderingContext2D(this.renderingSettings)
   private animateItem: AnimationItem | null = null
   private animateName: string = "rocketProgress"
-
+  // 动画总帧数
+  private animationFrames: number
   // 当前是否已经加载
   private isLoaded: boolean = false
   // 渲染画布是否准备好
   private onReady: boolean = false
-  // 当前页面路径, 只有当前页面中的loading才会响应,其他页面的事件不响应
+  // 当前页面路径, 只有当前页面中的事件才会响应,其他页面的事件不响应
   private currentPagePath: string = ""
+  private currentTaskFlag: string = null
 
   // MARK: - 组件即将出现时
   async aboutToAppear() {
@@ -179,9 +271,7 @@ export struct RKTProgress {
   // MARK: - 组件即将销毁
   aboutToDisappear(){
     lottie.destroy(this.animateName)
-    RKTEventBus.off('showLoading', this)
-    RKTEventBus.off('hideLoading', this)
-    RKTEventBus.off('hideAllLoading', this)
+    this.unregisterEvent()
     hilog.info(0xFFFF00 , `RocketUI`, "RKTProgress lottie动画销毁了" )
   }
 
@@ -203,12 +293,12 @@ export struct RKTProgress {
               this.destroyAnimation()
               hilog.info(0xFFFF00 , `RocketUI`, "RKTProgress Canvas onDisAppear")
             })
-          if (this.progressItem.message && this.progressItem.message.length > 0) {
-            Text(this.progressItem.message)
-              .fontColor('#FFFFFFFF').fontSize(11).fontWeight(FontWeight.Regular)
+          if (this.progressItem.text && this.progressItem.text.length > 0) {
+            Text(this.progressItem.text)
+              .fontColor(this.progressItem.textColor).fontSize(11).fontWeight(FontWeight.Regular)
               .textAlign(TextAlign.Center)
               .margin({ top: 5, bottom: 5 })
-              .constraintSize({ maxWidth: 71 })
+              .constraintSize({ maxWidth: this.progressItem.boxBorderSize.width })
           }
         }
         .justifyContent(FlexAlign.Center).alignItems(HorizontalAlign.Center).align(Alignment.Center)
@@ -221,18 +311,22 @@ export struct RKTProgress {
     .justifyContent(FlexAlign.Center).alignItems(HorizontalAlign.Center).align(Alignment.Center)
     .backgroundColor(Color.Transparent)
     .width('100%').height('100%')
-    .position({
-      x: 0,
-      y: 0,
-    })
+    .position({ x: 0, y: 0 })
     .zIndex(9999)
-    .visibility(this.show ? Visibility.Visible : Visibility.None)
+    .hitTestBehavior(this.interaction ? HitTestMode.Transparent : HitTestMode.Default)
+    .visibility(this.show ? Visibility.Visible : Visibility.Hidden)
   }
 
   // MARK: - 重新载入动画和配置
-  async reloadAnimation() {
+  async reloadAnimation(element?: RKTProgressElement) {
     try {
       this.destroyAnimation()
+      if (element) {
+        this.updateAnimationDisplay(element)
+      } else {
+        // 重载动画画布相关配置
+        this.progressItem.reload(this.style, this.message)
+      }
 
       // 自定义动画样式需传入json格式的动画数据
       if (this.style == RKTProgressStyle.custom && this.progressItem.lottieData == null) {
@@ -240,17 +334,17 @@ export struct RKTProgress {
         return
       }
 
-      // 重载动画画布相关配置
-      this.progressItem.reload(this.style, this.message)
-
       if (this.progressItem.lottieData == null) {
         let animatePath = '';
         switch (this.style) {
           case RKTProgressStyle.sandClock:
-            animatePath = 'loading_shalou.json'
+            animatePath = 'animation_shalou.json'
             break;
           case RKTProgressStyle.wordDance:
             animatePath = 'loading_7.json'
+            break;
+          case RKTProgressStyle.forward:
+            animatePath = 'animation_forward.json'
             break;
           case RKTProgressStyle.rotate:
           default:
@@ -284,27 +378,65 @@ export struct RKTProgress {
     if (this.animateItem == null && this.progressItem.lottieData != null) {
       let contexts = getContext(this).createModuleContext('rocketUI') as common.UIAbilityContext
       if (contexts == null) { return }
+      this.animateName = 'rocketProgress' + this.currentPagePath + this.tag + this.currentTaskFlag
       this.animateItem = lottie.loadAnimation({
         container: this.canvasRenderingContext,
         renderer: 'canvas', // canvas 渲染模式
         loop: true,
-        autoplay: true,
+        autoplay: this.autoplay,
         context: contexts,
         name: this.animateName,
         animationData: this.progressItem.lottieData,
       })
+      this.animationFrames = this.animateItem.getDuration(true)
+      hilog.info(0xFFFF00 , `RocketUI`, "RKTProgress 动画帧数：" + this.animationFrames + 'fps')
       this.isLoaded = true
-    } else if (this.animateItem) {
+      // 第一次更新一下动画进度
+      if (this.show && !this.autoplay) {
+        this.updateAnimationFrames(this.progress)
+      }
+    } else if (this.animateItem && this.autoplay) {
       this.animateItem.play(this.animateName)
     }
   }
 
+  // MARK: - 显示消息
+  onMessageUpdated(propName: string) {
+    if (this.progressItem == null) { return }
+    this.progressItem.text = this.message
+  }
+
+  // MARK: - 播放进度
+  onProgressUpdated(propName: string) {
+    this.updateAnimationFrames(this.progress)
+  }
+
+  // MARK: - 更新动画进度
+  updateAnimationFrames(progress: number) {
+    if (this.autoplay || this.progressItem == null || this.animateItem == null) { return }
+    let value = Math.min(Math.abs(progress), 1.0)
+    value = value * this.animationFrames
+    this.animateItem.goToAndStop(value, true)
+    hilog.info(0xFFFF00 , `RocketUI`, "RKTProgress 播放进度：" + value)
+  }
+
+  // MARK: - 更新动画展示（大部分属性会影响UI变化）
+  updateAnimationDisplay(element: RKTProgressElement) {
+    this.progressItem.lottieData = element.lottieData
+    this.progressItem.animateSize = element.animateSize
+    this.progressItem.boxBorderSize = element.boxBorderSize
+    this.progressItem.boxBorderRadius = element.boxBorderRadius
+    this.progressItem.boxBackgroundColor = element.boxBackgroundColor
+    this.progressItem.text = element.text
+    this.progressItem.textColor = element.textColor
+  }
+
   // MARK: - 销毁当前动画
   destroyAnimation() {
-    lottie.destroy(this.animateName)
     this.animateItem = null
     this.isLoaded = false
     this.onReady = false
+    lottie.destroy(this.animateName)
   }
 
   // MARK: - 注册事件
@@ -312,85 +444,160 @@ export struct RKTProgress {
     try {
       let routerState = router.getState();
       this.currentPagePath = routerState.path + routerState.name
-      this.animateName = this.animateName + this.currentPagePath
 
-      // 注册显示Loading事件
-      RKTEventBus.on({
-        eventName: "showLoading",
-        target: this, callback: (next: RKTEventData) => {
-          // 不是当前页面发来的不处理
-          if (next.pathName != this.currentPagePath) { return }
+      if (this.fastAbility & RKTProgressFastAbility.None) { return }
 
-          let message = next.data["message"] as string
-          if (typeof message != 'undefined' && message.length > 0) {
-            this.message = message
-          } else {
-            this.message = null
-          }
-          this.progressItem.message = this.message
+      // 快速Loading能力
+      if (this.fastAbility & RKTProgressFastAbility.Loading) {
+        // 注册显示Loading事件
+        RKTEventBus.on({
+          eventName: EVENT_SHOW_LOADING,
+          target: this, callback: (next: RKTEventData) => {
+            // 不是当前页面发来的不处理
+            if (next.pathName != this.currentPagePath) { return }
+            // 如果设置了tag；不是当前tag不处理
+            let tag = next.data["tag"] as string
+            if (tag != undefined && tag != this.tag) { return }
 
-          // 如果当前动画样式不一致则重新刷新
-          let style = next.data["style"] as RKTProgressStyle
-          if (style != this.style) {
-            this.style = style
-            this.progressItem.lottieData = null
-            this.reloadAnimation()
-          } else {
-            // 当前动画已在加载不处理
-            if (this.show && this.isLoaded) { return }
-            this.startAnimation()
-          }
-          this.show = true
-        }
-      })
+            this.autoplay = true
+            this.currentTaskFlag = EVENT_SHOW_LOADING
 
-      // 注册显示自定义Loading事件
-      RKTEventBus.on({
-        eventName: "showCustomLoading",
-        target: this, callback: (next: RKTEventData) => {
-          // 不是当前页面发来的不处理
-          if (next.pathName != this.currentPagePath) { return }
+            let style = next.data["style"] as RKTProgressStyle
+            // 因为鸿蒙的消息机制限制，这里接收到的对象不具备class能力，需要赋值更新
+            let progressElement = next.data["progressElement"] as RKTProgressElement
+            if (progressElement) {
+              this.style = style
+              this.reloadAnimation(progressElement)
+            } else {
+              this.message = next.data["message"] as string
 
-          // 因为鸿蒙的消息机制限制，这里接收到的对象不具备class能力，需要赋值更新
-          let progressItem = next.data["progressItem"] as RKTProgressItem
-          if (progressItem) {
-            this.style = next.data["style"] as RKTProgressStyle
-            this.progressItem.animateSize = progressItem.animateSize
-            this.progressItem.boxBorderSize = progressItem.boxBorderSize
-            this.progressItem.boxBorderRadius = progressItem.boxBorderRadius
-            this.progressItem.boxBackgroundColor = progressItem.boxBackgroundColor
-            this.progressItem.lottieData = progressItem.lottieData
-            this.progressItem.message = progressItem.message
-            this.reloadAnimation()
+              // 如果当前动画样式不一致则重新刷新
+              if (style != this.style) {
+                this.style = style
+                this.progressItem.lottieData = null
+                this.reloadAnimation()
+              } else {
+                // 当前动画已在加载不处理
+                if (this.show && this.isLoaded) { return }
+                this.startAnimation()
+              }
+            }
+
             this.show = true
           }
-        }
-      })
+        })
 
-      // 注册隐藏Loading事件
+        // 注册隐藏Loading事件
+        RKTEventBus.on({
+          eventName: EVENT_HIDE_LOADING,
+          target: this, callback: (next: RKTEventData) => {
+            let type = next.data["type"] as string
+            // 不是当前页面发来的不处理
+            if (type == 'current' && next.pathName != this.currentPagePath) { return }
+            // 如果设置了tag；不是当前tag不处理
+            let tag = next.data["tag"] as string
+            if (tag != undefined && tag != this.tag) { return }
+            if (!this.show || this.currentTaskFlag != EVENT_SHOW_LOADING) { return }
+
+            this.currentTaskFlag = EVENT_HIDE_LOADING
+            this.show = false
+            this.destroyAnimation()
+          }
+        })
+      }
+
+      // 快速Progress能力
+      if (this.fastAbility & RKTProgressFastAbility.Progress) {
+        // 注册显示任务进度事件
+        RKTEventBus.on({
+          eventName: EVENT_SHOW_PROGRESS,
+          target: this, callback: (next: RKTEventData) => {
+            // 不是当前页面发来的不处理
+            if (next.pathName != this.currentPagePath) { return }
+            // 如果设置了tag；不是当前tag不处理
+            let tag = next.data["tag"] as string
+            if (tag != undefined && tag != this.tag) { return }
+
+            this.autoplay = false
+            this.currentTaskFlag = EVENT_SHOW_PROGRESS
+
+            let style = next.data["style"] as RKTProgressStyle
+            // 因为鸿蒙的消息机制限制，这里接收到的对象不具备class能力，需要赋值更新
+            let progressElement = next.data["progressElement"] as RKTProgressElement
+            if (progressElement) {
+              // 如果已经在播放中，因为进度这个处理特殊，暂时用数据源做唯一标识
+              if (this.show && this.isLoaded) {
+                this.updateAnimationDisplay(progressElement)
+              } else {
+                this.style = style
+                this.reloadAnimation(progressElement)
+              }
+            } else {
+              this.message = next.data["message"] as string
+
+              // 如果当前动画样式不一致则重新刷新
+              if (style != this.style) {
+                this.style = style
+                this.progressItem.lottieData = null
+                this.reloadAnimation()
+              } else {
+                if (!this.isLoaded) {
+                  this.startAnimation()
+                }
+              }
+            }
+
+            this.progress = next.data['progress'] as number
+            this.show = true
+          }
+        })
+
+        // 注册隐藏进度事件
+        RKTEventBus.on({
+          eventName: EVENT_HIDE_PROGRESS,
+          target: this, callback: (next: RKTEventData) => {
+            let type = next.data["type"] as string
+            // 不是当前页面发来的不处理
+            if (type == 'current' && next.pathName != this.currentPagePath) { return }
+            // 如果设置了tag；不是当前tag不处理
+            let tag = next.data["tag"] as string
+            if (tag != undefined && tag != this.tag) { return }
+            if (!this.show || this.currentTaskFlag != EVENT_SHOW_PROGRESS) { return }
+
+            this.currentTaskFlag = EVENT_HIDE_PROGRESS
+            this.show = false
+            this.destroyAnimation()
+          }
+        })
+      }
+
+      // 注册隐藏当前组件事件
       RKTEventBus.on({
-        eventName: "hideLoading",
+        eventName: EVENT_HIDE_RKT_PROGRESS,
         target: this, callback: (next: RKTEventData) => {
+          let type = next.data["type"] as string
           // 不是当前页面发来的不处理
-          if (next.pathName != this.currentPagePath) { return }
+          if (type == 'current' && next.pathName != this.currentPagePath) { return }
+          // 如果设置了tag；不是当前tag不处理
+          let tag = next.data["tag"] as string
+          if (tag != undefined && tag != this.tag) { return }
 
+          this.currentTaskFlag = EVENT_HIDE_RKT_PROGRESS
           this.show = false
           this.destroyAnimation()
         }
       })
-
-      // 注册隐藏所有Loading事件
-      RKTEventBus.on({
-        eventName: "hideAllLoading",
-        target: this, callback: (next: RKTEventData) => {
-
-          this.show = false
-          this.destroyAnimation()
-        }
-      })
-
     } catch (error) {
       hilog.info(0xFFFF00 , `RocketUI`, "RKTProgress registerEvent" + error)
     }
+  }
+
+  // MARK: - 注销事件
+  unregisterEvent() {
+    RKTEventBus.off(EVENT_SHOW_LOADING, this)
+    RKTEventBus.off(EVENT_SHOW_PROGRESS, this)
+    RKTEventBus.off(EVENT_HIDE_LOADING, this)
+    RKTEventBus.off(EVENT_HIDE_PROGRESS, this)
+    RKTEventBus.off(EVENT_HIDE_RKT_PROGRESS, this)
   }
 }

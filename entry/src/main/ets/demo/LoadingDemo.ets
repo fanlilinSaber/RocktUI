@@ -17,8 +17,16 @@ export default struct LoadingDemo {
   @State isloding03: boolean = false;
   @State isloding04: boolean = false;
   @State isloding05: boolean = false;
+  @State isProgress01: boolean = false;
+  @State progressValue: number = 0
+  @State progressStr: string = '下载进度0%'
+  @State isProgress02: boolean = false;
 
-  progressItem: RKTProgressItem = new RKTProgressItem({ animateSize: { width: 200, height: 200 }, boxBorderSize: { width: 220, height: 220 }, boxBorderRadius: 10, boxBackgroundColor: Color.Red})
+  private intervalID: number
+
+  progressItem01: RKTProgressItem = new RKTProgressItem({ animateSize: { width: 200, height: 200 }, boxBorderSize: { width: 220, height: 220 }, boxBorderRadius: 10, boxBackgroundColor: Color.Red })
+
+  progressItem02: RKTProgressItem = new RKTProgressItem({ animateSize: { width: 300, height: 300 }, boxBorderSize: { width: 300, height: 300 }, boxBorderRadius: 0, boxBackgroundColor: Color.Transparent })
 
   loading: CustomDialogController = new CustomDialogController({
     builder: RKTProgress({}),
@@ -26,7 +34,11 @@ export default struct LoadingDemo {
   })
 
   async aboutToAppear() {
+    this.loadJSONFile01()
+    this.loadJSONFile02()
+  }
 
+  async loadJSONFile01() {
     let animatePath = 'loading_6.json';
 
     let resStr = util.TextDecoder.create('utf-8', { ignoreBOM: true })
@@ -37,8 +49,25 @@ export default struct LoadingDemo {
 
     let lottieStr = resStr.decodeWithStream(new Uint8Array(buffer))
 
-    this.progressItem.lottieData = JSON.parse(lottieStr);
-    promptAction.showToast({ message: 'json动画资源加载完成' })
+    this.progressItem01.lottieData = JSON.parse(lottieStr);
+
+    promptAction.showToast({ message: 'json动画1资源加载完成' })
+  }
+
+  async loadJSONFile02() {
+    let animatePath = 'animation_woniu.json';
+
+    let resStr = util.TextDecoder.create('utf-8', { ignoreBOM: true })
+    let context = getContext(this) as common.UIAbilityContext
+    // 这里是一个异步方法，可能在build - Canvas - onReady之后执行
+    let buffer = await context.resourceManager.getRawFileContent(animatePath)
+    if(buffer === null || buffer === undefined){ return }
+
+    let lottieStr = resStr.decodeWithStream(new Uint8Array(buffer))
+
+    this.progressItem02.lottieData = JSON.parse(lottieStr);
+
+    promptAction.showToast({ message: 'json动画2资源加载完成' })
   }
 
 
@@ -49,6 +78,8 @@ export default struct LoadingDemo {
       this.test03()
       this.test04()
       this.test05()
+      this.test06()
+      this.test07()
     }
     .width('100%')
   }
@@ -140,7 +171,62 @@ export default struct LoadingDemo {
       })
 
     if(this.isloding05) {
-      RKTProgress({ style: RKTProgressStyle.custom, progressItem: this.progressItem })
+      RKTProgress({ style: RKTProgressStyle.custom, progressItem: this.progressItem01 })
+    }
+  }
+
+  @Builder test06() {
+    Text("任务进度")
+      .fontSize(30)
+      .fontWeight(FontWeight.Bold)
+      .onClick(() => {
+        this.isProgress01 = true
+
+        this.intervalID = setInterval(() => {
+          if (this.progressValue > 1) {
+            clearInterval(this.intervalID)
+            this.progressValue = 0
+            this.isProgress01 = false
+            return
+          }
+          this.progressValue += 0.02
+          this.progressStr = `下载进度` + (this.progressValue * 100).toFixed(0) + `%`
+        }, 200)
+
+      })
+      .margin({
+        top: 10
+      })
+
+    if(this.isProgress01) {
+      RKTProgress({ autoplay: false, progress: this.progressValue, message: this.progressStr, style: RKTProgressStyle.forward})
+    }
+  }
+
+  @Builder test07() {
+    Text("自定义任务进度")
+      .fontSize(30)
+      .fontWeight(FontWeight.Bold)
+      .onClick(() => {
+        this.isProgress02 = true
+
+        this.intervalID = setInterval(() => {
+          if (this.progressValue > 1) {
+            clearInterval(this.intervalID)
+            this.progressValue = 0
+            this.isProgress02 = false
+            return
+          }
+          this.progressValue += 0.02
+          this.progressStr = `下载进度` + (this.progressValue * 100).toFixed(0) + `%`
+        }, 200)
+      })
+      .margin({
+        top: 10
+      })
+
+    if(this.isProgress02) {
+      RKTProgress({ autoplay: false, progress: this.progressValue, message: this.progressStr, style: RKTProgressStyle.custom, progressItem: this.progressItem02 })
     }
   }
 

@@ -4,11 +4,12 @@
  * Descrobe:
  */
 
-import { RKTProgress } from '../components/progress/RKTProgress'
+import { RKTProgress, RKTProgressFastAbility, RKTProgressStyle } from '../components/progress/RKTProgress'
 import { RKTNavBar, RKTNavBarMenuItem } from '../components/navBar/RKTNavBar'
 import promptAction from '@ohos.promptAction';
 import RKTUtil from '../utils/RKTUtil';
 import { RKTAlertComponent } from '../components/dialog/RKTAlertComponent';
+import { RKTToast } from '../components/toast/RKTToast';
 
 @Builder
 function empty() {
@@ -45,7 +46,9 @@ export struct RKTPage {
   // toast能力；默认 = true
   toastAbility: boolean = true
   // 常用提示弹窗
-  rktAlertAbility: boolean = true
+  alertAbility: boolean = true
+  // 任务进度能力
+  progressAbility: boolean = true
 
   // 尾随闭包初始化 (此场景下自定义组件内有且仅有一个使用@BuilderParam装饰的属性。)
   @BuilderParam closer: () => void
@@ -68,15 +71,19 @@ export struct RKTPage {
       this.closer()
 
       if (this.loadingAbility) {
-        RKTProgress({ show: false })
+        RKTProgress({ show: false, fastAbility: RKTProgressFastAbility.Loading })
       }
 
       if (this.toastAbility) {
 
       }
 
-      if (this.rktAlertAbility) {
+      if (this.alertAbility) {
         RKTAlertComponent()
+      }
+
+      if (this.progressAbility) {
+        RKTProgress({ show: false, fastAbility: RKTProgressFastAbility.Progress })
       }
 
     }
