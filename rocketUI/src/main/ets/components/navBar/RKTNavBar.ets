@@ -5,6 +5,7 @@
  */
 import router from '@ohos.router';
 import promptAction from '@ohos.promptAction';
+import App from '@system.app';
 
 /**
  * 导航栏菜单
@@ -33,7 +34,7 @@ export struct RKTNavBar {
   // 导航栏标题
   @Prop title: string
   titleColor: ResourceColor = Color.White
-  titleFont?: number | string = 17
+  titleSize?: number | string = 17
   titleWeight?: number | FontWeight | string = FontWeight.Medium
 
   // 背景色（因无法获取组件默认的backgroundColor属性作为条件判断值，单独提供一个来设置默认色，不用在外面设置 backgroundColor）
@@ -72,7 +73,7 @@ export struct RKTNavBar {
       }
       .height('100%').width('100%')
     }
-    .height('44').width('100%')
+    .height($r('app.float.navBar_height')).width('100%')
     .backgroundColor(this.barColor ? this.barColor : '#FFEF4033')
   }
 
@@ -122,7 +123,7 @@ export struct RKTNavBar {
       Column() {
         Text(this.title)
           .align(Alignment.Center)
-          .fontSize(this.titleFont).fontWeight(this.titleWeight).fontColor(this.titleColor)
+          .fontSize(this.titleSize).fontWeight(this.titleWeight).fontColor(this.titleColor)
           .textOverflow({ overflow: TextOverflow.Ellipsis }) // 限制为一行 ellipses
           .maxLines(1)
       }

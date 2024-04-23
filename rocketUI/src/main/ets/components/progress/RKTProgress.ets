@@ -34,26 +34,39 @@ export namespace RKTProgressUtil {
   }
 
   /**
-   * 加载loding
-   * @param value 样式 | 可选参数 | 自定义动画参数
+   * 加载loding（不影响导航栏返回）
+   * @param options 样式 | 可选参数 | 自定义动画参数
    * @param tag 指定组件唯一tag
+   * @param extraParams 组件内可额外修改的参数（根据业务需求新增维护）
    */
-  export function showLoading(value?: RKTProgressStyle | RKTProgressOptions | RKTProgressElement, tag?: string) {
-    var data = { 'style': RKTProgressStyle.rotate, 'tag': tag }
-    if (typeof value === 'number') {
-      data['style'] = value
-    } else if (typeof value === 'object') {
-      let any = value as RKTProgressElement
+  export function showLoading(options?: RKTProgressStyle | RKTProgressOptions | RKTProgressElement, tag?: string, extraParams?: {[key: string]: any}) {
+    var data = { 'style': RKTProgressStyle.rotate, 'tag': tag, 'offsetEnable': true }
+    if (typeof options === 'number') {
+      data['style'] = options
+    } else if (typeof options === 'object') {
+      let any = options as RKTProgressElement
       if (any.animateSize != undefined && any.boxBorderSize != undefined) {
         data['style'] = RKTProgressStyle.custom
         data['progressElement'] = any
       } else {
-        let any = value as RKTProgressOptions
+        let any = options as RKTProgressOptions
         data['style'] = any.style ?? RKTProgressStyle.rotate
         data['message'] = any.message
       }
     }
+    for (let key in extraParams) {
+      data[key] = extraParams[key]
+    }
     RKTEventBus.emit(EVENT_SHOW_LOADING, data)
+  }
+
+  /**
+   * 加载全屏loding（忽略组件的偏移量设置）
+   * @param options 样式 | 可选参数 | 自定义动画参数
+   * @param tag 指定组件唯一tag
+   */
+  export function showWindowLoading(options?: RKTProgressStyle | RKTProgressOptions | RKTProgressElement, tag?: string) {
+    RKTProgressUtil.showLoading(options, tag, {'offsetEnable': false})
   }
 
   /**
@@ -132,7 +145,7 @@ export enum RKTProgressStyle {
   wordDance,
   // 线条百分比动画（暂时的）
   forward,
-  // 自定义动画样式
+  // 自定义动画样式（需配合`RKTProgressItem`使用）
   custom
 }
 
@@ -208,7 +221,7 @@ export class RKTProgressItem implements RKTProgressElement {
         this.animateSize = { width: 300, height: 20 }
         this.boxBorderSize = { width: 310, height: 30 }
         this.boxBorderRadius = 0
-        this.boxBackgroundColor = '#80000000'
+        this.boxBackgroundColor = Color.Transparent
         this.text = text
         this.textColor = '#FFEF4033'
         break;
@@ -247,6 +260,10 @@ export struct RKTProgress {
   @State show: boolean = true
   // 动画item
   @State progressItem: RKTProgressItem = new RKTProgressItem()
+  // 组件中心点偏移量
+  @State offsetY: number = 0
+  // 偏移量属性是否激活
+  @State offsetEnable: boolean = true
 
   private renderingSettings: RenderingContextSettings = new RenderingContextSettings(true)
   private canvasRenderingContext: CanvasRenderingContext2D = new CanvasRenderingContext2D(this.renderingSettings)
@@ -259,7 +276,7 @@ export struct RKTProgress {
   // 渲染画布是否准备好
   private onReady: boolean = false
   // 当前页面路径, 只有当前页面中的事件才会响应,其他页面的事件不响应
-  private currentPagePath: string = ""
+  private currentPagePath: string = null
   private currentTaskFlag: string = null
 
   // MARK: - 组件即将出现时
@@ -277,8 +294,8 @@ export struct RKTProgress {
 
   // MARK: -布局UI
   build() {
-    Column() {
-      if (this.show) {
+    if (this.show) {
+      Column() {
         Column() {
           Canvas(this.canvasRenderingContext)
             .size(this.progressItem.animateSize)
@@ -306,20 +323,21 @@ export struct RKTProgress {
         .borderRadius(this.progressItem.boxBorderRadius)
         .width(this.progressItem.boxBorderSize.width)
         .constraintSize({ minHeight: this.progressItem.boxBorderSize.height })
+        .offset({ x: 0, y: this.offsetEnable ? -this.offsetY/2 : 0 })
       }
+      .justifyContent(FlexAlign.Center).alignItems(HorizontalAlign.Center).align(Alignment.Center)
+      .backgroundColor(Color.Transparent)
+      .width('100%').height('100%')
+      .position({ x: 0, y: this.offsetEnable ? this.offsetY : 0 })
+      .zIndex(9999)
+      .hitTestBehavior(this.interaction ? HitTestMode.Transparent : HitTestMode.Default)
     }
-    .justifyContent(FlexAlign.Center).alignItems(HorizontalAlign.Center).align(Alignment.Center)
-    .backgroundColor(Color.Transparent)
-    .width('100%').height('100%')
-    .position({ x: 0, y: 0 })
-    .zIndex(9999)
-    .hitTestBehavior(this.interaction ? HitTestMode.Transparent : HitTestMode.Default)
-    .visibility(this.show ? Visibility.Visible : Visibility.Hidden)
   }
 
   // MARK: - 重新载入动画和配置
   async reloadAnimation(element?: RKTProgressElement) {
     try {
+
       this.destroyAnimation()
       if (element) {
         this.updateAnimationDisplay(element)
@@ -461,6 +479,7 @@ export struct RKTProgress {
 
             this.autoplay = true
             this.currentTaskFlag = EVENT_SHOW_LOADING
+            this.offsetEnable = next.data["offsetEnable"] as boolean
 
             let style = next.data["style"] as RKTProgressStyle
             // 因为鸿蒙的消息机制限制，这里接收到的对象不具备class能力，需要赋值更新
@@ -526,7 +545,7 @@ export struct RKTProgress {
             let progressElement = next.data["progressElement"] as RKTProgressElement
             if (progressElement) {
               // 如果已经在播放中，因为进度这个处理特殊，暂时用数据源做唯一标识
-              if (this.show && this.isLoaded) {
+              if (this.show && this.isLoaded && this.progressItem.lottieData == progressElement.lottieData) {
                 this.updateAnimationDisplay(progressElement)
               } else {
                 this.style = style
