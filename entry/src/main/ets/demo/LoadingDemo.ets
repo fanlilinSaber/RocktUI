@@ -142,7 +142,7 @@ export default struct LoadingDemo {
   }
 
   @Builder test04() {
-    Text("全局loding")
+    Text("全屏loding")
       .fontSize(30)
       .fontWeight(FontWeight.Bold)
       .onClick(() => {

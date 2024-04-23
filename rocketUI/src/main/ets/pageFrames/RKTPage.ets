@@ -10,6 +10,8 @@ import promptAction from '@ohos.promptAction';
 import RKTUtil from '../utils/RKTUtil';
 import { RKTAlertComponent } from '../components/dialog/RKTAlertComponent';
 import { RKTToast } from '../components/toast/RKTToast';
+import common from '@ohos.app.ability.common'
+import resourceManager from '@ohos.resourceManager'
 
 @Builder
 function empty() {
@@ -27,7 +29,7 @@ export struct RKTPage {
   // 导航栏title
   @Prop title: string
   titleColor: ResourceColor = Color.White
-  titleFont?: number | string = 17
+  titleSize?: number | string = 17
   titleWeight?: number | FontWeight | string = FontWeight.Medium
 
   // 背景色（因无法获取组件默认的backgroundColor属性作为条件判断值，单独提供一个来设置默认色，不用在外面设置 backgroundColor）
@@ -45,9 +47,9 @@ export struct RKTPage {
   loadingAbility: boolean = true
   // toast能力；默认 = true
   toastAbility: boolean = true
-  // 常用提示弹窗
+  // 常用提示弹窗；默认 = true
   alertAbility: boolean = true
-  // 任务进度能力
+  // 任务进度能力；默认 = true
   progressAbility: boolean = true
 
   // 尾随闭包初始化 (此场景下自定义组件内有且仅有一个使用@BuilderParam装饰的属性。)
@@ -60,7 +62,7 @@ export struct RKTPage {
         RKTNavBar({
           title: this.title,
           titleColor: this.titleColor,
-          titleFont: this.titleFont,
+          titleSize: this.titleSize,
           titleWeight: this.titleWeight,
           barColor: this.barColor,
           backIcon: this.backIcon,
@@ -71,11 +73,11 @@ export struct RKTPage {
       this.closer()
 
       if (this.loadingAbility) {
-        RKTProgress({ show: false, fastAbility: RKTProgressFastAbility.Loading })
+        RKTProgress({ show: false, fastAbility: RKTProgressFastAbility.Loading, offsetY: this.navBar ? 44 : 0 })
       }
 
       if (this.toastAbility) {
-
+        RKTToast({ show: false, fastAbility: true })
       }
 
       if (this.alertAbility) {

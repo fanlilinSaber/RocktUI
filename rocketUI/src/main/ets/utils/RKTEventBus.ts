@@ -2,14 +2,13 @@
  * Author:fanlilin
  * Date:2024/3/13
  * Descrobe: 基于系统 emitter 封装，一是为了我们方便集中管理事件中心，二是往往我们在发送事件中需要额外的信息作为补充，比如页面路径信息作为默认信息，三是针对同一行为的事件可以分路径页面管理，四是发现发送多层json数据内容丢失问题。
+ * AmendHistory：系统的`emitter`因消息内容格式和大小问题（10KB）限制，我们优化掉`emitter`这个中间层，直接实现消息转发机制。
  */
 
 import emitter from '@ohos.events.emitter'
 import hilog from '@ohos.hilog';
 import router from '@ohos.router';
 
-// APP总线事件ID
-const RKT_EVENT_ID = 2024313;
 const RKT_LOG_DOMAIN = 0x00503;
 
 /**
@@ -41,25 +40,6 @@ export interface RKTEventData {
 export class RKTEventBus {
   private static instance: RKTEventBus;
   private subscribes: Map<string, Map<any, RKTEvent>> = new Map()
-
-  private constructor() {
-    this.__registerEventListener()
-  }
-
-  private __registerEventListener() {
-    emitter.on({eventId: RKT_EVENT_ID}, (data: emitter.EventData) => {
-      let eventData: RKTEventData = {
-        eventName: data?.data['eventName'],
-        pathName: data?.data['pathName'],
-      }
-      let dataStr = data?.data['dataStr']
-      if (dataStr) {
-        let data = JSON.parse(dataStr)
-        eventData.data = data
-      }
-      this.onEvent(eventData)
-    });
-  }
 
   public static getInstance() {
     if(!RKTEventBus.instance){
@@ -109,8 +89,8 @@ export class RKTEventBus {
       var subKey = eventTarget ? eventTarget : eventName + "." + subs.size
       if (!subs.has(subKey)) {
         subs.set(subKey, event)
+        hilog.info(RKT_LOG_DOMAIN , `RocketUI`, `RKTEventBus.on() 注册事件${eventName}成功`)
       }
-      hilog.info(RKT_LOG_DOMAIN , `RocketUI`, `RKTEventBus.on() 注册事件${eventName}成功`)
     } catch (error) {
       hilog.error(RKT_LOG_DOMAIN , `RocketUI`, `RKTEventBus.on() 注册事件${event.eventName}失败` + error)
     }
@@ -119,20 +99,18 @@ export class RKTEventBus {
   /**
    * 发送事件消息
    * @param eventName 事件名称
-   * @param data 传送的数据
+   * @param data 发送的数据
    */
   public emit(eventName: string, data?: any){
     try {
       let routerState = router.getState()
-      var newData = {
-        'pathName': routerState.path + routerState.name,
-        'eventName': eventName
+      let eventData: RKTEventData = {
+        eventName: eventName,
+        pathName: routerState.path + routerState.name,
+        data: data
       }
-
-      // 因系统emitter发送多层json数据的格式会过滤掉，这里转换成json字符串发送
-      if (data) { newData['dataStr'] = JSON.stringify(data) }
-      emitter.emit({ eventId: RKT_EVENT_ID }, { data: newData })
-      hilog.info(RKT_LOG_DOMAIN , `RocketUI`, "RKTEventBus.emit() 发送事件成功/" + JSON.stringify(newData))
+      this.onEvent(eventData)
+      hilog.info(RKT_LOG_DOMAIN , `RocketUI`, "RKTEventBus.emit() 发送事件成功/" + JSON.stringify(eventData))
     } catch (error) {
       hilog.error(RKT_LOG_DOMAIN , `RocketUI`, "RKTEventBus.emit() 发送事件失败/" + error)
     }

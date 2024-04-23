@@ -18,7 +18,7 @@ export default struct RKTLoadingDemo {
   private intervalID: number
 
   progressElement01: RKTProgressElement = { animateSize: { width: 200, height: 200 }, boxBorderSize: { width: 220, height: 220 }, boxBorderRadius: 10, boxBackgroundColor: Color.Red}
-  progressElement02: RKTProgressElement = { animateSize: { width: 300, height: 50 }, boxBorderSize: { width: 300, height: 50 }, boxBorderRadius: 0, boxBackgroundColor: '#80000000' }
+  progressElement02: RKTProgressElement = { animateSize: { width: 300, height: 300 }, boxBorderSize: { width: 300, height: 300 }, boxBorderRadius: 0, boxBackgroundColor: Color.Transparent }
 
   async aboutToAppear() {
     this.loadJSONFile01()
@@ -42,7 +42,7 @@ export default struct RKTLoadingDemo {
   }
 
   async loadJSONFile02() {
-    let animatePath = 'animation_5k.json'
+    let animatePath = 'animation_woniu.json'
 
     let resStr = util.TextDecoder.create('utf-8', { ignoreBOM: true })
     let context = getContext(this) as common.UIAbilityContext
@@ -117,11 +117,11 @@ export default struct RKTLoadingDemo {
   }
 
   @Builder test04() {
-    Text("全局loding")
+    Text("全屏loding")
       .fontSize(30)
       .fontWeight(FontWeight.Bold)
       .onClick(() => {
-        RKTProgressUtil.showLoading()
+        RKTProgressUtil.showWindowLoading()
         setTimeout(()=>{
           RKTProgressUtil.hideLoading()
         },3000)
