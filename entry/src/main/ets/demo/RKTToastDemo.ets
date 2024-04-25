@@ -4,7 +4,7 @@
  * Descrobe:
  */
 
-import { RKTToast, RKTToastUtil } from '@zjos/rocketUI'
+import { RKTToast, RKTToastUtil, RKTToastPosition } from '@zjos/rocketUI'
 
 @Component
 export default struct RKTToastDemo {
@@ -18,6 +18,8 @@ export default struct RKTToastDemo {
     Column() {
       this.test01()
       this.test02()
+      this.test03()
+      this.test04()
     }
     .width('100%')
     .height('100%')
@@ -60,6 +62,40 @@ export default struct RKTToastDemo {
         }
         let text = this.testTexts[this.index]
         RKTToastUtil.show(text)
+        this.index ++
+      })
+      .margin({
+        top: 10
+      })
+  }
+
+  @Builder test03() {
+    Text("快捷使用Toast顶部弹出")
+      .fontSize(30)
+      .fontWeight(FontWeight.Bold)
+      .onClick(() => {
+        if (this.index >= this.testTexts.length) {
+          this.index = 0
+        }
+        let text = this.testTexts[this.index]
+        RKTToastUtil.show({ message: text, position: RKTToastPosition.top} )
+        this.index ++
+      })
+      .margin({
+        top: 10
+      })
+  }
+
+  @Builder test04() {
+    Text("快捷使用Toast底部弹出")
+      .fontSize(30)
+      .fontWeight(FontWeight.Bold)
+      .onClick(() => {
+        if (this.index >= this.testTexts.length) {
+          this.index = 0
+        }
+        let text = this.testTexts[this.index]
+        RKTToastUtil.show({ message: text, position: RKTToastPosition.bottom} )
         this.index ++
       })
       .margin({

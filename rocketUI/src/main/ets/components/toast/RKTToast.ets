@@ -25,15 +25,6 @@ export namespace RKTToastUtil {
     position?: RKTToastPosition
   }
 
-  export enum RKTToastPosition {
-    // 居中
-    center = 0,
-    // 顶部
-    top,
-    // 底部
-    bottom
-  }
-
   /**
    * 显示一个消息提示
    * @param message 文本 | 可选参数
@@ -53,11 +44,24 @@ export namespace RKTToastUtil {
   }
 }
 
+/**
+ * 显示位置
+ */
+export enum RKTToastPosition {
+  // 居中
+  center = 0,
+  // 顶部
+  top,
+  // 底部
+  bottom
+}
+
 @Component
 export struct RKTToast {
   // 消息文本
   @State message: string = ''
-  @State showPosition: RKTToastUtil.RKTToastPosition = RKTToastUtil.RKTToastPosition.center
+  // 显示位置
+  @State @Watch('onShowPositionUpdated') showPosition: RKTToastPosition = RKTToastPosition.center
   // 延时消失时间 2s
   duration?: number = 2000
   // 文本字体颜色
@@ -68,6 +72,7 @@ export struct RKTToast {
   fastAbility: boolean = false
   // 是否显示
   @State show: boolean = true
+  @State showPositionY: string = '50%'
   // 当前页面路径, 只有当前页面中的loading才会响应,其他页面的事件不响应
   private currentPagePath: string = null
   private timeID: number
@@ -98,9 +103,24 @@ export struct RKTToast {
       .hitTestBehavior(HitTestMode.Transparent)
       .width('100%')
       .align(Alignment.Center).alignItems(HorizontalAlign.Center)
-      .position({ x: 0, y: '50%' })
+      .position({ x: 0, y: this.showPositionY })
       .zIndex(999)
       .transition({ type: TransitionType.Insert, opacity: 1 })
+    }
+  }
+
+  // MARK: - 显示位置更新变化
+  onShowPositionUpdated() {
+    switch (this.showPosition) {
+      case RKTToastPosition.top:
+        this.showPositionY = '15%'
+        break;
+      case RKTToastPosition.bottom:
+        this.showPositionY = '85%'
+        break;
+      default:
+        this.showPositionY = '50%'
+        break;
     }
   }
 
@@ -139,11 +159,8 @@ export struct RKTToast {
             return
           }
 
-          let position = next.data["position"] as RKTToastUtil.RKTToastPosition
-
-
+          this.showPosition = next.data["position"] as RKTToastPosition
           this.duration = next.data["duration"] as number ?? 2000
-
 
           animateTo({ duration: 200, curve: Curve.EaseIn}, () => {
             this.show = true
