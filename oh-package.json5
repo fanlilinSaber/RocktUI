@@ -6,7 +6,6 @@
   "author": "",
   "license": "",
   "dependencies": {
-    "myapplication": "file:../rocketUI"
   },
   "devDependencies": {
     "@ohos/hypium": "1.0.6"
