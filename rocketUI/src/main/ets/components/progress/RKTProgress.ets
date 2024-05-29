@@ -28,6 +28,8 @@ const EVENT_HIDE_RKT_PROGRESS: string = "hideRKTProgress"
  */
 export namespace RKTProgressUtil {
 
+  type UAny = string | number | undefined | boolean | object
+
   export interface RKTProgressOptions {
     style?: RKTProgressStyle
     message?: string
@@ -39,11 +41,13 @@ export namespace RKTProgressUtil {
    * @param tag 指定组件唯一tag
    * @param extraParams 组件内可额外修改的参数（根据业务需求新增维护）
    */
-  export function showLoading(options?: RKTProgressStyle | RKTProgressOptions | RKTProgressElement, tag?: string, extraParams?: Map<string, object>) {
-    let data = new Map<string, object>()
-    data['style'] = RKTProgressStyle.rotate
-    data['tag'] = tag
-    data['offsetEnable'] = true
+  export function showLoading(options?: RKTProgressStyle | RKTProgressOptions | RKTProgressElement, tag?: string, extraParams?: Record<string, UAny>) {
+    let data: Record<string, string | number | undefined | boolean | RKTProgressElement | object> = {
+      'style': RKTProgressStyle.rotate,
+      'tag': tag,
+      'offsetEnable': true,
+    }
+
     if (typeof options === 'number') {
       data['style'] = options
     } else if (typeof options === 'object') {
@@ -59,8 +63,9 @@ export namespace RKTProgressUtil {
     }
 
     if (extraParams) {
-      extraParams.forEach((value, key) => {
-        data[key] = value
+      Object.entries(extraParams).forEach((object) => {
+        let key = object[0]
+        data[key] = extraParams[key]
       })
     }
     RKTEventBus.emit(EVENT_SHOW_LOADING, data)
@@ -72,7 +77,7 @@ export namespace RKTProgressUtil {
    * @param tag 指定组件唯一tag
    */
   export function showWindowLoading(options?: RKTProgressStyle | RKTProgressOptions | RKTProgressElement, tag?: string) {
-    let data = new Map<string, object>()
+    let data: Record<string, boolean> = {}
     data['offsetEnable'] = false
     RKTProgressUtil.showLoading(options, tag, data)
   }
@@ -84,7 +89,7 @@ export namespace RKTProgressUtil {
    * @param tag 指定组件唯一tag
    */
   export function showProgress(value: number, options?: RKTProgressOptions | RKTProgressElement, tag?: string) {
-    var data = { 'progress': value, 'tag': tag }
+    let data: Record<string, number | string | undefined | RKTProgressElement> = { 'progress': value, 'tag': tag }
     if (options === undefined) {
       data['style'] = RKTProgressStyle.forward
     } else if (typeof options === 'object') {
@@ -106,7 +111,7 @@ export namespace RKTProgressUtil {
    * @param tag 指定组件唯一tag
    */
   export function hideLoading(all: boolean = false, tag?: string) {
-    var data = { 'type': all ? 'all' : 'current', 'tag': tag }
+    let data: Record<string, boolean | string | undefined> = { 'type': all ? 'all' : 'current', 'tag': tag }
     RKTEventBus.emit(EVENT_HIDE_LOADING, data)
   }
 
@@ -116,7 +121,7 @@ export namespace RKTProgressUtil {
    * @param tag 指定组件唯一tag
    */
   export function hideProgress(all: boolean = false, tag?: string) {
-    var data = { 'type': all ? 'all' : 'current', 'tag': tag }
+    let data: Record<string, boolean | string | undefined> = { 'type': all ? 'all' : 'current', 'tag': tag }
     RKTEventBus.emit(EVENT_HIDE_PROGRESS, data)
   }
 
@@ -126,7 +131,7 @@ export namespace RKTProgressUtil {
    * @param tag 指定组件唯一tag
    */
   export function hide(all: boolean = false, tag?: string) {
-    var data = { 'type': all ? 'all' : 'current', 'tag': tag }
+    let data: Record<string, boolean | string | undefined> = { 'type': all ? 'all' : 'current', 'tag': tag }
     RKTEventBus.emit(EVENT_HIDE_RKT_PROGRESS, data)
   }
 }
@@ -184,9 +189,9 @@ export interface RKTProgressElement {
 export class RKTProgressItem implements RKTProgressElement {
   animateSize: SizeOptions = { width: 50, height: 50 }
   boxBorderSize: SizeOptions = { width: 80, height: 80 }
-  boxBorderRadius: Length = 10
-  boxBackgroundColor: ResourceColor = `#80000000`
-  lottieData: object | null | string
+  boxBorderRadius?: Length = 10
+  boxBackgroundColor?: ResourceColor = `#80000000`
+  lottieData?: object | null | string = null
   text?: string
   textColor?: ResourceColor = `#FFFFFFFF`
 
@@ -278,14 +283,14 @@ export struct RKTProgress {
   private animateItem: AnimationItem | null = null
   private animateName: string = "rocketProgress"
   // 动画总帧数
-  private animationFrames: number
+  private animationFrames: number = 0
   // 当前是否已经加载
   private isLoaded: boolean = false
   // 渲染画布是否准备好
   private onReady: boolean = false
   // 当前页面路径, 只有当前页面中的事件才会响应,其他页面的事件不响应
-  private currentPagePath: string = null
-  private currentTaskFlag: string = null
+  private currentPagePath: string | null = null
+  private currentTaskFlag: string | null = null
 
   // MARK: - 组件即将出现时
   async aboutToAppear() {
@@ -331,7 +336,7 @@ export struct RKTProgress {
         .borderRadius(this.progressItem.boxBorderRadius)
         .width(this.progressItem.boxBorderSize.width)
         .constraintSize({ minHeight: this.progressItem.boxBorderSize.height })
-        .offset({ x: 0, y: this.offsetEnable ? -this.offsetY/2 : 0 })
+        .offset({ x: 0, y: this.offsetEnable ? -this.offsetY / 2 : 0 })
       }
       .justifyContent(FlexAlign.Center).alignItems(HorizontalAlign.Center).align(Alignment.Center)
       .backgroundColor(Color.Transparent)
@@ -427,13 +432,13 @@ export struct RKTProgress {
   }
 
   // MARK: - 显示消息
-  onMessageUpdated(propName: string) {
+  onMessageUpdated() {
     if (this.progressItem == null) { return }
     this.progressItem.text = this.message
   }
 
   // MARK: - 播放进度
-  onProgressUpdated(propName: string) {
+  onProgressUpdated() {
     this.updateAnimationFrames(this.progress)
   }
 

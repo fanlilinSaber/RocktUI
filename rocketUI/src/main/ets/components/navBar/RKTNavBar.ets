@@ -21,7 +21,7 @@ export interface RKTNavBarMenuItem {
   // 自定义图标大小 不设置默认 = {20，20}
   iconSize?: SizeOptions
   // 点击事件；注意：外部需要通过bind绑定，是为了在对应的函数里this指向self（例： {title: '删除', action: this.deleteAction.bind(this)} ）
-  action?: (tag: string | number) => void
+  action?: (tag?: string | number) => void
   // 标签；当共用一个`action`的时候可以传入tag来区分不同的事件
   tag?: string | number
 }
@@ -45,15 +45,15 @@ export struct RKTNavBar {
   hideBack: boolean = false
 
   // 左右常规菜单
-  leftMemus?: RKTNavBarMenuItem[] = null
-  rightMemus?: RKTNavBarMenuItem[] = null
+  leftMemus?: RKTNavBarMenuItem[] = undefined
+  rightMemus?: RKTNavBarMenuItem[] = undefined
 
   // 自定义title（自定义title的视图会处于最顶层位置且不受内部约束影响）
-  @BuilderParam customTitle?: CustomBuilder = null
+  @BuilderParam customTitle?: CustomBuilder = undefined
   // 自定义左菜单（受内部约束影响，不想被约束就使用`customTitle`）
-  @BuilderParam customLeftMemus?: CustomBuilder = null
+  @BuilderParam customLeftMemus?: CustomBuilder = undefined
   // 自定义右菜单（受内部约束影响，不想被约束就使用`customTitle`）
-  @BuilderParam customRightMemus?: CustomBuilder = null
+  @BuilderParam customRightMemus?: CustomBuilder = undefined
 
   // MARK: - 布局UI
   build() {
@@ -183,7 +183,7 @@ export struct RKTNavBar {
    * @param items 数据源
    * @param padding 内边距
    */
-  @Builder normalMemus(items: Array<RKTNavBarMenuItem>, padding: Padding) {
+  @Builder normalMemus(items: Array<RKTNavBarMenuItem> | undefined, padding: Padding) {
     Row({ space: 10 }) {
       if (Array.isArray(items)) {
         ForEach(items, (item: RKTNavBarMenuItem)  => {

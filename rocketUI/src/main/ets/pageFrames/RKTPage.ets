@@ -69,7 +69,7 @@ export struct RKTPage {
       this.closer()
 
       if (this.loadingAbility) {
-        RKTProgress({ show: false, fastAbility: RKTProgressFastAbility.Loading, offsetY: this.navBar ? 44 : 0 })
+        RKTProgress({ show: false, fastAbility: RKTProgressFastAbility.Loading, offsetY: this.navBar ? 56 : 0 })
       }
 
       if (this.toastAbility) {

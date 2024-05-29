@@ -30,7 +30,7 @@ export namespace RKTToastUtil {
    * @param message 文本 | 可选参数
    */
   export function show(message: string | RKTToastOptions) {
-    let data = new Map<string, object>()
+    let data: Record<string, string | number> = {}
     if (typeof message === 'string') {
       data['message'] = message
       data['duration'] = 2000
