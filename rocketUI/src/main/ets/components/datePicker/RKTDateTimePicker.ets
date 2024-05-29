@@ -14,8 +14,8 @@ export struct RKTDateTimePicker {
   startDate: Date = new Date('1970-1-1')
   selectDate: Date = new Date()
   selectTime: Date = new Date()
-  onCancel: () => void
-  onEnter: (date: Date) => void
+  onCancel:Function = () => {}
+  onEnter:Function = (date: Date) => {}
 
   build() {
     Column() {
@@ -73,7 +73,7 @@ export struct RKTDateTimePicker {
               .height('100%')
               .layoutWeight(3)
               .onChange((value: DatePickerResult) => {
-                this.selectDate.setFullYear(value.year, value.month, value.day)
+                this.selectDate.setFullYear(value.year??0, value.month, value.day)
               })
           }
           if (this.pickerType == RKTDateTimePickerType.time || this.pickerType == RKTDateTimePickerType.dateAndTime) {
