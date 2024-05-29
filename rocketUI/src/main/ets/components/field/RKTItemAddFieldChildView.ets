@@ -8,7 +8,7 @@ import { RKTItemAddFieldEntity } from './RKTItemAddFieldEntity'
  */
 @Component
 export struct RKTItemAddFieldChildView {
-  itemData: RKTItemAddFieldEntity
+  itemData: RKTItemAddFieldEntity = new RKTItemAddFieldEntity()
   clickAction: Function = (result?: string) => {
   }
   onDateChange: Function = (itemData?: RKTItemAddFieldEntity) => {

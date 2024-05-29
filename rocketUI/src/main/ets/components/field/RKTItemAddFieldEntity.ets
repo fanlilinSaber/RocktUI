@@ -1,4 +1,4 @@
 export class RKTItemAddFieldEntity {
-  key: string = null
-  value: string = null
+  key: string = ""
+  value: string = ""
 }

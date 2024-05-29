@@ -57,7 +57,7 @@ export struct RKTItemAddFieldView {
       .justifyContent(FlexAlign.Start)
 
       List() {
-        ForEach(this.fieldList, (item, index) => {
+        ForEach(this.fieldList, (item : RKTItemAddFieldEntity, index) => {
           ListItem() {
             RKTItemAddFieldChildView({ itemData: item, onDateChange: (itemData: RKTItemAddFieldEntity) => {
               this.fieldList[index] = itemData
