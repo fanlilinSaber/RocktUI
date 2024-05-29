@@ -39,8 +39,11 @@ export namespace RKTProgressUtil {
    * @param tag 指定组件唯一tag
    * @param extraParams 组件内可额外修改的参数（根据业务需求新增维护）
    */
-  export function showLoading(options?: RKTProgressStyle | RKTProgressOptions | RKTProgressElement, tag?: string, extraParams?: {[key: string]: any}) {
-    var data = { 'style': RKTProgressStyle.rotate, 'tag': tag, 'offsetEnable': true }
+  export function showLoading(options?: RKTProgressStyle | RKTProgressOptions | RKTProgressElement, tag?: string, extraParams?: Map<string, object>) {
+    let data = new Map<string, object>()
+    data['style'] = RKTProgressStyle.rotate
+    data['tag'] = tag
+    data['offsetEnable'] = true
     if (typeof options === 'number') {
       data['style'] = options
     } else if (typeof options === 'object') {
@@ -54,8 +57,11 @@ export namespace RKTProgressUtil {
         data['message'] = any.message
       }
     }
-    for (let key in extraParams) {
-      data[key] = extraParams[key]
+
+    if (extraParams) {
+      extraParams.forEach((value, key) => {
+        data[key] = value
+      })
     }
     RKTEventBus.emit(EVENT_SHOW_LOADING, data)
   }
@@ -66,7 +72,9 @@ export namespace RKTProgressUtil {
    * @param tag 指定组件唯一tag
    */
   export function showWindowLoading(options?: RKTProgressStyle | RKTProgressOptions | RKTProgressElement, tag?: string) {
-    RKTProgressUtil.showLoading(options, tag, {'offsetEnable': false})
+    let data = new Map<string, object>()
+    data['offsetEnable'] = false
+    RKTProgressUtil.showLoading(options, tag, data)
   }
 
   /**

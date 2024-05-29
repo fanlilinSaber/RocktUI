@@ -6,12 +6,8 @@
 
 import { RKTProgress, RKTProgressFastAbility, RKTProgressStyle } from '../components/progress/RKTProgress'
 import { RKTNavBar, RKTNavBarMenuItem } from '../components/navBar/RKTNavBar'
-import promptAction from '@ohos.promptAction';
-import RKTUtil from '../utils/RKTUtil';
 import { RKTAlertComponent } from '../components/dialog/RKTAlertComponent';
 import { RKTToast } from '../components/toast/RKTToast';
-import common from '@ohos.app.ability.common'
-import resourceManager from '@ohos.resourceManager'
 
 @Builder
 function empty() {
@@ -40,8 +36,8 @@ export struct RKTPage {
   hideBack: boolean = false
 
   // 左右常规菜单
-  leftMemus?: RKTNavBarMenuItem[] = null
-  rightMemus?: RKTNavBarMenuItem[] = null
+  leftMemus?: RKTNavBarMenuItem[] = undefined
+  rightMemus?: RKTNavBarMenuItem[] = undefined
 
   // loading能力；默认 = true
   loadingAbility: boolean = true

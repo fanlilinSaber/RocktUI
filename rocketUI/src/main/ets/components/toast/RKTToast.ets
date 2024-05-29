@@ -30,7 +30,7 @@ export namespace RKTToastUtil {
    * @param message 文本 | 可选参数
    */
   export function show(message: string | RKTToastOptions) {
-    var data = {}
+    let data = new Map<string, object>()
     if (typeof message === 'string') {
       data['message'] = message
       data['duration'] = 2000
@@ -74,8 +74,8 @@ export struct RKTToast {
   @State show: boolean = true
   @State showPositionY: string = '50%'
   // 当前页面路径, 只有当前页面中的loading才会响应,其他页面的事件不响应
-  private currentPagePath: string = null
-  private timeID: number
+  private currentPagePath: string = ''
+  private timeID: number = 0
 
   // MARK: - 组件即将出现时
   aboutToAppear(){
