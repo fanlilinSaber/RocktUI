@@ -10,12 +10,12 @@ export struct RKTOptionsPickerDialog {
   }
   onClickRight: Function = (selectIndex: number, selectValue: string) => {
   }
-  enterTextColor: Resource | string
-  cancelTextColor: Resource | string
-  enterText: string
-  title: string
-  cancelText: string
-  tag: string
+  enterTextColor: Resource | string = ""
+  cancelTextColor: Resource | string = ""
+  enterText: string = ""
+  title: string = ""
+  cancelText: string = ""
+  tag: string = ""
   selectIndex: number = 0
   @Link childList: Array<string>
   private selectValue: string = this.childList.length > 0 ? this.childList[0] : ""
@@ -69,9 +69,13 @@ export struct RKTOptionsPickerDialog {
       .justifyContent(FlexAlign.Center)
 
       TextPicker({ range: this.childList, selected: this.selectIndex })
-        .onChange((value: string, index: number) => {
-          this.selectIndex = index
-          this.selectValue = value
+        .onChange((value: string | string[], index: number | number[]) => {
+          if (typeof value === 'string') {
+            this.selectValue = value
+          }
+          if (typeof index === 'number') {
+            this.selectIndex = index
+          }
         })
         .width("100%")
         .height(180)

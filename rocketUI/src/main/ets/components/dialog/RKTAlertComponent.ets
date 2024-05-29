@@ -16,17 +16,17 @@ const EVENT_ALERTDIALOG_CLOSE: string = "EVENT_ALERTDIALOG_CLOSE"
  */
 export class RKTAlertDialog {
   //确定按钮
-  onClickEnter: Function = null
+  onClickEnter: Function = () => {}
   //取消按钮
-  onClickCancel: Function = null
+  onClickCancel: Function =  () => {}
   //单例模式
   private static mInstance: RKTAlertDialog
   //获取对象
   public static getInstance() {
-    if (this.mInstance == null || this.mInstance == undefined) {
-      this.mInstance = new RKTAlertDialog()
+    if (RKTAlertDialog.mInstance == null || RKTAlertDialog.mInstance == undefined) {
+      RKTAlertDialog.mInstance = new RKTAlertDialog()
     }
-    return this.mInstance;
+    return RKTAlertDialog.mInstance;
   }
 
   /**
@@ -36,29 +36,29 @@ export class RKTAlertDialog {
    * @param onClickCancel 取消按钮点击回调函数
    */
   static show(message?: string | RKTAlertDialogElement,
-              onClickEnter?: Function,
-              onClickCancel?: Function
+              onClickEnter: Function = ()=>{},
+              onClickCancel: Function = ()=>{}
   ) {
-    let mInstance = this.getInstance()
+    let mInstance = RKTAlertDialog.getInstance()
     mInstance.onClickEnter = onClickEnter
     mInstance.onClickCancel = onClickCancel
 
-    let data = {}
+    let data : Record<string , string | boolean | undefined> = {}
     if (typeof message === 'string') {
       data = {
         "content": message
       }
     } else {
       data = {
-        "content": message.content,
-        "contentTextColor": message.contentTextColor,
-        "enterTextColor": message.enterTextColor,
-        "cancelTextColor": message.cancelTextColor,
-        "enterText": message.enterText,
-        "cancelText": message.cancelText,
-        "title": message.title,
-        "tag": message.tag,
-        "isOneBtn": message.isOneBtn??true,
+        "content": message?.content,
+        "contentTextColor": message?.contentTextColor,
+        "enterTextColor": message?.enterTextColor,
+        "cancelTextColor": message?.cancelTextColor,
+        "enterText": message?.enterText,
+        "cancelText": message?.cancelText,
+        "title": message?.title,
+        "tag": message?.tag,
+        "isOneBtn": message?.isOneBtn??true,
       }
     }
     RKTEventBus.emit(EVENT_ALERTDIALOG_OPEN, data)
@@ -75,7 +75,7 @@ export class RKTAlertDialog {
 /**
  * 支持修改的参数
  */
-export declare type RKTAlertDialogElement = {
+export interface  RKTAlertDialogElement {
   content?: string
   contentTextColor?: string
   enterTextColor?: string
@@ -147,15 +147,15 @@ export struct RKTAlertComponent {
             return
           }
           let mCommonDialogObserved: RKTCommonDialogObserved = new RKTCommonDialogObserved()
-          let content = next.data["content"]
-          let contentTextColor = next.data["contentTextColor"]
-          let enterTextColor = next.data["enterTextColor"]
-          let cancelTextColor = next.data["cancelTextColor"]
-          let enterText = next.data["enterText"]
-          let cancelText = next.data["cancelText"]
-          let title = next.data["title"]
-          let tag = next.data["tag"]
-          let isOneBtn = next.data["isOneBtn"]
+          let content: string = next.data["content"]
+          let contentTextColor: Resource | string = next.data["contentTextColor"]
+          let enterTextColor: Resource | string = next.data["enterTextColor"]
+          let cancelTextColor: Resource | string = next.data["cancelTextColor"]
+          let enterText: string = next.data["enterText"]
+          let cancelText: string = next.data["cancelText"]
+          let title: string = next.data["title"]
+          let tag: string = next.data["tag"]
+          let isOneBtn: boolean = next.data["isOneBtn"]
           if (content) {
             mCommonDialogObserved.content = content
           }
