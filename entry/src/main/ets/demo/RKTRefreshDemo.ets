@@ -1,8 +1,10 @@
 import {
   RKTProgressUtil,
   RKTRefreshActionEvent,
+  RKTRefreshBaseEntity,
   RKTRefreshComponent,
   RKTRefreshEnum,
+  RKTRefreshItemContent,
   RKTRefreshObserved
 } from '@zjos/rocketUI'
 import promptAction from '@ohos.promptAction'
@@ -32,14 +34,11 @@ export default struct RKTRefreshDemo {
     }.backgroundColor("#FFFFFFFF").zIndex(-1)
   }
 
-  @Builder listItemContent($$: {
-    item: ListItemEntity,
-    index: number
-  }) {
-    ListItemComponent({ entity: $$.item }).onClick(() => {
+  @Builder listItemContent($$: RKTRefreshItemContent) {
+    ListItemComponent({ entity: $$.item as ListItemEntity}).onClick(() => {
       this.mActionEvent = new RKTRefreshActionEvent({
         action: RKTRefreshEnum.ClickEvent,
-        id: $$.item.name
+        id: ($$.item as ListItemEntity).name
       })
     })
   }
@@ -75,16 +74,16 @@ export default struct RKTRefreshDemo {
 
 @Component
 export struct ListItemComponent {
-  entity: ListItemEntity
+  entity?: ListItemEntity
 
   build() {
     Column() {
-      Text(this.entity.name).width("100%").height(100)
+      Text(this.entity?.name).width("100%").height(100)
       Shape().width("100%").height(1).backgroundColor("#FFEDEDED")
     }.padding({ left: 15, right: 15 })
   }
 }
 
-class ListItemEntity {
-  name: string
+class ListItemEntity extends RKTRefreshBaseEntity{
+  name?: string
 }

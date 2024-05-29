@@ -3,7 +3,7 @@ import { RKTRefreshConstant, RefreshState } from './RKTRefreshConstant';
 import { RKTRefreshObserved } from './RKTRefreshObserved';
 
 
-export function listTouchEvent(mObserved: RKTRefreshObserved, event: TouchEvent): Promise<RKTRefreshObserved> {
+export function listTouchEvent(mObserved: RKTRefreshObserved, event: TouchEvent): Promise<RKTRefreshObserved> | undefined {
   switch (event.type) {
     case TouchType.Down:
       mObserved.downY = event.touches[0].y;
@@ -40,6 +40,7 @@ export function listTouchEvent(mObserved: RKTRefreshObserved, event: TouchEvent)
     default:
       break;
   }
+  return;
 }
 
 export function touchMovePullRefresh(mObserved: RKTRefreshObserved, event: TouchEvent) {

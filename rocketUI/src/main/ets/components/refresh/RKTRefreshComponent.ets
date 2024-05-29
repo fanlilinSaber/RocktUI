@@ -1,5 +1,6 @@
 import { closeRefresh, listTouchEvent } from './RKTPullDownRefresh';
 import { closeLoadMore } from './RKTPullUpLoadMore';
+import { RKTRefreshBaseEntity } from './RKTRefreshBaseEntity';
 import { RKTRefreshConstant } from './RKTRefreshConstant';
 import { RKTRefreshObserved } from './RKTRefreshObserved';
 
@@ -11,25 +12,21 @@ import { RKTRefreshObserved } from './RKTRefreshObserved';
 @Component
 export struct RKTRefreshComponent {
   enableRefresh: boolean = true
-  currentPage: number
-  pageSize: number
+  currentPage: number = 0
+  pageSize: number = 10
   //如果有其它的数据，可以用这个字段传递
-  extendData: any
+  extendData: object | string | number | boolean | null | undefined
   //隐藏“没有更多数据了”
   isHideNoMoreData: boolean = false
   @State mObserved: RKTRefreshObserved = new RKTRefreshObserved();
   //监听列表的数据
-  @Watch("onLiveDataChange") @Link mLiveData: any[]
+  @Watch("onLiveDataChange") @Link mLiveData: RKTRefreshBaseEntity[]
   //监听用户的交互操作
   @Watch("onActionChange") @Link mActionEvent: RKTRefreshActionEvent
 
   //注意：这种方式添加的@Builder listItemContent(){}内部的this是指向此RKTRefreshComponent的
-  @BuilderParam listItemContent: ($$: {
-    mLiveData: any[],
-    item: any,
-    index: number,
-    extendData: any
-  }) => void
+  @BuilderParam listItemContent: ($$: RKTRefreshItemContent) => void
+
   onRefreshOrLoadMore: Function = (mObserved: RKTRefreshObserved, isAboutToAppear: boolean) => {
   }
 
@@ -100,7 +97,7 @@ export struct RKTRefreshComponent {
             })
           }
 
-          ForEach(this.mLiveData, (item, index) => {
+          ForEach(this.mLiveData, (item : RKTRefreshBaseEntity, index) => {
             ListItem() {
               this.listItemContent({ mLiveData: this.mLiveData, item: item, index: index, extendData: this.extendData })
             }
@@ -148,6 +145,13 @@ export struct RKTRefreshComponent {
   }
 }
 
+export class RKTRefreshItemContent {
+  mLiveData: RKTRefreshBaseEntity[] = []
+  item: RKTRefreshBaseEntity = new RKTRefreshBaseEntity()
+  index: number = 0
+  extendData: object | string | number | boolean | null | undefined
+}
+
 /**
  * 组件间通信
  */
@@ -164,7 +168,7 @@ export class RKTRefreshActionEvent {
     }
   }
 
-  build(action?: RKTRefreshEnum, id?: string, entity?: any, index?: number, content?: any, tag?: any, other?: any) {
+  build(action?: RKTRefreshEnum, id?: string, entity?: object | string | number | boolean | null , index?: number, content?: object | string | number | boolean | null , tag?: object | string | number | boolean | null , other?: object | string | number | boolean | null ) {
     this.action = action
     this.id = id
     this.entity = entity
@@ -175,24 +179,25 @@ export class RKTRefreshActionEvent {
     return this
   }
 
-  action: RKTRefreshEnum
-  id: string
-  entity: any
-  index: number
-  content: any
-  tag: any
-  other: any
+  action?: RKTRefreshEnum
+  id?: string
+  entity?: object | string | number | boolean | null
+  index?: number
+  content?: object | string | number | boolean | null
+  tag?: object | string | number | boolean | null
+  other?: object | string | number | boolean | null
 }
 
 
-export declare type RKTRefreshActionEventElement = {
+export interface RKTRefreshActionEventElement {
   action?: RKTRefreshEnum
   id?: string
-  entity?: any
+  entity?: object | string | number | boolean | null
   index?: number
-  content?: any
-  tag?: any
-  other?: any
+  content?: object | string | number | boolean | null
+  tag?: object | string | number | boolean | null
+  other?: object | string | number | boolean | null
+
 }
 
 export const enum RKTRefreshEnum {

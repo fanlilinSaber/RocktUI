@@ -26,12 +26,12 @@ export class RKTRefreshObserved {
   isCanLoadMore: boolean = false
   //
   currentPageDataLength: number = 0
-  onCallRefresh: () => void
+  onCallRefresh:Function = () => {}
   //
-  isVisible: boolean
-  imageSrc: Resource
-  textValue: string
-  heightValue: number
+  isVisible?: boolean = false
+  imageSrc?: Resource = $r("app.media.rkt_ic_pull_up_load")
+  textValue?: string = ""
+  heightValue?: number = 0
 
   constructor(isVisible ?: boolean, imageSrc?: Resource, textValue?: string, heightValue?: number) {
     this.isVisible = isVisible
