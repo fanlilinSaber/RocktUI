@@ -6,14 +6,14 @@ export class RKTItemInputTextViewObserved {
   constructor(t?: HorizontalElement | VerticalElement | CheckBoxElement) {
     if (t != undefined && t != null)
       if (t.orientation === RKTOrientation.vertical) {
-        this.getVerticalElement(t)
+        this.getVerticalElement(t as VerticalElement)
       } else if (t.orientation === RKTOrientation.checkBox) {
-        this.getCheckBoxElement(t)
+        this.getCheckBoxElement(t as CheckBoxElement)
       } else {
         if (t.orientation === undefined) {
           this.orientation = RKTOrientation.horizontal
         }
-        this.getHorizontalElement(t)
+        this.getHorizontalElement(t as HorizontalElement)
       }
   }
 
@@ -26,42 +26,41 @@ export class RKTItemInputTextViewObserved {
   rightPadding: number = 15
 
   //左侧图片
-  leftImage: string | PixelMap | Resource
+  leftImage: string | PixelMap | Resource | null | undefined = null
   //左侧文案
-  leftContent: string = "-"
-  leftContentFontColor: ResourceColor = $r("app.color.white")
+  leftContent: string| undefined = "-"
+  leftContentFontColor: ResourceColor| undefined = $r("app.color.color_FF333333")
   leftContentMaxLines: number = 1
 
   //是否显示红色星号"*"
   isShowRedStar: boolean = true
 
   //右侧是否能够输入 true 能够输入 false 不能输入，只是展示文案
-  isRightInput: boolean = false
+  isRightInput: boolean| undefined = false
   //右侧提示文案
   rightHint: string = "请选择"
   //右侧文案（优先显示content文案，如果没有则显示hint）
-  rightContent: string = ""
+  rightContent: string | undefined = ""
   rightContentColor: ResourceColor = $r("app.color.color_FF000000")
   //水平模式是否显示下方输入框
   isRightBottomInput: boolean = false
   //右侧底部提示文案
   rightBottomHint: string = "请输入内容"
   //右侧底部文案（优先显示content文案，如果没有则显示hint）
-  rightBottomContent: string = ""
+  rightBottomContent: string | undefined  = ""
   leftContentPaddingVertical: number = 15
-
 
   //是否显示右侧箭头
   isShowRightArrow: boolean = true
   //自定义右侧图标
-  rightImage: Resource = null
+  rightImage: Resource | null = null
 
   //底部是否能够输入 true 能够输入 false 不能输入，只是展示文案
   isBottomInput: boolean = false
   //底部提示文案
   bottomHint: string = "请选择"
   //底部文案（优先显示content文案，如果没有则显示hint）
-  bottomContent: string = ""
+  bottomContent: string | undefined = ""
 
   //文案的最大行数
   maxLines: number = 1
@@ -70,12 +69,12 @@ export class RKTItemInputTextViewObserved {
   bottomLineMarginLeft: number = 15
   bottomLineMarginRight: number = 15
   bgColor: ResourceColor = $r("app.color.color_FFFFFFFF")
-  rightContentUnit: string = ""
-  isCheckBoxChecked: boolean
-  checkBoxContent: string
+  rightContentUnit: string | undefined = ""
+  isCheckBoxChecked: boolean| undefined = false
+  checkBoxContent: string| undefined = ""
 
   //保存的数据
-  tag: string = ""
+  tag: string| undefined = ""
 
   //horizontal
   getHorizontal(leftContent: string, rightHint?: string, rightContent?: string, isRightInput?: boolean, isShowRedStar?: boolean, isShowRightArrow?: boolean, isShowBottomLine?: boolean, bgColor?: ResourceColor, maxLines?: number, rightBottomHint?: string, rightBottomContent?: string, isRightBottomInput?: boolean) {
