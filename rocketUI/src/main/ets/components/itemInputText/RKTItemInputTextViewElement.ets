@@ -1,6 +1,6 @@
 import { RKTOrientation } from './RKTItemInputTextView'
 
-export declare type HorizontalElement = {
+export class HorizontalElement {
   //组件的布局方向（默认水平方向）
   //水平方向时只展示左侧和右侧的布局，不展示底部的布局
   //垂直方式时只展示左侧和底部的布局，不展示右侧的布局
@@ -12,10 +12,9 @@ export declare type HorizontalElement = {
   //左侧文案
   leftContent?: string
   leftContentFontColor?: ResourceColor
-  leftContentMaxLines?:number
+  leftContentMaxLines?: number
   //是否显示红色星号"*"
   isShowRedStar?: boolean
-
   //右侧是否能够输入 true 能够输入 false 不能输入，只是展示文案
   isRightInput?: boolean
   //右侧提示文案
@@ -44,7 +43,7 @@ export declare type HorizontalElement = {
   tag?: string
 }
 
-export declare type VerticalElement = {
+export class VerticalElement {
   //组件的布局方向
   orientation?: RKTOrientation
   leftPadding?: number
@@ -52,7 +51,7 @@ export declare type VerticalElement = {
   //左侧文案
   leftContent?: string
   leftContentFontColor?: ResourceColor
-  leftContentMaxLines?:number
+  leftContentMaxLines?: number
   //是否显示红色星号"*"
   isShowRedStar?: boolean
   //是否显示右侧箭头
@@ -76,7 +75,7 @@ export declare type VerticalElement = {
   tag?: string
 }
 
-export declare type CheckBoxElement = {
+export class CheckBoxElement {
   //组件的布局方向
   orientation?: RKTOrientation
   leftPadding?: number
@@ -84,10 +83,9 @@ export declare type CheckBoxElement = {
   //左侧文案
   leftContent?: string
   leftContentFontColor?: ResourceColor
-  leftContentMaxLines?:number
+  leftContentMaxLines?: number
   //是否显示红色星号"*"
   isShowRedStar?: boolean
-
   //右侧是否能够输入 true 能够输入 false 不能输入，只是展示文案
   isRightInput?: boolean
   //右侧提示文案

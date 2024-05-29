@@ -81,7 +81,7 @@ export struct RKTItemInputTextView {
                 })
             }
           } else {
-            if (this.isEmptyString(this.mObserved.rightContent)) {
+            if (this.isEmptyString(this.mObserved.rightContent??"")) {
               Text(this.mObserved.rightHint)
                 .fontColor($r("app.color.color_FFC0C4CC"))
                 .maxLines(this.mObserved.maxLines)
@@ -173,7 +173,7 @@ export struct RKTItemInputTextView {
               })
           }
         } else {
-          if (this.isEmptyString(this.mObserved.bottomContent)) {
+          if (this.isEmptyString(this.mObserved.bottomContent??"")) {
             Text(this.mObserved.bottomHint).maxLines(this.mObserved.maxLines).width("100%")
               .padding({ left: 15, right: 15, bottom: 10 })
               .fontColor($r("app.color.color_FFC0C4CC"))

@@ -51,13 +51,17 @@ export { RKTRefreshConstant } from './components/refresh/RKTRefreshConstant'
 
 export { RKTRefreshObserved } from './components/refresh/RKTRefreshObserved'
 
+export { RKTRefreshBaseEntity } from './components/refresh/RKTRefreshBaseEntity'
+
 export { RKTRefreshComponent,
   RKTLoadingLayout,
   RKTNoMoreLayout,
   RKTLoadMoreLayout,
   RKTRefreshActionEvent,
   RKTRefreshEnum,
-  RKTRefreshLayout } from './components/refresh/RKTRefreshComponent'
+  RKTRefreshLayout,
+  RKTRefreshItemContent
+} from './components/refresh/RKTRefreshComponent'
 
 export { RKTCategoryTitleEntity,
   RKTCategoryTitleView } from './components/category/RKTCategoryTitleView'

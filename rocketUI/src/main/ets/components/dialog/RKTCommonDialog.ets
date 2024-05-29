@@ -18,17 +18,20 @@ export struct RKTCommonObservedDialog {
 
   build() {
     Column() {
-      Text(this.mObserved.title??'温馨提示')
+      Text(this.mObserved.title ?? '温馨提示')
         .fontSize(16)
         .fontWeight(FontWeight.Medium)
         .margin({ top: 20, left: 20, right: 20 })
-      Text(this.mObserved.content).fontSize(14).margin({ top: 20, left: 20, right: 20 }).fontColor(this.mObserved.contentTextColor??$r("app.color.color_FF333333"))
+      Text(this.mObserved.content)
+        .fontSize(14)
+        .margin({ top: 20, left: 20, right: 20 })
+        .fontColor(this.mObserved.contentTextColor ?? $r("app.color.color_FF333333"))
       Divider().color($r("app.color.color_FFEDEDED")).width('100%').margin({ top: 20 })
       Flex() {
         if (this.mObserved.isOneBtn == false) {
-          Text(this.mObserved.cancelText??'取消')
+          Text(this.mObserved.cancelText ?? '取消')
             .backgroundColor($r("app.color.color_FFFFFFFF"))
-            .fontColor(this.mObserved.cancelTextColor??$r("app.color.color_FF666666"))
+            .fontColor(this.mObserved.cancelTextColor ?? $r("app.color.color_FF666666"))
             .textAlign(TextAlign.Center)
             .height('100%')
             .flexGrow(1)
@@ -41,9 +44,9 @@ export struct RKTCommonObservedDialog {
             })
           Divider().vertical(true).color($r("app.color.color_FFEDEDED")).height('100%')
         }
-        Text(this.mObserved.enterText??'确定')
+        Text(this.mObserved.enterText ?? '确定')
           .backgroundColor($r("app.color.color_FFFFFFFF"))
-          .fontColor(this.mObserved.enterTextColor??$r("app.color.color_FF79A2FF"))
+          .fontColor(this.mObserved.enterTextColor ?? $r("app.color.color_FF79A2FF"))
           .fontWeight(FontWeight.Medium)
           .textAlign(TextAlign.Center)
           .height('100%')
@@ -82,19 +85,19 @@ export class RKTCommonDialogObserved {
     }
   }
 
-  content: string = ""
-  contentTextColor: Resource | string
-  enterTextColor: Resource | string
-  cancelTextColor: Resource | string
-  enterText: string
-  cancelText: string
-  title: string
-  tag: string
-  obj: any
-  isOneBtn: boolean = false
+  content?: string = ""
+  contentTextColor?: Resource | string
+  enterTextColor?: Resource | string
+  cancelTextColor?: Resource | string
+  enterText?: string
+  cancelText?: string
+  title?: string
+  tag?: string
+  obj?: object | string | number | boolean | null
+  isOneBtn?: boolean = false
 }
 
-export declare type RKTCommonDialogElement = {
+export class RKTCommonDialogElement {
   content?: string
   contentTextColor?: Resource | string
   enterTextColor?: Resource | string
@@ -103,7 +106,7 @@ export declare type RKTCommonDialogElement = {
   cancelText?: string
   title?: string
   tag?: string
-  obj?: any
+  obj?: object | string | number | boolean | null
   isOneBtn?: boolean
 }
 
@@ -124,24 +127,24 @@ export struct RKTCommonDialog {
   onClickCancel: Function = (result: string) => {
   };
   content: string = ""
-  enterTextColor: Resource | string
-  cancelTextColor: Resource | string
-  enterText: string
-  cancelText: string
-  title: string
-  tag: string
+  enterTextColor: Resource | string = ""
+  cancelTextColor: Resource | string = ""
+  enterText: string = ""
+  cancelText: string = ""
+  title: string = ""
+  tag: string = ""
   isOneBtn: boolean = false
 
   build() {
     Column() {
-      Text(this.title??'温馨提示').fontSize(16).fontWeight(FontWeight.Medium).margin({ top: 20, left: 20, right: 20 })
+      Text(this.title ?? '温馨提示').fontSize(16).fontWeight(FontWeight.Medium).margin({ top: 20, left: 20, right: 20 })
       Text(this.content).fontSize(14).margin({ top: 20, left: 20, right: 20 })
       Divider().color($r("app.color.color_FFEDEDED")).width('100%').margin({ top: 20 })
       Flex() {
         if (this.isOneBtn == false) {
-          Text(this.cancelText??'取消')
+          Text(this.cancelText ?? '取消')
             .backgroundColor($r("app.color.color_FFFFFFFF"))
-            .fontColor(this.cancelTextColor??$r("app.color.color_FF666666"))
+            .fontColor(this.cancelTextColor ?? $r("app.color.color_FF666666"))
             .textAlign(TextAlign.Center)
             .height('100%')
             .flexGrow(1)
@@ -154,9 +157,9 @@ export struct RKTCommonDialog {
             })
           Divider().vertical(true).color($r("app.color.color_FFEDEDED")).height('100%')
         }
-        Text(this.enterText??'确定')
+        Text(this.enterText ?? '确定')
           .backgroundColor($r("app.color.color_FFFFFFFF"))
-          .fontColor(this.enterTextColor??$r("app.color.color_FF79A2FF"))
+          .fontColor(this.enterTextColor ?? $r("app.color.color_FF79A2FF"))
           .fontWeight(FontWeight.Medium)
           .textAlign(TextAlign.Center)
           .height('100%')

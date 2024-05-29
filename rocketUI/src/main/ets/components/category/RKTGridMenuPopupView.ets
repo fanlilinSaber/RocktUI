@@ -9,22 +9,19 @@ export struct RKTGridMenuPopupView {
   private itemHeight: number = 35
   private gridColumnTemplate: string = ''
   private maxHeight: number = 240
-  private heightValue: number
-  clickAction: (index: number) => void
-  cancelAction: () => void
+  private heightValue: number = 0
+  clickAction: Function = (index: number) => {}
+  cancelAction: Function = () => {}
 
   aboutToAppear() {
     let screenWidth = Math.ceil(px2vp(display.getDefaultDisplaySync().width))
     let maxRow = Math.floor((screenWidth - 15 * 2 + 10) / (this.itemWidth + 10))
-    var columns = Math.ceil(this.gridMenuTitles.length / maxRow)
+    let columns = Math.ceil(this.gridMenuTitles.length / maxRow)
     this.gridColumnTemplate = '1fr '.repeat(maxRow)
     this.heightValue = columns * (this.itemHeight + 10) + 10 > this.maxHeight ? this.maxHeight : columns * (this.itemHeight + 10) + 10
   }
 
-  @Builder gridMenuItem($$: {
-    title: string,
-    isSelect: boolean
-  }) {
+  @Builder gridMenuItem($$: GridMenuItem) {
     Text($$.title)
       .fontSize(12)
       .fontColor($$.isSelect ? "#EF4033" : "#666666")
@@ -40,7 +37,7 @@ export struct RKTGridMenuPopupView {
   build() {
     Column() {
       Grid() {
-        ForEach(this.gridMenuTitles, (title, index) => {
+        ForEach(this.gridMenuTitles, (title : string, index) => {
           GridItem() {
             this.gridMenuItem({ title: title, isSelect: this.selectIndex == index })
           }
@@ -69,4 +66,9 @@ export struct RKTGridMenuPopupView {
     .height('100%')
     .margin({ top: this.topMargin })
   }
+}
+
+class GridMenuItem {
+  title: string = ""
+  isSelect: boolean = false
 }

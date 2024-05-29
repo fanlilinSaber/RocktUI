@@ -6,9 +6,9 @@ export struct RKTCategoryTitleView {
   /// 设置菜单按钮宽度
   @State menuWidth: number = 0
   /// 当前选中item
-  private selectEntity: RKTCategoryTitleEntity
+  private selectEntity: RKTCategoryTitleEntity = new RKTCategoryTitleEntity()
   /// 菜单索引从1开始
-  clickAction: ((index: number) => void)
+  clickAction: Function = ((index: number) => {})
 
   aboutToAppear() {
     if (this.categoryEntityArray.length == 0) {
@@ -58,7 +58,7 @@ export struct RKTCategoryTitleView {
 struct RKTCategoryTitleItem {
   @State index: number = 0
   @ObjectLink entity: RKTCategoryTitleEntity
-  clickAction: ((index: number) => void)
+  clickAction: Function = ((index: number) => {})
 
   build() {
     Row({ space: 5 }) {
