@@ -49,11 +49,11 @@ export struct RKTNavBar {
   rightMemus?: RKTNavBarMenuItem[] = undefined
 
   // 自定义title（自定义title的视图会处于最顶层位置且不受内部约束影响）
-  @BuilderParam customTitle?: CustomBuilder = undefined
+  @BuilderParam customTitle?: CustomBuilder = EmptyBuilder
   // 自定义左菜单（受内部约束影响，不想被约束就使用`customTitle`）
-  @BuilderParam customLeftMemus?: CustomBuilder = undefined
+  @BuilderParam customLeftMemus?: CustomBuilder = EmptyBuilder
   // 自定义右菜单（受内部约束影响，不想被约束就使用`customTitle`）
-  @BuilderParam customRightMemus?: CustomBuilder = undefined
+  @BuilderParam customRightMemus?: CustomBuilder = EmptyBuilder
 
   // MARK: - 布局UI
   build() {
