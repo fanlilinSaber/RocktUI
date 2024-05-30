@@ -318,7 +318,7 @@ export class AreaData {
                 "children": [],
                 "no": "120118",
                 "lng": "116.98",
-                "sort": null,
+                "sort": 0,
                 "name": "静海区",
                 "parentId": 120100
               },
@@ -2187,7 +2187,7 @@ export class AreaData {
                 "children": [],
                 "no": "130110",
                 "lng": "114.31",
-                "sort": null,
+                "sort": 0,
                 "name": "鹿泉区",
                 "parentId": 130100
               },
@@ -13984,7 +13984,7 @@ export class AreaData {
                 "children": [],
                 "no": "321012",
                 "lng": "119.567482",
-                "sort": null,
+                "sort": 0,
                 "name": "江都区",
                 "parentId": 321000
               },
@@ -16495,7 +16495,7 @@ export class AreaData {
                 "children": [],
                 "no": "340124",
                 "lng": "117.289841",
-                "sort": null,
+                "sort": 0,
                 "name": "庐江县",
                 "parentId": 340100
               },
@@ -21317,7 +21317,7 @@ export class AreaData {
                 "children": [],
                 "no": "370114",
                 "lng": "117.53",
-                "sort": null,
+                "sort": 0,
                 "name": "章丘区",
                 "parentId": 370100
               },
@@ -33277,7 +33277,7 @@ export class AreaData {
                 "children": [],
                 "no": "440309",
                 "lng": "110.330376",
-                "sort": null,
+                "sort": 0,
                 "name": "龙华区",
                 "parentId": 440300
               },
@@ -33292,7 +33292,7 @@ export class AreaData {
                 "children": [],
                 "no": "440310",
                 "lng": "114.35",
-                "sort": null,
+                "sort": 0,
                 "name": "坪山区",
                 "parentId": 440300
               },
@@ -41214,7 +41214,7 @@ export class AreaData {
                 "children": [],
                 "no": "510124",
                 "lng": "103.901092",
-                "sort": null,
+                "sort": 0,
                 "name": "郫都区",
                 "parentId": 510100
               },
@@ -53856,7 +53856,7 @@ export class AreaData {
             "children": [],
             "no": "659000",
             "lng": "87.526886",
-            "sort": null,
+            "sort": 0,
             "name": "五家渠市",
             "parentId": 650000
           },
