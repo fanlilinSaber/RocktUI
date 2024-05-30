@@ -66,9 +66,9 @@ export struct DetailsPage03 {
   getAreaData(): RKTFilterExpandComponentConfig[][] {
     let data = AreaData.getData()
     /*添加省数据*/
-    let provinceArr = []
-    let cityArr = []
-    let areaArr = []
+    let provinceArr : RKTFilterExpandComponentConfig[] = []
+    let cityArr : RKTFilterExpandComponentConfig[]= []
+    let areaArr : RKTFilterExpandComponentConfig[]= []
 
     data.forEach(province => {
       let provinceConfig = new RKTFilterExpandComponentConfig({
@@ -76,13 +76,13 @@ export struct DetailsPage03 {
         id: province.id.toString()
       })
       provinceArr.push(provinceConfig)
-      province.children.forEach(city => {
+      province.children?.forEach(city => {
         let cityConfig = new RKTFilterExpandComponentConfig({
           text: city.name,
           id: city.id.toString()
         })
         cityArr.push(cityConfig)
-        city.children.forEach(area => {
+        city.children?.forEach(area => {
           let areaConfig = new RKTFilterExpandComponentConfig({
             text: area.name,
             id: area.id.toString()
@@ -121,7 +121,7 @@ export struct DetailsPage03 {
 
   /*配置条件筛选点击的下拉菜单的选择毁掉*/
   configExpand() {
-    this.filterExpandViewModel.makeSureCallBack = (sel) => {
+    this.filterExpandViewModel.makeSureCallBack = (sel : RKTFilterExpandComponentConfig[] | RKTFilterExpandComponentConfig[]) => {
       console.debug("选择内容" + JSON.stringify(sel))
     }
   }
@@ -132,7 +132,7 @@ export struct DetailsPage03 {
       text: "多选1",
       index: 0,
       type: RKTFilterBoxComponentButtonType.normal,
-      clickCallBack: (item) => {
+      clickCallBack: (item : RKTFilterBoxComponentConfig) => {
         /*点击回调*/
         console.debug(JSON.stringify(item))
       }
@@ -141,7 +141,7 @@ export struct DetailsPage03 {
       text: "多选2",
       index: 1,
       type: RKTFilterBoxComponentButtonType.normal,
-      clickCallBack: (item) => {
+      clickCallBack: (item : RKTFilterBoxComponentConfig) => {
         /*点击回调*/
         console.debug(JSON.stringify(item))
       }
@@ -152,7 +152,7 @@ export struct DetailsPage03 {
       index: 2,
       mutableId: "1",
       type: RKTFilterBoxComponentButtonType.normal,
-      clickCallBack: (item) => {
+      clickCallBack: (item : RKTFilterBoxComponentConfig) => {
         /*点击回调*/
         console.debug(JSON.stringify(item))
       }
@@ -163,7 +163,7 @@ export struct DetailsPage03 {
       index: 3,
       mutableId: "1",
       type: RKTFilterBoxComponentButtonType.normal,
-      clickCallBack: (item) => {
+      clickCallBack: (item : RKTFilterBoxComponentConfig) => {
         /*点击回调*/
         console.debug(JSON.stringify(item))
       }
@@ -174,7 +174,7 @@ export struct DetailsPage03 {
       index: 4,
       type: RKTFilterBoxComponentButtonType.rightButton,
       canExpand: true,
-      clickCallBack: (item) => {
+      clickCallBack: (item : RKTFilterBoxComponentConfig) => {
         /*点击回调*/
         console.debug(JSON.stringify(item))
       }
@@ -185,7 +185,7 @@ export struct DetailsPage03 {
       index: 5,
       type: RKTFilterBoxComponentButtonType.rightButton,
       canExpand: true,
-      clickCallBack: (item) => {
+      clickCallBack: (item : RKTFilterBoxComponentConfig) => {
         /*点击回调*/
         console.debug(JSON.stringify(item))
       }
@@ -196,7 +196,7 @@ export struct DetailsPage03 {
       index: 6,
       type: RKTFilterBoxComponentButtonType.rightButton,
       canExpand: true,
-      clickCallBack: (item) => {
+      clickCallBack: (item : RKTFilterBoxComponentConfig) => {
         /*点击回调*/
         console.debug(JSON.stringify(item))
       }
