@@ -1,4 +1,3 @@
-import { RKTFilterBoxComponentConfig } from '../model/RKTFilterBoxComponentConfig'
 import {
   RKTFilterBoxComponentButtonType,
   RKTFilterBoxViewModel
@@ -6,7 +5,7 @@ import {
 
 @Component
 export struct RKTFilterBoxSubComponent {
-  index: number
+  index: number = 0
   @Consume filterBoxViewModel: RKTFilterBoxViewModel
 
   build() {

@@ -18,7 +18,7 @@ export struct RKTFilterBoxComponent {
   //滑动控制器
   scroll: Scroller = new Scroller()
   //滑动控制器的x轴偏移量
-  scrollXOffset: number
+  scrollXOffset: number = 0
   //用来配置CanvasRenderingContext2D对象的参数，包括是否开启抗锯齿，true表明开启抗锯齿。
   private settings: RenderingContextSettings = new RenderingContextSettings(true)
   //用来创建CanvasRenderingContext2D对象，通过在canvas中调用CanvasRenderingContext2D对象来绘制。
@@ -121,11 +121,11 @@ export struct RKTFilterBoxComponent {
               /*x轴偏移*/
               let xOffset = 5
               /*长度*/
-              let width = Math.ceil(Number(this.clickEvent.target.area.width))
+              let width = Math.ceil(Number(this.clickEvent?.target.area.width))
               /*高度*/
-              let height = Math.ceil(Number(this.clickEvent.target.area.height))
+              let height = Math.ceil(Number(this.clickEvent?.target.area.height))
               /*点击空间的 x 坐标*/
-              let x = Number(this.clickEvent.target.area.globalPosition.x) - this.scrollXOffset
+              let x = Number(this.clickEvent?.target.area.globalPosition.x) - this.scrollXOffset
               let r = 12
               this.context.strokeStyle = "#ededed"
               this.context.moveTo(0, height + yOffset)

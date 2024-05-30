@@ -66,7 +66,7 @@ export struct RKTFilterAreaComponent {
   build() {
     Column() {
       Flex({ direction: FlexDirection.Row }) {
-        ForEach((this.filterExpandViewModel.dataArr as RKTFilterExpandComponentConfig[][]), (i, categoryIndex) => {
+        ForEach((this.filterExpandViewModel.dataArr as RKTFilterExpandComponentConfig[][]), (i:RKTFilterExpandComponentConfig[], categoryIndex) => {
           List() {
             ForEach(categoryIndex == 0 ? this.provinceDataArr : (categoryIndex == 1 ? this.cityDataArr : this.areaDataArr), (item: RKTFilterExpandComponentConfig, index) => {
               ListItem() {
@@ -132,7 +132,9 @@ export struct RKTFilterAreaComponent {
         .backgroundColor(Color.Black)
         .opacity(this.blankTransparency)
         .onClick(() => {
-          this.filterBoxViewModel.clickGoodsFilterBoxComponentConfig.isClick = false
+          if (typeof this.filterBoxViewModel.clickGoodsFilterBoxComponentConfig != "undefined") {
+            this.filterBoxViewModel.clickGoodsFilterBoxComponentConfig.isClick = false
+          }
           this.filterBoxViewModel.dataArr = this.filterBoxViewModel.dataArr.slice()
           this.hide()
         })

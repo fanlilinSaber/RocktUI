@@ -129,16 +129,16 @@ export struct RKTFilterAllItemComponent {
           .height(this.buttonHeight)
           .borderRadius(5)
           .onClick(() => {
-            this.filterBoxViewModel.clickGoodsFilterBoxComponentConfig.isClick = false
+            this.filterBoxViewModel.clickGoodsFilterBoxComponentConfig!.isClick = false
             this.privateDataArr.forEach((privateItem, index) => {
               (this.filterExpandViewModel.dataArr[index] as RKTFilterExpandComponentConfig).isSelected = privateItem.isSelected
             })
             let selArray = (this.filterExpandViewModel.dataArr as RKTFilterExpandComponentConfig[]).filter(item => item.isSelected)
             if (selArray !== null && selArray !== undefined && selArray.length != 0) {
-              this.filterBoxViewModel.clickGoodsFilterBoxComponentConfig.isSelected = true
+              this.filterBoxViewModel.clickGoodsFilterBoxComponentConfig!.isSelected = true
               this.filterExpandViewModel.makeSureCallBack(selArray)
             } else {
-              this.filterBoxViewModel.clickGoodsFilterBoxComponentConfig.isSelected = false
+              this.filterBoxViewModel.clickGoodsFilterBoxComponentConfig!.isSelected = false
             }
             this.filterBoxViewModel.dataArr = this.filterBoxViewModel.dataArr.slice()
             this.hide()
@@ -155,7 +155,9 @@ export struct RKTFilterAllItemComponent {
         .backgroundColor(Color.Black)
         .opacity(this.blankTransparency)
         .onClick(() => {
-          this.filterBoxViewModel.clickGoodsFilterBoxComponentConfig.isClick = false
+          if (typeof this.filterBoxViewModel.clickGoodsFilterBoxComponentConfig != "undefined") {
+            this.filterBoxViewModel.clickGoodsFilterBoxComponentConfig.isClick = false
+          }
           this.filterBoxViewModel.dataArr = this.filterBoxViewModel.dataArr.slice()
           this.hide()
         })

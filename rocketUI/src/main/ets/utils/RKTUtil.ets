@@ -11,9 +11,6 @@ import RKTEventBus, { RKTEventData } from '../utils/RKTEventBus'
 
 export class RKTUtil {
 
-  public static context(x: any) {
-    // let context = getContext(x).createModuleContext('rocketUI') as common.UIAbilityContext
-  }
 
 
 }

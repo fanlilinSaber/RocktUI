@@ -1,6 +1,4 @@
-import {
-  RKTFilterBoxComponentConfig
-} from '../Model/RKTFilterBoxComponentConfig'
+import { RKTFilterBoxComponentConfig } from '../model/RKTFilterBoxComponentConfig'
 
 /*
  * 条件筛选，在需要引用条件筛选的界面
@@ -21,5 +19,5 @@ export class RKTFilterBoxViewModel {
   /*数据源*/
   dataArr: RKTFilterBoxComponentConfig[] = []
   /*当前点击的模型*/
-  clickGoodsFilterBoxComponentConfig: RKTFilterBoxComponentConfig
+  clickGoodsFilterBoxComponentConfig?: RKTFilterBoxComponentConfig
 }
