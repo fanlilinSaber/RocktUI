@@ -31,7 +31,7 @@ struct DetailsPage02 {
     let params = (router.getParams() || {}) as DemoParams
     if (params.title) {
       this.title = params.title;
-      this.value = params.value;
+      this.value = params.value??"";
     }
   }
 

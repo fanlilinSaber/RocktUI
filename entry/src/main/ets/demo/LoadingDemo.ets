@@ -22,7 +22,7 @@ export default struct LoadingDemo {
   @State progressStr: string = '下载进度0%'
   @State isProgress02: boolean = false;
 
-  private intervalID: number
+  private intervalID: number = 0
 
   progressItem01: RKTProgressItem = new RKTProgressItem({ animateSize: { width: 200, height: 200 }, boxBorderSize: { width: 220, height: 220 }, boxBorderRadius: 10, boxBackgroundColor: Color.Red })
 

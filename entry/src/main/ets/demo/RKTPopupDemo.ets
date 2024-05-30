@@ -23,7 +23,7 @@ export struct RKTPopupDemo {
         RKTCategoryTitleView({
           categoryEntityArray: $categoryEntityArray,
           categoryTitleArray: this.categoryTitleArray,
-          clickAction: (index) => {
+          clickAction: (index:number) => {
             this.popupType = index
           }
         })
@@ -43,7 +43,7 @@ export struct RKTPopupDemo {
 
       RKTDateTimePicker({
         titleName: "日期选择器",
-        onEnter: (date) => {
+        onEnter: (date : Date) => {
           hilog.info(0x00, 'RKTDateTimePicker', `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`)
 
           this.popupType = CategoryPopupType.Default

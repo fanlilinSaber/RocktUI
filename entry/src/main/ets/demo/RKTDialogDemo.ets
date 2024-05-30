@@ -222,7 +222,7 @@ export default struct RKTDialogDemo {
    */
   mOptionsDialog: CustomDialogController = new CustomDialogController({
     builder: RKTOptionsPickerDialog({
-      onClickRight: (selectIndex, selectValue) => {
+      onClickRight: (selectIndex: number, selectValue: string) => {
         promptAction.showToast({ message: selectValue })
       },
       childList: $mChildList,

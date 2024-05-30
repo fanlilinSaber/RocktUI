@@ -88,7 +88,7 @@ export struct RKTSelectPicturesDemo {
         this.uris = photoSelectResult.photoUris
         this.photoCount = this.uris.length
       })
-      .catch((err) => {
+      .catch(() => {
         console.log('Invoke photoViewPicker.select failed, code is ${err.code},message is ${err.message}')
       })
   }

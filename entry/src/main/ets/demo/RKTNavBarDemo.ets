@@ -20,7 +20,7 @@ export interface DemoTabItem {
 @Component
 export default struct RKTLoadingDemo {
 
-  leftMemus01: WeakSet<RKTNavBarMenuItem>
+  leftMemus01?: WeakSet<RKTNavBarMenuItem>
 
   leftMemus: Array<RKTNavBarMenuItem> = []
 
@@ -137,13 +137,13 @@ export default struct RKTLoadingDemo {
 
   deleteAction() {
     promptAction.showToast({ message: 'deleteAction' })
-    let eventData = {
-      data: {
-        "content": "c",
-        "id": 1,
-        "info": { "name": "lisi"}
-      }};
-    emitter.emit({ eventId: 110 }, eventData)
+    // let eventData = {
+    //   data: {
+    //     "content": "c",
+    //     "id": 1,
+    //     "info": { "name": "lisi"}
+    //   }};
+    // emitter.emit({ eventId: 110 }, eventData)
   }
 
   refreshAction() {

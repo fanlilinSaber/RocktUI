@@ -10,7 +10,7 @@ import { RKTToast, RKTToastUtil, RKTToastPosition } from '@zjos/rocketUI'
 export default struct RKTToastDemo {
 
   @State isToast: boolean = false
-  private timeID: number
+  private timeID: number = 0
   private index: number = 0
   private testTexts: Array<string> = ["请输入输入内容", "测试很多内容测试很多内容测试很多内容测试很多内容", "测试提示内容1", "测试超多多内容测试超多多内容测试超多多内容测试超多多内容测试超多多内容测试超多多内容测试超多多内容测试超多多内容测试超多多内容测试超多多内容"]
 

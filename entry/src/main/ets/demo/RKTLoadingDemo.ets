@@ -15,7 +15,7 @@ export default struct RKTLoadingDemo {
   @State count: number = 0;
   @State progressStr: string = '下载进度0%'
   @State progressValue: number = 0
-  private intervalID: number
+  private intervalID: number = 0
 
   progressElement01: RKTProgressElement = { animateSize: { width: 200, height: 200 }, boxBorderSize: { width: 220, height: 220 }, boxBorderRadius: 10, boxBackgroundColor: Color.Red}
   progressElement02: RKTProgressElement = { animateSize: { width: 300, height: 300 }, boxBorderSize: { width: 300, height: 300 }, boxBorderRadius: 0, boxBackgroundColor: Color.Transparent }
