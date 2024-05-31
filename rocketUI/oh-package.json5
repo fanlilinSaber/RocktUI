@@ -2,10 +2,10 @@
   "name": "rocketui",
   "version": "1.0.0",
   "description": "Please describe the basic information.",
-  "main": "./src/main/ets/Index.ets",
+  "main": "Index.ets",
   "author": "",
   "license": "Apache-2.0",
   "dependencies": {
-    "@ohos/lottie": "^2.0.8"
+    "@ohos/lottie": "2.0.9"
   }
 }

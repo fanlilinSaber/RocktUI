@@ -48,12 +48,14 @@ export struct RKTNavBar {
   leftMemus?: RKTNavBarMenuItem[] = undefined
   rightMemus?: RKTNavBarMenuItem[] = undefined
 
+  @Builder doNothingBuilder() {};
+
   // 自定义title（自定义title的视图会处于最顶层位置且不受内部约束影响）
-  @BuilderParam customTitle?: CustomBuilder = EmptyBuilder
+  @BuilderParam customTitle: CustomBuilder = this.doNothingBuilder
   // 自定义左菜单（受内部约束影响，不想被约束就使用`customTitle`）
-  @BuilderParam customLeftMemus?: CustomBuilder = EmptyBuilder
+  @BuilderParam customLeftMemus: CustomBuilder = this.doNothingBuilder
   // 自定义右菜单（受内部约束影响，不想被约束就使用`customTitle`）
-  @BuilderParam customRightMemus?: CustomBuilder = EmptyBuilder
+  @BuilderParam customRightMemus: CustomBuilder = this.doNothingBuilder
 
   // MARK: - 布局UI
   build() {
@@ -86,7 +88,7 @@ export struct RKTNavBar {
           this.leftBackBar()
         }
 
-        if (this.customLeftMemus && this.customLeftMemus != null) {
+        if (this.customLeftMemus && this.customLeftMemus != this.doNothingBuilder) {
           this.customLeftMemus()
         } else {
           this.normalMemus(this.leftMemus, { left: this.hideBack ? 15 : 10, right: 10 })
@@ -107,7 +109,7 @@ export struct RKTNavBar {
 
   // 中间标题栏
   @Builder titleBar() {
-    if (this.customTitle && this.customTitle != null) {
+    if (this.customTitle && this.customTitle != this.doNothingBuilder) {
       Column() {
         this.customTitle()
       }
@@ -145,7 +147,7 @@ export struct RKTNavBar {
   @Builder rightMemuBar() {
     Column() {
       Row() {
-        if (this.customRightMemus && this.customRightMemus != null) {
+        if (this.customRightMemus && this.customRightMemus != this.doNothingBuilder) {
           this.customRightMemus()
         } else {
           this.normalMemus(this.rightMemus, { left: 10, right: 15 })

@@ -6,6 +6,8 @@
   "author": "",
   "license": "",
   "dependencies": {
-    "@zjos/rocketUI": "file:../rocketUI",
-  }
+    "@zjos/rocketUI": "file:../rocketUI"
+  },
+  "devDependencies": {},
+  "dynamicDependencies": {}
 }

@@ -10,6 +10,7 @@ import common from '@ohos.app.ability.common'
 import router from '@ohos.router'
 import hilog from '@ohos.hilog'
 import RKTEventBus, { RKTEventData } from '../../utils/RKTEventBus'
+import resourceManager from '@ohos.resourceManager'
 
 
 // show loading event name
@@ -22,6 +23,8 @@ const EVENT_SHOW_PROGRESS: string = "showProgress"
 const EVENT_HIDE_PROGRESS: string = "hideProgress"
 // hide RKTProgress event name
 const EVENT_HIDE_RKT_PROGRESS: string = "hideRKTProgress"
+
+const RKT_LOG_DOMAIN = 0x00503;
 
 /**
  * RKTProgress 组件快速调用接口（需要配合RKTPage使用）
@@ -177,7 +180,7 @@ export interface RKTProgressElement {
   // json格式的动画数据, 仅限json格式（配合 style = custom 可以自定义动画）
   lottieData?: object | null | string
   // 显示文本
-  text?: string
+  text?: string | null
   // 文本颜色
   textColor?: ResourceColor
 }
@@ -192,7 +195,7 @@ export class RKTProgressItem implements RKTProgressElement {
   boxBorderRadius?: Length = 10
   boxBackgroundColor?: ResourceColor = `#80000000`
   lottieData?: object | null | string = null
-  text?: string
+  text?: string | null = null
   textColor?: ResourceColor = `#FFFFFFFF`
 
   constructor(t?: RKTProgressElement) {
@@ -307,44 +310,43 @@ export struct RKTProgress {
 
   // MARK: -布局UI
   build() {
-    if (this.show) {
+    Column() {
       Column() {
-        Column() {
-          Canvas(this.canvasRenderingContext)
-            .size(this.progressItem.animateSize)
-            .alignSelf(ItemAlign.Center).align(Alignment.Center)
-            .onReady(() => {
-              this.onReady = true
-              // 在此生命回调周期中加载动画，可以保证动画尺寸正确
-              this.startAnimation()
-              hilog.info(0xFFFF00 , `RocketUI`, "RKTProgress Canvas onReady")
-            })
-            .onDisAppear(() => {
-              this.destroyAnimation()
-              hilog.info(0xFFFF00 , `RocketUI`, "RKTProgress Canvas onDisAppear")
-            })
-          if (this.progressItem.text && this.progressItem.text.length > 0) {
-            Text(this.progressItem.text)
-              .fontColor(this.progressItem.textColor).fontSize(11).fontWeight(FontWeight.Regular)
-              .textAlign(TextAlign.Center)
-              .margin({ top: 5, bottom: 5 })
-              .constraintSize({ maxWidth: this.progressItem.boxBorderSize.width })
-          }
+        Canvas(this.canvasRenderingContext)
+          .size(this.progressItem.animateSize)
+          .alignSelf(ItemAlign.Center).align(Alignment.Center)
+          .onReady(() => {
+            this.onReady = true
+            // 在此生命回调周期中加载动画，可以保证动画尺寸正确
+            this.startAnimation()
+            hilog.info(RKT_LOG_DOMAIN , `RocketUI`, "RKTProgress Canvas onReady")
+          })
+          .onDisAppear(() => {
+            this.destroyAnimation()
+            hilog.info(RKT_LOG_DOMAIN , `RocketUI`, "RKTProgress Canvas onDisAppear")
+          })
+        if (this.progressItem.text && this.progressItem.text.length > 0) {
+          Text(this.progressItem.text)
+            .fontColor(this.progressItem.textColor).fontSize(11).fontWeight(FontWeight.Regular)
+            .textAlign(TextAlign.Center)
+            .margin({ top: 5, bottom: 5 })
+            .constraintSize({ maxWidth: this.progressItem.boxBorderSize.width })
         }
-        .justifyContent(FlexAlign.Center).alignItems(HorizontalAlign.Center).align(Alignment.Center)
-        .backgroundColor(this.progressItem.boxBackgroundColor)
-        .borderRadius(this.progressItem.boxBorderRadius)
-        .width(this.progressItem.boxBorderSize.width)
-        .constraintSize({ minHeight: this.progressItem.boxBorderSize.height })
-        .offset({ x: 0, y: this.offsetEnable ? -this.offsetY / 2 : 0 })
       }
       .justifyContent(FlexAlign.Center).alignItems(HorizontalAlign.Center).align(Alignment.Center)
-      .backgroundColor(Color.Transparent)
-      .width('100%').height('100%')
-      .position({ x: 0, y: this.offsetEnable ? this.offsetY : 0 })
-      .zIndex(9999)
-      .hitTestBehavior(this.interaction ? HitTestMode.Transparent : HitTestMode.Default)
+      .backgroundColor(this.progressItem.boxBackgroundColor)
+      .borderRadius(this.progressItem.boxBorderRadius)
+      .width(this.progressItem.boxBorderSize.width)
+      .constraintSize({ minHeight: this.progressItem.boxBorderSize.height })
+      .offset({ x: 0, y: this.offsetEnable ? -this.offsetY / 2 : 0 })
     }
+    .justifyContent(FlexAlign.Center).alignItems(HorizontalAlign.Center).align(Alignment.Center)
+    .backgroundColor(Color.Transparent)
+    .width('100%').height('100%')
+    .position({ x: 0, y: this.offsetEnable ? this.offsetY : 0 })
+    .zIndex(9999)
+    .visibility(this.show ? Visibility.Visible : Visibility.Hidden)
+    .hitTestBehavior(this.interaction ? HitTestMode.Transparent : HitTestMode.Default)
   }
 
   // MARK: - 重新载入动画和配置
@@ -361,7 +363,7 @@ export struct RKTProgress {
 
       // 自定义动画样式需传入json格式的动画数据
       if (this.style == RKTProgressStyle.custom && this.progressItem.lottieData == null) {
-        hilog.error(0xFFFF00 , `RocketUI`, "RKTProgress 自定义动画样式需传入json格式的动画数据")
+        hilog.error(RKT_LOG_DOMAIN , `RocketUI`, "RKTProgress 自定义动画样式需传入json格式的动画数据")
         return
       }
 
@@ -384,13 +386,13 @@ export struct RKTProgress {
         }
 
         let resStr = util.TextDecoder.create('utf-8', { ignoreBOM: true })
-        let context = getContext(this).createModuleContext('rocketUI') as common.UIAbilityContext
+        let context = getContext(this) as common.UIAbilityContext
 
         // 这里是一个异步方法，可能在build - Canvas - onReady之后执行
-        let buffer = await context.resourceManager.getRawFileContent(animatePath)
-        if(buffer === null || buffer === undefined){ return }
+        let data = await context.resourceManager.getRawFileContent(animatePath)
+        if(data === null || data === undefined || data.buffer === undefined){ return }
 
-        let lottieStr = resStr.decodeWithStream(new Uint8Array(buffer))
+        let lottieStr = resStr.decodeWithStream(new Uint8Array(data.buffer))
         this.progressItem.lottieData = JSON.parse(lottieStr);
       }
 
@@ -399,7 +401,7 @@ export struct RKTProgress {
         this.startAnimation()
       }
     } catch (error) {
-      hilog.error(0xFFFF00 , `RocketUI`, "RKTProgress reloadAnimation" + error)
+      hilog.error(RKT_LOG_DOMAIN , `RocketUI`, "RKTProgress reloadAnimation" + error)
     }
   }
 
@@ -407,20 +409,17 @@ export struct RKTProgress {
   startAnimation() {
     if (!this.onReady) { return }
     if (this.animateItem == null && this.progressItem.lottieData != null) {
-      let contexts = getContext(this).createModuleContext('rocketUI') as common.UIAbilityContext
-      if (contexts == null) { return }
       this.animateName = 'rocketProgress' + this.currentPagePath + this.tag + this.currentTaskFlag
       this.animateItem = lottie.loadAnimation({
         container: this.canvasRenderingContext,
         renderer: 'canvas', // canvas 渲染模式
         loop: true,
         autoplay: this.autoplay,
-        context: contexts,
         name: this.animateName,
         animationData: this.progressItem.lottieData,
       })
       this.animationFrames = this.animateItem.getDuration(true)
-      hilog.info(0xFFFF00 , `RocketUI`, "RKTProgress 动画帧数：" + this.animationFrames + 'fps')
+      hilog.info(RKT_LOG_DOMAIN , `RocketUI`, "RKTProgress 动画帧数：" + this.animationFrames + 'fps')
       this.isLoaded = true
       // 第一次更新一下动画进度
       if (this.show && !this.autoplay) {
@@ -448,7 +447,7 @@ export struct RKTProgress {
     let value = Math.min(Math.abs(progress), 1.0)
     value = value * this.animationFrames
     this.animateItem.goToAndStop(value, true)
-    hilog.info(0xFFFF00 , `RocketUI`, "RKTProgress 播放进度：" + value)
+    hilog.info(RKT_LOG_DOMAIN, `RocketUI`, "RKTProgress 播放进度：" + value)
   }
 
   // MARK: - 更新动画展示（大部分属性会影响UI变化）
@@ -620,7 +619,7 @@ export struct RKTProgress {
         }
       })
     } catch (error) {
-      hilog.info(0xFFFF00 , `RocketUI`, "RKTProgress registerEvent" + error)
+      hilog.info(RKT_LOG_DOMAIN , `RocketUI`, "RKTProgress registerEvent" + error)
     }
   }
 
