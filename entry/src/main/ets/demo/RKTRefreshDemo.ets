@@ -1,7 +1,6 @@
 import {
   RKTProgressUtil,
   RKTRefreshActionEvent,
-  RKTRefreshBaseEntity,
   RKTRefreshComponent,
   RKTRefreshEnum,
   RKTRefreshItemContent,
@@ -84,6 +83,6 @@ export struct ListItemComponent {
   }
 }
 
-class ListItemEntity extends RKTRefreshBaseEntity{
+class ListItemEntity{
   name?: string
 }

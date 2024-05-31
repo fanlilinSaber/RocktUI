@@ -1,6 +1,5 @@
 import { closeRefresh, listTouchEvent } from './RKTPullDownRefresh';
 import { closeLoadMore } from './RKTPullUpLoadMore';
-import { RKTRefreshBaseEntity } from './RKTRefreshBaseEntity';
 import { RKTRefreshConstant } from './RKTRefreshConstant';
 import { RKTRefreshObserved } from './RKTRefreshObserved';
 
@@ -20,7 +19,7 @@ export struct RKTRefreshComponent {
   isHideNoMoreData: boolean = false
   @State mObserved: RKTRefreshObserved = new RKTRefreshObserved();
   //监听列表的数据
-  @Watch("onLiveDataChange") @Link mLiveData: RKTRefreshBaseEntity[]
+  @Watch("onLiveDataChange") @Link mLiveData: object[]
   //监听用户的交互操作
   @Watch("onActionChange") @Link mActionEvent: RKTRefreshActionEvent
 
@@ -97,7 +96,7 @@ export struct RKTRefreshComponent {
             })
           }
 
-          ForEach(this.mLiveData, (item : RKTRefreshBaseEntity, index) => {
+          ForEach(this.mLiveData, (item : object, index) => {
             ListItem() {
               this.listItemContent({ mLiveData: this.mLiveData, item: item, index: index, extendData: this.extendData })
             }
@@ -146,8 +145,8 @@ export struct RKTRefreshComponent {
 }
 
 export class RKTRefreshItemContent {
-  mLiveData: RKTRefreshBaseEntity[] = []
-  item: RKTRefreshBaseEntity = new RKTRefreshBaseEntity()
+  mLiveData: object[] = []
+  item: object = new Object()
   index: number = 0
   extendData: object | string | number | boolean | null | undefined
 }

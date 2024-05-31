@@ -51,8 +51,6 @@ export { RKTRefreshConstant } from './src/main/ets/components/refresh/RKTRefresh
 
 export { RKTRefreshObserved } from './src/main/ets/components/refresh/RKTRefreshObserved'
 
-export { RKTRefreshBaseEntity } from './src/main/ets/components/refresh/RKTRefreshBaseEntity'
-
 export { RKTRefreshComponent,
   RKTLoadingLayout,
   RKTNoMoreLayout,
