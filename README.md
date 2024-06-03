@@ -28,11 +28,25 @@ import lottie from '@zjos/rocketUI'
 build() {
     Column() {
       RKTPage({ title: this.title, titleColor: Color.Black }) {
-
+        ...
       }
     }
     .width('100%')
     .height('100%')
   }
+}
+```
+3.使用RKTProgress
+```
+1.配合RKTPage使用
+显示loding
+RKTProgressUtil.showLoading()
+隐藏loading
+RKTProgressUtil.hideLoading()
+
+2.单独使用
+结合arkUI语法，用条件语句控制是否加载
+if(this.isloding) {
+   RKTProgress()
 }
 ```
