@@ -1,0 +1,14 @@
+{
+  "name": "rocket-ui",
+  "version": "1.0.0",
+  "description": "鸿蒙快速开发UI组件库",
+  "author": "zjkj",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://codehub.devcloud.cn-east-3.huaweicloud.com/HarmonyOS00001/RocketUI.git"
+  },
+  "files": [
+    "rocketUI"
+  ]
+}

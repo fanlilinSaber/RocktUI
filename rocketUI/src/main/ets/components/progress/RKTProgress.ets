@@ -10,8 +10,6 @@ import common from '@ohos.app.ability.common'
 import router from '@ohos.router'
 import hilog from '@ohos.hilog'
 import RKTEventBus, { RKTEventData } from '../../utils/RKTEventBus'
-import resourceManager from '@ohos.resourceManager'
-
 
 // show loading event name
 const EVENT_SHOW_LOADING: string = "showLoading"
@@ -312,25 +310,28 @@ export struct RKTProgress {
   build() {
     Column() {
       Column() {
-        Canvas(this.canvasRenderingContext)
-          .size(this.progressItem.animateSize)
-          .alignSelf(ItemAlign.Center).align(Alignment.Center)
-          .onReady(() => {
-            this.onReady = true
-            // 在此生命回调周期中加载动画，可以保证动画尺寸正确
-            this.startAnimation()
-            hilog.info(RKT_LOG_DOMAIN , `RocketUI`, "RKTProgress Canvas onReady")
-          })
-          .onDisAppear(() => {
-            this.destroyAnimation()
-            hilog.info(RKT_LOG_DOMAIN , `RocketUI`, "RKTProgress Canvas onDisAppear")
-          })
-        if (this.progressItem.text && this.progressItem.text.length > 0) {
-          Text(this.progressItem.text)
-            .fontColor(this.progressItem.textColor).fontSize(11).fontWeight(FontWeight.Regular)
-            .textAlign(TextAlign.Center)
-            .margin({ top: 5, bottom: 5 })
-            .constraintSize({ maxWidth: this.progressItem.boxBorderSize.width })
+        if (this.show) { // 利用重新创建来触发画布的 onReady 和 onDisAppear 确保动画尺寸显示正确，也是为了控制常驻内存大小。
+          Canvas(this.canvasRenderingContext)
+            .size(this.progressItem.animateSize)
+            .alignSelf(ItemAlign.Center).align(Alignment.Center)
+            .onReady(() => {
+              this.onReady = true
+              // 在此生命回调周期中加载动画，可以保证动画尺寸正确
+              this.startAnimation()
+              hilog.info(RKT_LOG_DOMAIN , `RocketUI`, "RKTProgress Canvas onReady")
+            })
+            .onDisAppear(() => {
+              this.onReady = false
+              this.destroyAnimation()
+              hilog.info(RKT_LOG_DOMAIN , `RocketUI`, "RKTProgress Canvas onDisAppear")
+            })
+          if (this.progressItem.text && this.progressItem.text.length > 0) {
+            Text(this.progressItem.text)
+              .fontColor(this.progressItem.textColor).fontSize(11).fontWeight(FontWeight.Regular)
+              .textAlign(TextAlign.Center)
+              .margin({ top: 5, bottom: 5 })
+              .constraintSize({ maxWidth: this.progressItem.boxBorderSize.width })
+          }
         }
       }
       .justifyContent(FlexAlign.Center).alignItems(HorizontalAlign.Center).align(Alignment.Center)
@@ -352,7 +353,6 @@ export struct RKTProgress {
   // MARK: - 重新载入动画和配置
   async reloadAnimation(element?: RKTProgressElement) {
     try {
-
       this.destroyAnimation()
       if (element) {
         this.updateAnimationDisplay(element)
@@ -465,7 +465,6 @@ export struct RKTProgress {
   destroyAnimation() {
     this.animateItem = null
     this.isLoaded = false
-    this.onReady = false
     lottie.destroy(this.animateName)
   }
 

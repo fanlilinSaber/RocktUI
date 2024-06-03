@@ -3,9 +3,7 @@
  * Date:2024/1/22
  * Descrobe:
  */
-import router from '@ohos.router';
-import promptAction from '@ohos.promptAction';
-import App from '@system.app';
+import router from '@ohos.router'
 
 /**
  * 导航栏菜单
@@ -20,19 +18,21 @@ export interface RKTNavBarMenuItem {
   icon?: Resource
   // 自定义图标大小 不设置默认 = {20，20}
   iconSize?: SizeOptions
-  // 点击事件；注意：外部需要通过bind绑定，是为了在对应的函数里this指向self（例： {title: '删除', action: this.deleteAction.bind(this)} ）
+  // 点击事件；注意：外部需要通过bind绑定，是为了在对应的函数里this指向self（例： {title: '删除', action: this.deleteAction.bind(this)}
+  // 新的ArkTS语法上不支持bind函数了，要用新的action: (): void => { this.xxAction() }
   action: (tag?: string | number) => void
   // 标签；当共用一个`action`的时候可以传入tag来区分不同的事件
   tag?: string | number
 }
 
-@Builder function EmptyBuilder() {}
-
+/**
+ * 通用导航栏
+ */
 @Component
 export struct RKTNavBar {
 
   // 导航栏标题
-  @Prop title: string
+  @Prop title: string = ''
   titleColor: ResourceColor = Color.White
   titleSize?: number | string = 17
   titleWeight?: number | FontWeight | string = FontWeight.Medium
@@ -48,7 +48,7 @@ export struct RKTNavBar {
   leftMemus?: RKTNavBarMenuItem[] = undefined
   rightMemus?: RKTNavBarMenuItem[] = undefined
 
-  @Builder doNothingBuilder() {};
+  @Builder doNothingBuilder() {}
 
   // 自定义title（自定义title的视图会处于最顶层位置且不受内部约束影响）
   @BuilderParam customTitle: CustomBuilder = this.doNothingBuilder

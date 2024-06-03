@@ -20,13 +20,11 @@ export interface DemoTabItem {
 @Component
 export default struct RKTLoadingDemo {
 
-  leftMemus01?: WeakSet<RKTNavBarMenuItem>
-
   leftMemus: Array<RKTNavBarMenuItem> = []
 
   rightMemus: Array<RKTNavBarMenuItem> = []
 
-  tabItems: Array<DemoTabItem> = []
+  tabItems: Array<DemoTabItem> = [{title: '商品大厅', desc: '商品大厅占位内容'}]
 
   leftMemus04: Array<RKTNavBarMenuItem> = []
 
@@ -38,14 +36,14 @@ export default struct RKTLoadingDemo {
   aboutToAppear() {
 
     this.leftMemus = [
-      {icon: $r('app.media.goods_ic_btn_add_to'), action: this.addAction.bind(this)},
-      {title: '删除', action: this.deleteAction.bind(this)},
-      // {title: '更多', action: this.deleteAction}
+      {icon: $r('app.media.goods_ic_btn_add_to'), action: (): void => this.addAction() },
+      {title: '删除', action: (): void => this.deleteAction() },
+      // {title: '更多', action: this.deleteAction.bind(this)}
       ]
 
     this.rightMemus = [
-      {title: '刷新', action: this.refreshAction.bind(this)},
-      {title: '重装', action: this.reloadAction.bind(this)}
+      {title: '刷新', action: (): void => this.refreshAction() },
+      {title: '重装', action: (): void => this.reloadAction() }
     ]
     
     this.tabItems = [
@@ -58,10 +56,10 @@ export default struct RKTLoadingDemo {
     ]
 
     this.leftMemus04 = [
-      {icon: $r('app.media.common_Search'), action: this.searchAction.bind(this)},
-      {title: '发布', action: this.publishAction.bind(this)},
-      {title: '询价', action: this.enquiryAction.bind(this)},
-      {icon: $r('app.media.btn_more'), action: this.addAction.bind(this)},
+      {icon: $r('app.media.common_Search'), action: (): void => this.searchAction()},
+      {title: '发布', action: (): void => this.publishAction()},
+      {title: '询价', action: (): void => this.enquiryAction()},
+      {icon: $r('app.media.btn_more'), action: (): void => this.addAction() },
     ]
 
     emitter.on({ eventId: 110 }, (data: emitter.EventData) => {
@@ -100,22 +98,22 @@ export default struct RKTLoadingDemo {
 
       RKTNavBar({ title: 'RKTNavBar使用', leftMemus: this.leftMemus, rightMemus: this.rightMemus })
 
-      RKTNavBar({ title: 'RKTNavBar使用', customLeftMemus: this.customLeftMemus01(), rightMemus: this.rightMemus, barColor: Color.Gray })
+      RKTNavBar({ title: 'RKTNavBar使用', customLeftMemus: this.customLeftMemus01, rightMemus: this.rightMemus, barColor: Color.Gray })
 
-      RKTNavBar({ title: 'RKTNavBar使用', customTitle: this.customTitle01(), barColor: Color.Orange })
+      RKTNavBar({ title: 'RKTNavBar使用', customTitle: this.customTitle01, barColor: Color.Orange })
 
       RKTNavBar({
         title: 'RKTNavBar使用',
-        customTitle: this.customTitle02(),
-        rightMemus: [{icon: $r('app.media.common_Search'), action: this.searchAction, iconSize: {width:35, height: 35}}] })
+        customTitle: this.customTitle02,
+        rightMemus: [{icon: $r('app.media.common_Search'), action: this.searchAction, iconSize: {width:35, height: 35}}], barColor: Color.Yellow})
 
-      RKTNavBar({ title: 'RKTNavBar使用', customTitle: this.customTitle02(), rightMemus: [{title: '搜索', action: this.searchAction}] })
+      RKTNavBar({ title: 'RKTNavBar使用', customTitle: this.customTitle02, rightMemus: [{title: '搜索', action: this.searchAction}] })
 
-      RKTNavBar({ title: 'RKTNavBar使用', customTitle: this.customTitle03() })
+      RKTNavBar({ title: 'RKTNavBar使用', customTitle: (): void => { this.customTitle03() }})
 
-      RKTNavBar({ title: '', hideBack: true, customTitle: this.customTitle04() })
+      RKTNavBar({ hideBack: true, customTitle: (): void => { this.customTitle04() } })
 
-      RKTNavBar({ title: this.title, rightMemus: [{title: '变化1', action: this.changeTitleAction.bind(this), tag: 1}, {title: '变化2', action: this.changeTitleAction.bind(this), tag: 2}] })
+      RKTNavBar({ title: this.title, rightMemus: [{title: '变化1', action: (): void => this.changeTitleAction(), tag: 1}, {title: '变化2', action: (): void => this.changeTitleAction(), tag: 2}] })
 
       Text(`变化标题测试: ${this.count1} + ${this.count2}`)
         .onClick(() => {
@@ -124,7 +122,7 @@ export default struct RKTLoadingDemo {
         })
     }
     .width('100%')
-    .height('100%')
+    .margin({ top: 2})
   }
 
   addAction() {
@@ -166,7 +164,7 @@ export default struct RKTLoadingDemo {
     promptAction.showToast({ message: 'enquiryAction' })
   }
 
-  changeTitleAction(tag: number) {
+  changeTitleAction(tag?: number) {
     if (tag == 1) {
       this.count1 -= 1;
     } else {
@@ -193,7 +191,7 @@ export default struct RKTLoadingDemo {
   @Builder customTitle02() {
     Column() {
       TextInput({placeholder: '请输入搜索内容'})
-        .width('300')
+        .width('280')
         .backgroundColor(Color.Pink)
     }
     .justifyContent(FlexAlign.Center)
@@ -205,14 +203,18 @@ export default struct RKTLoadingDemo {
       Tabs({ barPosition: BarPosition.Start }) {
         ForEach(this.tabItems, (item: DemoTabItem)  => {
           TabContent() {
+            Column().width('100%').height('100%').backgroundColor(Color.Yellow).borderRadius('12vp')
           }
-          .tabBar(item.title)
+          .tabBar(new SubTabBarStyle(item.title))
         })
       }
       .backgroundColor(Color.White)
-      .barHeight('40')
+      .scrollable(true)
       .barMode(BarMode.Scrollable)
       .width(320)
+      .onChange((index: number) => {
+        console.info(index.toString())
+      })
     }
     .justifyContent(FlexAlign.Center)
     .backgroundColor(Color.Yellow)
@@ -286,7 +288,6 @@ export default struct RKTLoadingDemo {
     }
     .alignItems(VerticalAlign.Center)
     .padding({left: 10})
-    .height('100%')
     .onClick(() => {
       promptAction.showToast({ message: '切换地区' })
     })

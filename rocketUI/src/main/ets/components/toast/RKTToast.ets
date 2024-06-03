@@ -88,25 +88,24 @@ export struct RKTToast {
   }
 
   build() {
-    if (this.show) {
+    Column() {
       Column() {
-        Column() {
-          Text(this.message)
-            .fontColor(this.fontColor).fontSize(this.fontSize).fontWeight(FontWeight.Regular)
-            .textAlign(TextAlign.Center)
-        }.align(Alignment.Center).alignItems(HorizontalAlign.Center).alignSelf(ItemAlign.Center)
-        .constraintSize({ maxWidth:345, minHeight:45 })
-        .padding({ left:20, right:20, top:12, bottom:12 })
-        .borderRadius(7)
-        .backgroundColor(`#99000000`)
-      }
-      .hitTestBehavior(HitTestMode.Transparent)
-      .width('100%')
-      .align(Alignment.Center).alignItems(HorizontalAlign.Center)
-      .position({ x: 0, y: this.showPositionY })
-      .zIndex(999)
-      .transition({ type: TransitionType.Insert, opacity: 1 })
+        Text(this.message)
+          .fontColor(this.fontColor).fontSize(this.fontSize).fontWeight(FontWeight.Regular)
+          .textAlign(TextAlign.Center)
+      }.align(Alignment.Center).alignItems(HorizontalAlign.Center).alignSelf(ItemAlign.Center)
+      .constraintSize({ maxWidth:345, minHeight:45 })
+      .padding({ left:20, right:20, top:12, bottom:12 })
+      .borderRadius(7)
+      .backgroundColor(`#99000000`)
     }
+    .hitTestBehavior(HitTestMode.Transparent)
+    .width('100%')
+    .align(Alignment.Center).alignItems(HorizontalAlign.Center)
+    .position({ x: 0, y: this.showPositionY })
+    .zIndex(999)
+    .visibility(this.show ? Visibility.Visible : Visibility.Hidden)
+    .transition({ type: TransitionType.Insert, opacity: 1 })
   }
 
   // MARK: - 显示位置更新变化
