@@ -5,11 +5,11 @@ export class RKTRefreshObserved {
   currentPage: number = 1
   pageSize: number = RKTRefreshConstant.PAGE_SIZE
   pullDownRefreshText: string = '下拉刷新'
-  pullDownRefreshImage: Resource = $r("app.media.rkt_ic_pull_down_refresh")
+  pullDownRefreshImage: Resource = $r("app.media.ru_ic_pull_down_refresh")
   pullDownRefreshHeight: number = RKTRefreshConstant.CUSTOM_LAYOUT_HEIGHT
   isVisiblePullDown: boolean = false
   pullUpLoadText: string = '加载中...'
-  pullUpLoadImage: Resource = $r("app.media.rkt_ic_pull_up_load")
+  pullUpLoadImage: Resource = $r("app.media.ru_ic_pull_up_load")
   pullUpLoadHeight: number = 70
   isVisiblePullUpLoad: boolean = false
   offsetY: number = 0
@@ -29,7 +29,7 @@ export class RKTRefreshObserved {
   onCallRefresh:Function = () => {}
   //
   isVisible?: boolean = false
-  imageSrc?: Resource = $r("app.media.rkt_ic_pull_up_load")
+  imageSrc?: Resource = $r("app.media.ru_ic_pull_up_load")
   textValue?: string = ""
   heightValue?: number = 0
 

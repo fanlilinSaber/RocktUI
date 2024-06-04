@@ -31,7 +31,7 @@ export struct RKTPage {
   // 背景色（因无法获取组件默认的backgroundColor属性作为条件判断值，单独提供一个来设置默认色，不用在外面设置 backgroundColor）
   barColor?: ResourceColor = '#FFEF4033'
   // 返回按钮
-  backIcon?: string | PixelMap | Resource = $r("app.media.navbar_back")
+  backIcon?: string | PixelMap | Resource = $r("app.media.ru_navbar_back")
   // 是否隐藏返回按钮
   hideBack: boolean = false
 

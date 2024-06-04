@@ -19,14 +19,14 @@ export struct RKTItemAddFieldView {
         Text("新增字段")
           .fontSize(15)
           .padding({ top: 15, bottom: 15 })
-          .fontColor($r("app.color.color_FF333333"))
+          .fontColor($r("app.color.ru_color_FF333333"))
           .layoutWeight(1)
 
         Text("+ 新增")
           .fontSize(14)
           .padding({ top: 2, bottom: 2, left: 5, right: 5 })
-          .fontColor($r("app.color.color_FF5792FD"))
-          .borderColor($r("app.color.color_FF5792FD"))
+          .fontColor($r("app.color.ru_color_FF5792FD"))
+          .borderColor($r("app.color.ru_color_FF5792FD"))
           .borderWidth(0.5)
           .borderRadius(5)
           .onClick(() => {
@@ -72,12 +72,12 @@ export struct RKTItemAddFieldView {
       .width("100%")
 
       if (this.bottomLine) {
-        Divider().width('100%').height(0.5).color($r("app.color.color_FFEDEDED"))
+        Divider().width('100%').height(0.5).color($r("app.color.ru_color_FFEDEDED"))
       }
     }
     .width("100%")
     .padding({ left: 15, right: 10 })
-    .backgroundColor($r("app.color.color_FFFFFFFF"))
+    .backgroundColor($r("app.color.ru_color_FFFFFFFF"))
   }
 }
 

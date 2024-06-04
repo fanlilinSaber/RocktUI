@@ -45,7 +45,7 @@ export struct RKTItemInputTextView {
                 top: this.mObserved.leftContentPaddingVertical,
                 bottom: this.mObserved.leftContentPaddingVertical
               })
-              .fontColor(this.mObserved.leftContentFontColor??$r("app.color.color_FF333333"))
+              .fontColor(this.mObserved.leftContentFontColor??$r("app.color.ru_color_FF333333"))
               .maxLines(this.mObserved.leftContentMaxLines)
               .textOverflow({ overflow: TextOverflow.Ellipsis })
             if (this.mObserved.isShowRedStar) {
@@ -60,7 +60,7 @@ export struct RKTItemInputTextView {
                 .textAlign(TextAlign.End)
                 .fontSize(15)
                 .backgroundColor(this.mObserved.bgColor)
-                .placeholderColor($r("app.color.color_FFC0C4CC"))
+                .placeholderColor($r("app.color.ru_color_FFC0C4CC"))
                 .fontColor(this.mObserved.rightContentColor)
                 .layoutWeight(1)
                 .onChange((value: string) => {
@@ -72,7 +72,7 @@ export struct RKTItemInputTextView {
                 .textAlign(TextAlign.End)
                 .fontSize(15)
                 .fontColor(this.mObserved.rightContentColor)
-                .placeholderColor($r("app.color.color_FFC0C4CC"))
+                .placeholderColor($r("app.color.ru_color_FFC0C4CC"))
                 .backgroundColor(this.mObserved.bgColor)
                 .layoutWeight(1)
                 .onChange((value: string) => {
@@ -83,7 +83,7 @@ export struct RKTItemInputTextView {
           } else {
             if (this.isEmptyString(this.mObserved.rightContent??"")) {
               Text(this.mObserved.rightHint)
-                .fontColor($r("app.color.color_FFC0C4CC"))
+                .fontColor($r("app.color.ru_color_FFC0C4CC"))
                 .maxLines(this.mObserved.maxLines)
                 .textAlign(TextAlign.End)
                 .fontSize(15)
@@ -99,7 +99,7 @@ export struct RKTItemInputTextView {
           }
           if (this.mObserved.isShowRightArrow) {
             if (this.mObserved.rightImage === null || this.mObserved.rightImage === undefined) {
-              Image($r("app.media.rkt_ic_right_arrow_gray")).width(7).height(14).margin({ left: 9 })
+              Image($r("app.media.ru_ic_right_arrow_gray")).width(7).height(14).margin({ left: 9 })
             } else {
               Image(this.mObserved.rightImage).width(14).height(14).margin({ left: 9 })
             }
@@ -116,8 +116,8 @@ export struct RKTItemInputTextView {
           TextArea({ placeholder: this.mObserved.rightBottomHint, text: this.mObserved.rightBottomContent })
             .textAlign(TextAlign.End)
             .fontSize(15)
-            .fontColor($r("app.color.color_FF000000"))
-            .placeholderColor($r("app.color.color_FFC0C4CC"))
+            .fontColor($r("app.color.ru_color_FF000000"))
+            .placeholderColor($r("app.color.ru_color_FFC0C4CC"))
             .backgroundColor(this.mObserved.bgColor)
             .onChange((value: string) => {
               this.mObserved.rightBottomContent = value
@@ -133,7 +133,7 @@ export struct RKTItemInputTextView {
               top: this.mObserved.leftContentPaddingVertical,
               bottom: this.mObserved.leftContentPaddingVertical
             })
-            .fontColor(this.mObserved.leftContentFontColor??$r("app.color.color_FF333333"))
+            .fontColor(this.mObserved.leftContentFontColor??$r("app.color.ru_color_FF333333"))
             .maxLines(this.mObserved.leftContentMaxLines)
             .textOverflow({ overflow: TextOverflow.Ellipsis })
           if (this.mObserved.isShowRedStar) {
@@ -152,8 +152,8 @@ export struct RKTItemInputTextView {
             TextInput({ placeholder: this.mObserved.bottomHint, text: this.mObserved.bottomContent })
               .width("100%")
               .fontSize(15)
-              .fontColor($r("app.color.color_FF000000"))
-              .placeholderColor($r("app.color.color_FFC0C4CC"))
+              .fontColor($r("app.color.ru_color_FF000000"))
+              .placeholderColor($r("app.color.ru_color_FFC0C4CC"))
               .backgroundColor(this.mObserved.bgColor)
               .onChange((value: string) => {
                 this.mObserved.bottomContent = value
@@ -164,8 +164,8 @@ export struct RKTItemInputTextView {
             TextArea({ placeholder: this.mObserved.bottomHint, text: this.mObserved.bottomContent })
               .width("100%")
               .fontSize(15)
-              .fontColor($r("app.color.color_FF000000"))
-              .placeholderColor($r("app.color.color_FFC0C4CC"))
+              .fontColor($r("app.color.ru_color_FF000000"))
+              .placeholderColor($r("app.color.ru_color_FFC0C4CC"))
               .backgroundColor(this.mObserved.bgColor)
               .onChange((value: string) => {
                 this.mObserved.bottomContent = value
@@ -176,11 +176,11 @@ export struct RKTItemInputTextView {
           if (this.isEmptyString(this.mObserved.bottomContent??"")) {
             Text(this.mObserved.bottomHint).maxLines(this.mObserved.maxLines).width("100%")
               .padding({ left: 15, right: 15, bottom: 10 })
-              .fontColor($r("app.color.color_FFC0C4CC"))
+              .fontColor($r("app.color.ru_color_FFC0C4CC"))
           } else {
             Text(this.mObserved.bottomContent).maxLines(this.mObserved.maxLines).width("100%")
               .padding({ left: 15, right: 15, bottom: 10 })
-              .fontColor($r("app.color.color_FF000000"))
+              .fontColor($r("app.color.ru_color_FF000000"))
           }
         }
       } else {
@@ -192,13 +192,13 @@ export struct RKTItemInputTextView {
               top: this.mObserved.leftContentPaddingVertical,
               bottom: this.mObserved.leftContentPaddingVertical
             })
-            .fontColor(this.mObserved.leftContentFontColor??$r("app.color.color_FF333333"))
+            .fontColor(this.mObserved.leftContentFontColor??$r("app.color.ru_color_FF333333"))
             .maxLines(this.mObserved.leftContentMaxLines)
             .textOverflow({ overflow: TextOverflow.Ellipsis })
           if (this.mObserved.isShowRedStar) {
             Text("*").fontSize(15)
               .padding({ top: 15, bottom: 15, left: 5 })
-              .fontColor($r("app.color.color_FFEF4033"))
+              .fontColor($r("app.color.ru_color_FFEF4033"))
           }
 
           Blank()
@@ -209,18 +209,18 @@ export struct RKTItemInputTextView {
               .fontSize(15)
               .width(100)
               .backgroundColor(this.mObserved.bgColor)
-              .placeholderColor($r("app.color.color_FFC0C4CC"))
-              .fontColor($r("app.color.color_FF000000"))
+              .placeholderColor($r("app.color.ru_color_FFC0C4CC"))
+              .fontColor($r("app.color.ru_color_FF000000"))
               .onChange((value: string) => {
                 this.mObserved.rightContent = value
                 this.onCheckBoxContentChange(value)
               })
-            Text(this.mObserved.rightContentUnit??"").fontColor($r("app.color.color_FF333333"))
+            Text(this.mObserved.rightContentUnit??"").fontColor($r("app.color.ru_color_FF333333"))
               .fontSize(14)
               .padding({ left: 5 })
           }
 
-          Image(this.mObserved.isCheckBoxChecked === true ? $r("app.media.rkt_ic_check_blue") : $r("app.media.rkt_ic_check_gray"))
+          Image(this.mObserved.isCheckBoxChecked === true ? $r("app.media.ru_ic_check_blue") : $r("app.media.ru_ic_check_gray"))
             .width(15)
             .margin({ left: 20 })
             .height(15)
@@ -229,7 +229,7 @@ export struct RKTItemInputTextView {
               this.mObserved.isRightInput = !this.mObserved.isCheckBoxChecked
               this.onClickCheckBox(this.mObserved.isCheckBoxChecked)
             })
-          Text(this.mObserved.checkBoxContent??"不限").fontColor($r("app.color.color_FF333333"))
+          Text(this.mObserved.checkBoxContent??"不限").fontColor($r("app.color.ru_color_FF333333"))
             .fontSize(14)
             .padding({ left: 5 })
             .onClick(() => {
@@ -248,7 +248,7 @@ export struct RKTItemInputTextView {
           Shape()
             .layoutWeight(1)
             .height(1)
-            .backgroundColor($r("app.color.color_FFEDEDED"))
+            .backgroundColor($r("app.color.ru_color_FFEDEDED"))
         }
         .width("100%")
         .height(1)
@@ -262,7 +262,7 @@ export struct RKTItemInputTextView {
   @Builder defaultBuilder() {
     Text("*").fontSize(15)
       .padding({ top: 15, bottom: 15, left: 5 })
-      .fontColor($r("app.color.color_FFEF4033"))
+      .fontColor($r("app.color.ru_color_FFEF4033"))
   }
 
   /**

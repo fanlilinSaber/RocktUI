@@ -28,7 +28,7 @@ export struct RKTFilterAllItemComponent {
   /*正常状态的字体颜色*/
   textColor: ResourceColor = Color.Black
   /*选中状态的字体颜色*/
-  selTextColor: ResourceColor = $r("app.color.color_FFEF4033")
+  selTextColor: ResourceColor = $r("app.color.ru_color_FFEF4033")
   /*正常状态的字体*/
   fontSize: number = 14
 
@@ -121,7 +121,7 @@ export struct RKTFilterAllItemComponent {
           })
 
         Text("确定")
-          .backgroundColor($r("app.color.color_FFEF4033"))
+          .backgroundColor($r("app.color.ru_color_FFEF4033"))
           .fontColor(Color.White)
           .textAlign(TextAlign.Center)
           .flexGrow(1)

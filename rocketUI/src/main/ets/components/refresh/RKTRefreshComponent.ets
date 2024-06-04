@@ -70,17 +70,17 @@ export struct RKTRefreshComponent {
   build() {
     if (this.mActionEvent != null && this.mActionEvent.action === RKTRefreshEnum.NetErr) {
       Column() {
-        Image($r('app.media.rkt_ic_net_err'))
+        Image($r("app.media.ru_ic_net_err"))
           .height(187)
           .width(144)
           .margin({ top: 116 })
         Text("网络连接失败")
           .fontSize(16)
-          .fontColor($r('app.color.color_FF333333'))
+          .fontColor($r("app.color.ru_color_FF333333"))
           .margin({ top: 15 })
         Text("请检查您的网络设置或重新加载")
           .fontSize(14)
-          .fontColor($r('app.color.color_FF969696'))
+          .fontColor($r("app.color.ru_color_FF969696"))
           .margin({ top: 10, bottom: 50 })
       }.onClick(() => {
         this.onRefreshOrLoadMore(this.mObserved, false)

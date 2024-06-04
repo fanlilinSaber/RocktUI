@@ -74,7 +74,7 @@ export struct RKTFilterAreaComponent {
                   Text(item.text)
                     .fontWeight(item.isSelected ? FontWeight.Bold : FontWeight.Normal)
                   if (item.isSelected) {
-                    Image($r("app.media.goods_ic_selected"))
+                    Image($r("app.media.ru_ic_selected"))
                       .size({ width: 14, height: 10 })
                   }
                 }

@@ -29,7 +29,7 @@ export class RKTItemInputTextViewObserved {
   leftImage: string | PixelMap | Resource | null | undefined = null
   //左侧文案
   leftContent: string| undefined = "-"
-  leftContentFontColor: ResourceColor| undefined = $r("app.color.color_FF333333")
+  leftContentFontColor: ResourceColor| undefined = $r("app.color.ru_color_FF333333")
   leftContentMaxLines: number = 1
 
   //是否显示红色星号"*"
@@ -41,7 +41,7 @@ export class RKTItemInputTextViewObserved {
   rightHint: string = "请选择"
   //右侧文案（优先显示content文案，如果没有则显示hint）
   rightContent: string | undefined = ""
-  rightContentColor: ResourceColor = $r("app.color.color_FF000000")
+  rightContentColor: ResourceColor = $r("app.color.ru_color_FF000000")
   //水平模式是否显示下方输入框
   isRightBottomInput: boolean = false
   //右侧底部提示文案
@@ -68,7 +68,7 @@ export class RKTItemInputTextViewObserved {
   isShowBottomLine: boolean = true
   bottomLineMarginLeft: number = 15
   bottomLineMarginRight: number = 15
-  bgColor: ResourceColor = $r("app.color.color_FFFFFFFF")
+  bgColor: ResourceColor = $r("app.color.ru_color_FFFFFFFF")
   rightContentUnit: string | undefined = ""
   isCheckBoxChecked: boolean| undefined = false
   checkBoxContent: string| undefined = ""
@@ -89,7 +89,7 @@ export class RKTItemInputTextViewObserved {
     this.isRightBottomInput = isRightBottomInput??false
     this.rightBottomHint = rightBottomHint??"请输入内容"
     this.rightBottomContent = rightBottomContent
-    this.bgColor = bgColor?? $r("app.color.color_FFFFFFFF")
+    this.bgColor = bgColor?? $r("app.color.ru_color_FFFFFFFF")
     this.maxLines = maxLines??1
     return this
   }
@@ -103,7 +103,7 @@ export class RKTItemInputTextViewObserved {
     this.isBottomInput = isBottomInput??false
     this.isShowRedStar = isShowRedStar??true
     this.isShowBottomLine = isShowBottomLine??true
-    this.bgColor = bgColor?? $r("app.color.color_FFFFFFFF")
+    this.bgColor = bgColor?? $r("app.color.ru_color_FFFFFFFF")
     this.maxLines = maxLines??1
     return this
   }
@@ -132,7 +132,7 @@ export class RKTItemInputTextViewObserved {
     this.leftImage = e.leftImage
     this.rightHint = e.rightHint??"请选择"
     this.rightContent = e.rightContent
-    this.rightContentColor = e.rightContentColor?? $r("app.color.color_FF000000")
+    this.rightContentColor = e.rightContentColor?? $r("app.color.ru_color_FF000000")
     this.isRightInput = e.isRightInput??false
     this.isShowRedStar = e.isShowRedStar??true
     this.isShowRightArrow = e.isShowRightArrow??true
@@ -142,7 +142,7 @@ export class RKTItemInputTextViewObserved {
     this.isRightBottomInput = e.isRightBottomInput??false
     this.rightBottomHint = e.rightBottomHint??"请输入内容"
     this.rightBottomContent = e.rightBottomContent
-    this.bgColor = e.bgColor?? $r("app.color.color_FFFFFFFF")
+    this.bgColor = e.bgColor?? $r("app.color.ru_color_FFFFFFFF")
     this.maxLines = e.maxLines??1
     this.leftContentPaddingVertical = e.leftContentPaddingVertical?? 15
     this.tag = e.tag
@@ -163,7 +163,7 @@ export class RKTItemInputTextViewObserved {
     this.isShowBottomLine = e.isShowBottomLine??true
     this.bottomLineMarginLeft = e.bottomLineMarginLeft??15
     this.bottomLineMarginRight = e.bottomLineMarginRight??15
-    this.bgColor = e.bgColor?? $r("app.color.color_FFFFFFFF")
+    this.bgColor = e.bgColor?? $r("app.color.ru_color_FFFFFFFF")
     this.maxLines = e.maxLines??1
     this.leftContentPaddingVertical = e.leftContentPaddingVertical?? 15
     this.tag = e.tag
@@ -188,7 +188,7 @@ export class RKTItemInputTextViewObserved {
     this.isCheckBoxChecked = e.isCheckBoxChecked
     this.checkBoxContent = e.checkBoxContent
     this.leftContentPaddingVertical = e.leftContentPaddingVertical?? 15
-    this.bgColor = e.bgColor?? $r("app.color.color_FFFFFFFF")
+    this.bgColor = e.bgColor?? $r("app.color.ru_color_FFFFFFFF")
     this.maxLines = e.maxLines??1
     this.tag = e.tag
     return this

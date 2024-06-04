@@ -79,13 +79,13 @@ struct RKTCategoryTitleItem {
 export class RKTCategoryTitleEntity {
   index: number = 0
   name: string = ""
-  image: string | Resource = $r("app.media.rkt_ic_arrow_down_gray")
-  selectImage: string | Resource = $r("app.media.rkt_ic_arrow_up_gray")
-  highLightImage: string | Resource = $r("app.media.rkt_ic_arrow_down_red")
+  image: string | Resource = $r("app.media.ru_ic_arrow_down_gray")
+  selectImage: string | Resource = $r("app.media.ru_ic_arrow_up_gray")
+  highLightImage: string | Resource = $r("app.media.ru_ic_arrow_down_red")
   isSelect: boolean = false
   isHighLight: boolean = false
 
-  constructor(name: string = "", image: string | Resource = $r("app.media.rkt_ic_arrow_down_gray"), selectImage: string | Resource = $r("app.media.rkt_ic_arrow_up_gray"), isSelect: boolean = false, isHighLight: boolean = false) {
+  constructor(name: string = "", image: string | Resource = $r("app.media.ru_ic_arrow_down_gray"), selectImage: string | Resource = $r("app.media.ru_ic_arrow_up_gray"), isSelect: boolean = false, isHighLight: boolean = false) {
     this.name = name;
     this.image = image;
     this.selectImage = selectImage;

@@ -1,8 +1,8 @@
 {
   "string": [
     {
-      "name": "shared_desc",
-      "value": "description"
+      "name": "rocketUI_desc",
+      "value": "快速开发UI组件库"
     }
   ]
 }

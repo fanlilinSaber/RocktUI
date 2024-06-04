@@ -113,7 +113,7 @@ export default struct RKTLoadingDemo {
 
       RKTNavBar({ hideBack: true, customTitle: (): void => { this.customTitle04() } })
 
-      RKTNavBar({ title: this.title, rightMemus: [{title: '变化1', action: (): void => this.changeTitleAction(), tag: 1}, {title: '变化2', action: (): void => this.changeTitleAction(), tag: 2}] })
+      RKTNavBar({ title: this.title, rightMemus: [{title: '变化1', action: (tag?: string): void => { this.changeTitleAction(tag) }, tag: '1'}, {title: '变化2', action: (tag?: string): void => { this.changeTitleAction(tag) }, tag: '2'}] })
 
       Text(`变化标题测试: ${this.count1} + ${this.count2}`)
         .onClick(() => {
@@ -164,8 +164,8 @@ export default struct RKTLoadingDemo {
     promptAction.showToast({ message: 'enquiryAction' })
   }
 
-  changeTitleAction(tag?: number) {
-    if (tag == 1) {
+  changeTitleAction(tag?: string ) {
+    if (tag === '1') {
       this.count1 -= 1;
     } else {
       this.count1 += 1;

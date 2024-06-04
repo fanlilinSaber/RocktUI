@@ -2,7 +2,7 @@
   "module": {
     "name": "rocketUI",
     "type": "har",
-    "description": "$string:shared_desc",
+    "description": "$string:rocketUI_desc",
     "deviceTypes": [
       "phone",
       "tablet"

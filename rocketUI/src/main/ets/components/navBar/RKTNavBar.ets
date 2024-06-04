@@ -20,9 +20,9 @@ export interface RKTNavBarMenuItem {
   iconSize?: SizeOptions
   // 点击事件；注意：外部需要通过bind绑定，是为了在对应的函数里this指向self（例： {title: '删除', action: this.deleteAction.bind(this)}
   // 新的ArkTS语法上不支持bind函数了，要用新的action: (): void => { this.xxAction() }
-  action: (tag?: string | number) => void
+  action: (tag?: string) => void
   // 标签；当共用一个`action`的时候可以传入tag来区分不同的事件
-  tag?: string | number
+  tag?: string
 }
 
 /**
@@ -40,7 +40,7 @@ export struct RKTNavBar {
   // 背景色（因无法获取组件默认的backgroundColor属性作为条件判断值，单独提供一个来设置默认色，不用在外面设置 backgroundColor）
   barColor?: ResourceColor = '#FFEF4033'
   // 返回按钮
-  backIcon?: string | PixelMap | Resource = $r("app.media.navbar_back")
+  backIcon?: string | PixelMap | Resource = $r("app.media.ru_navbar_back")
   // 是否隐藏返回按钮
   hideBack: boolean = false
 
@@ -75,8 +75,17 @@ export struct RKTNavBar {
       }
       .height('100%').width('100%')
     }
-    .height($r('app.float.navBar_height')).width('100%')
+    .height($r('app.float.ru_navBar_height')).width('100%')
     .backgroundColor(this.barColor ? this.barColor : '#FFEF4033')
+  }
+
+  // 是否有返回按钮
+  private isBackButton(): boolean {
+    console.log('routerLength' + router.getLength())
+    if (router.getLength() == '1') {
+      return false
+    }
+    return !this.hideBack
   }
 
   // 左侧菜单栏
@@ -84,7 +93,7 @@ export struct RKTNavBar {
     Column() {
       Row() {
         // 返回按钮
-        if (!this.hideBack) {
+        if (this.isBackButton()) {
           this.leftBackBar()
         }
 

@@ -81,33 +81,33 @@ export function pullRefreshState(mObserved: RKTRefreshObserved, state: number) {
   switch (state) {
     case RefreshState.DropDown:
       mObserved.pullDownRefreshText = '下拉刷新';
-      mObserved.pullDownRefreshImage = $r("app.media.rkt_ic_pull_down_refresh");
+      mObserved.pullDownRefreshImage = $r("app.media.ru_ic_pull_down_refresh");
       mObserved.isCanRefresh = false;
       mObserved.isRefreshing = false;
       mObserved.isVisiblePullDown = true;
       break;
     case RefreshState.Release:
       mObserved.pullDownRefreshText = '松开刷新';
-      mObserved.pullDownRefreshImage = $r("app.media.rkt_ic_pull_up_refresh");
+      mObserved.pullDownRefreshImage = $r("app.media.ru_ic_pull_up_refresh");
       mObserved.isCanRefresh = true;
       mObserved.isRefreshing = false;
       break;
     case RefreshState.Refreshing:
       mObserved.offsetY = vp2px(mObserved.pullDownRefreshHeight);
       mObserved.pullDownRefreshText = '正在刷新';
-      mObserved.pullDownRefreshImage = $r("app.media.rkt_ic_pull_up_load");
+      mObserved.pullDownRefreshImage = $r("app.media.ru_ic_pull_up_load");
       mObserved.isCanRefresh = true;
       mObserved.isRefreshing = true;
       break;
     case RefreshState.Success:
       mObserved.pullDownRefreshText = '刷新成功';
-      mObserved.pullDownRefreshImage = $r("app.media.rkt_ic_succeed_refresh");
+      mObserved.pullDownRefreshImage = $r("app.media.ru_ic_succeed_refresh");
       mObserved.isCanRefresh = true;
       mObserved.isRefreshing = true;
       break;
     case RefreshState.Fail:
       mObserved.pullDownRefreshText = '刷新失败';
-      mObserved.pullDownRefreshImage = $r("app.media.rkt_ic_fail_refresh");
+      mObserved.pullDownRefreshImage = $r("app.media.ru_ic_fail_refresh");
       mObserved.isCanRefresh = true;
       mObserved.isRefreshing = true;
       break;
