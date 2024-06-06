@@ -7,7 +7,7 @@
 
 ```
  1.通过npm安装源代码，安装在根目录（存放目录：./node_modules/RocketUI/rocket-ui）
- npm install git+https://codehub.devcloud.cn-east-3.huaweicloud.com/HarmonyOS00001/RocketUI.git
+ npm install 'git+https://codehub.devcloud.cn-east-3.huaweicloud.com/HarmonyOS00001/RocketUI.git#dev'
  
  2.在工程级下build-profile.json5文件下配置手动新增module
 
