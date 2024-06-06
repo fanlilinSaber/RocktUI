@@ -6,12 +6,21 @@
 ## 下载安装
 
 ```
- 1.通过npm安装源代码（示列存放目录：entry/node_modules/RocketUI/rocket-ui）
+ 1.通过npm安装源代码，安装在根目录（存放目录：./node_modules/RocketUI/rocket-ui）
  npm install git+https://codehub.devcloud.cn-east-3.huaweicloud.com/HarmonyOS00001/RocketUI.git
+ 
+ 2.在工程级下build-profile.json5文件下配置手动新增module
 
- 2.然后通过ohpm安装本地文件夹
+ "modules": [
+    {
+      "name": "rocketUI",
+      "srcPath": "./node_modules/rocket-ui/rocketUI"
+    }
+  ]
+
+ 3.然后通过ohpm安装本地文件
  "dependencies": {
-    "@zjos/rocketUI": 'file:../entry/node_modules/RocketUI/rocket-ui'
+    "@zjos/rocketUI": 'file:../node_modules/RocketUI/rocket-ui'
   },
 ```
 
