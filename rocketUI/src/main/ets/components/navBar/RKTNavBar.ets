@@ -73,10 +73,12 @@ export struct RKTNavBar {
         // 右侧菜单栏
         this.rightMemuBar()
       }
-      .height('100%').width('100%')
+      .height($r('app.float.ru_navBar_height')).width('100%')
     }
-    .height($r('app.float.ru_navBar_height')).width('100%')
+    .width('100%')
     .backgroundColor(this.barColor ? this.barColor : '#FFEF4033')
+    // 设置顶部绘制延伸到状态栏
+    .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP])
   }
 
   // 是否有返回按钮
@@ -113,7 +115,7 @@ export struct RKTNavBar {
       left: {anchor: "__container__", align: HorizontalAlign.Start}
     })
     .displayPriority(100)
-    .id("leftMemuBar")
+    .id("__leftMemuBar")
   }
 
   // 中间标题栏
@@ -128,7 +130,7 @@ export struct RKTNavBar {
         center: {anchor: "__container__", align: VerticalAlign.Center},
         middle: {anchor: "__container__", align: HorizontalAlign.Center}
       })
-      .id("titleBar")
+      .id("__titleBar1")
       .zIndex(1)
     } else  {
       Column() {
@@ -148,7 +150,7 @@ export struct RKTNavBar {
         right: {anchor: 'rightMemuBar', align: HorizontalAlign.Start}
       })
       .displayPriority(99)
-      .id("titleBar")
+      .id("__titleBar2")
     }
   }
 
@@ -172,7 +174,7 @@ export struct RKTNavBar {
       right: {anchor: "__container__", align: HorizontalAlign.End}
     })
     .displayPriority(100)
-    .id("rightMemuBar")
+    .id("__rightMemuBar")
   }
 
   // 默认返回按钮

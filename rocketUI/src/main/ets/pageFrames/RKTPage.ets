@@ -64,7 +64,7 @@ export struct RKTPage {
           backIcon: this.backIcon,
           hideBack: this.hideBack,
           leftMemus: this.leftMemus,
-          rightMemus: this.rightMemus, })
+          rightMemus: this.rightMemus })
       }
       this.closer()
 
