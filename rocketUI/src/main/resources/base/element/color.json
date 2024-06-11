@@ -33,7 +33,8 @@
       "value": "#FF79A2FF"
     },
     {
-      "name": "ru_color_FFEF4033",
+      "comment": "主色调",
+      "name": "ru_main_color",
       "value": "#FFEF4033"
     },
     {

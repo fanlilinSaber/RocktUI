@@ -198,7 +198,7 @@ export struct RKTItemInputTextView {
           if (this.mObserved.isShowRedStar) {
             Text("*").fontSize(15)
               .padding({ top: 15, bottom: 15, left: 5 })
-              .fontColor($r("app.color.ru_color_FFEF4033"))
+              .fontColor($r("app.color.ru_main_color"))
           }
 
           Blank()
@@ -262,7 +262,7 @@ export struct RKTItemInputTextView {
   @Builder defaultBuilder() {
     Text("*").fontSize(15)
       .padding({ top: 15, bottom: 15, left: 5 })
-      .fontColor($r("app.color.ru_color_FFEF4033"))
+      .fontColor($r("app.color.ru_main_color"))
   }
 
   /**
