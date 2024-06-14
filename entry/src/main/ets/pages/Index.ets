@@ -1,6 +1,7 @@
 import { RKTProgress } from "@zjos/rocketUI"
 import Prompt from '@system.prompt'
 import router from '@ohos.router'
+import { DetailsPage01Builder } from './DetailsPage01';
 
 interface Demo {
   text: string;
@@ -25,34 +26,31 @@ let demos: Demo[] = [
 struct Index {
   @State message: string = 'Hello World';
   @State visible: boolean = false;
+  pageStack: NavPathStack = new NavPathStack()
 
   build() {
-    Column() {
-      // RKTNavBar()
-      // Test001()
-      this.buildContent()
+    // Navigation(this.pageStack) {
+      Column() {
+        // RKTNavBar()
+        // Test001()
+        this.buildContent()
+      }
+      .width('100%')
+    // }
+    // .title("测试表示")
+    // .navDestination(this.pageMap)
+    // .mode(NavigationMode.Stack)
+  }
 
-      // Text("加载loding")
-      //   .fontSize(50)
-      //   .fontWeight(FontWeight.Bold)
-      //   .onClick(() => {
-      //     // Prompt.showToast({
-      //     //   message: "测试点击"
-      //     // })
-      //     this.visible = true;
-      //
-      //     setTimeout(()=>{
-      //       this.visible = false;
-      //     },3000)
-      //   })
-      //
-      // if(this.visible) {
-      //   RKTProgress({
-      //   })
-      // }
-      // RKTProgress()
+  @Builder pageMap(name: string) {
+
+    if (name === 'DetailsPage01') {
+
+      // 路由到hsp包中的登录页面
+
+      DetailsPage01Builder()
+
     }
-    .width('100%')
   }
 
   @Builder
@@ -99,6 +97,8 @@ struct Index {
     let url = 'pages/DetailsPage02'
     if (item.text == '加载Loading') {
       url = 'pages/DetailsPage01'
+      // this.pageStack.pushPathByName("DetailsPage01", null, true)
+      // return
     } else if (item.text == "条件筛选框") {
       url = 'pages/DetailsPage03'
     }

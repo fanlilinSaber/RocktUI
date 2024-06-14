@@ -10,6 +10,7 @@ import common from '@ohos.app.ability.common'
 import router from '@ohos.router'
 import hilog from '@ohos.hilog'
 import RKTEventBus, { RKTEventData } from '../../utils/RKTEventBus'
+import RKTUIConfig from '../../utils/RKTUIConfig'
 
 // show loading event name
 const EVENT_SHOW_LOADING: string = "showLoading"
@@ -388,6 +389,10 @@ export struct RKTProgress {
         let resStr = util.TextDecoder.create('utf-8', { ignoreBOM: true })
         let context = getContext(this) as common.UIAbilityContext
 
+        if (RKTUIConfig.moduleName) {
+           context = getContext(this).createModuleContext(RKTUIConfig.moduleName) as common.UIAbilityContext
+        }
+
         // 这里是一个异步方法，可能在build - Canvas - onReady之后执行
         let data = await context.resourceManager.getRawFileContent(animatePath)
         if(data === null || data === undefined || data.buffer === undefined){ return }
@@ -401,7 +406,7 @@ export struct RKTProgress {
         this.startAnimation()
       }
     } catch (error) {
-      hilog.error(RKT_LOG_DOMAIN , `RocketUI`, "RKTProgress reloadAnimation" + error)
+      hilog.error(RKT_LOG_DOMAIN , `RocketUI`, "RKTProgress reloadAnimation" + (error as Error).message)
     }
   }
 

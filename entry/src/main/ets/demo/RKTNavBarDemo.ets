@@ -107,7 +107,7 @@ export default struct RKTLoadingDemo {
         customTitle: this.customTitle02,
         rightMemus: [{icon: $r('app.media.common_Search'), action: this.searchAction, iconSize: {width:35, height: 35}}], barColor: Color.Yellow})
 
-      RKTNavBar({ title: 'RKTNavBar使用', customTitle: this.customTitle02, rightMemus: [{title: '搜索', action: this.searchAction}] })
+      RKTNavBar({ title: 'RKTNavBar使用', customTitle: this.customTitle02, rightMemus: [{title: '搜索', action: this.searchAction}, {title: '搜索', action: this.searchAction}] })
 
       RKTNavBar({ title: 'RKTNavBar使用', customTitle: (): void => { this.customTitle03() }})
 
@@ -191,7 +191,7 @@ export default struct RKTLoadingDemo {
   @Builder customTitle02() {
     Column() {
       TextInput({placeholder: '请输入搜索内容'})
-        .width('280')
+        .width('200')
         .backgroundColor(Color.Pink)
     }
     .justifyContent(FlexAlign.Center)

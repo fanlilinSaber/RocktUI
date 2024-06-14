@@ -32,7 +32,7 @@ export { RKTFilterAreaComponent, } from "./src/main/ets/components/filterBox/com
 
 export { RKTEvent, RKTEventBus, RKTEventData } from "./src/main/ets/utils/RKTEventBus"
 
-export { RKTUtil } from "./src/main/ets/utils/RKTUtil"
+export { RKTUIConfig } from "./src/main/ets/utils/RKTUIConfig"
 
 export { RKTItemInputTextView,
   RKTOrientation } from './src/main/ets/components/itemInputText/RKTItemInputTextView'

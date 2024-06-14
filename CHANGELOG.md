@@ -1,4 +1,8 @@
 
+## v1.0.2
+    修复RKTNavBar因自定义title设置了外边距导致点击事件失效的bug
+    返回按钮替换成svg格式
+
 ## v1.0.1
     RKTNavBar、RKTPage 默认支持沉浸式。
 

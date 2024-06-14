@@ -37,7 +37,7 @@ struct DetailsPage02 {
 
   build() {
     Column() {
-      RKTPage({ title: this.title, titleColor: Color.Black }) {
+      RKTPage({ title: this.title, titleColor: Color.White }) {
         if (this.value == 'RKTLoadingDemo') {
           RKTLoadingDemo()
         } else if (this.value == 'RKTNavBarDemo') {

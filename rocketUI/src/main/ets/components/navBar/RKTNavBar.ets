@@ -40,7 +40,7 @@ export struct RKTNavBar {
   // 背景色（因无法获取组件默认的backgroundColor属性作为条件判断值，单独提供一个来设置默认色，不用在外面设置 backgroundColor）
   barColor?: ResourceColor = $r("app.color.ru_main_color")
   // 返回按钮
-  backIcon?: string | PixelMap | Resource = $r("app.media.ru_navbar_back")
+  backIcon?: string | PixelMap | Resource = $r("app.media.ru_navbar_back_svg")
   // 是否隐藏返回按钮
   hideBack: boolean = false
 
@@ -130,8 +130,8 @@ export struct RKTNavBar {
         center: {anchor: "__container__", align: VerticalAlign.Center},
         middle: {anchor: "__container__", align: HorizontalAlign.Center}
       })
+      .displayPriority(101)
       .id("__titleBar1")
-      .zIndex(1)
     } else  {
       Column() {
         Text(this.title)
@@ -183,6 +183,7 @@ export struct RKTNavBar {
       Image(this.backIcon)
         .width(10).height(20)
         .margin({ left: 15 })
+        .fillColor(Color.White)
     }
     .width('44').height('44')
     .justifyContent(FlexAlign.Start).alignItems(VerticalAlign.Center)

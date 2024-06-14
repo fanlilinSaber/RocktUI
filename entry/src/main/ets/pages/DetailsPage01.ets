@@ -12,12 +12,22 @@ interface DemoParams{
   value?: string
 }
 
+
+@Builder
+export function DetailsPage01Builder(): void {
+  NavDestination() {
+    DetailsPage01()
+  }
+}
+
 @Entry
 @Component
-struct DetailsPage {
+struct DetailsPage01 {
 
   @State title: string = "";
   @State value: string = "";
+
+  pageStack: NavPathStack = new NavPathStack()
 
   aboutToAppear(){
     let params = (router.getParams()||{}) as DemoParams
@@ -41,6 +51,18 @@ struct DetailsPage {
     .height('100%')
   }
 
+  // build() {
+  //   Navigation(this.pageStack) {
+  //     Column() {
+  //     }
+  //     .width('100%')
+  //     .height('100%')
+  //   }
+  //   .title(this.buildNavbar)
+  //   .backButtonIcon($r('app.media.ru_navbar_back'))
+  //   .mode(NavigationMode.Stack)
+  // }
+
   // 页面主内容
   @Builder buildPageFrame() {
     if (this.value == 'LoadingDemo') {
@@ -59,6 +81,7 @@ struct DetailsPage {
           .fontSize(20)
           .onClick(() => {
             router.back()
+            // this.pageStack.pop()
           })
 
         Text(this.title)

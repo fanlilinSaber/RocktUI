@@ -4,7 +4,7 @@
  * Descrobe:
  */
 
-import { RKTProgressUtil, RKTProgressStyle, RKTProgressItem } from "@zjos/rocketUI"
+import { RKTProgressUtil, RKTProgressStyle, RKTProgressItem, RKTPage } from "@zjos/rocketUI"
 import util from '@ohos.util'
 import common from '@ohos.app.ability.common'
 import promptAction from '@ohos.promptAction'
@@ -184,30 +184,36 @@ export default struct RKTLoadingDemo {
   }
 
   @Builder test07() {
-    Text("自定义任务进度")
-      .fontSize(30)
-      .fontWeight(FontWeight.Bold)
-      .onClick(() => {
+    Column() {
+      RKTPage() {
+        Text("自定义任务进度")
+          .fontSize(30)
+          .fontWeight(FontWeight.Bold)
+          .onClick(() => {
 
-        RKTProgressUtil.showProgress(this.progressValue, this.progressElement02)
+            RKTProgressUtil.showProgress(this.progressValue, this.progressElement02)
 
-        // 模拟网络下载进度
-        this.intervalID = setInterval(() => {
-          if (this.progressValue > 1) {
-            clearInterval(this.intervalID)
-            this.progressValue = 0
-            RKTProgressUtil.hideProgress()
-            return
-          }
-          this.progressValue += 0.02
-          this.progressStr = `下载进度` + (this.progressValue * 100).toFixed(0) + `%`
-          this.progressElement02.text = this.progressStr
 
-          RKTProgressUtil.showProgress(this.progressValue, this.progressElement02)
-        }, 200)
-      })
-      .margin({
-        top: 10
-      })
+            // 模拟网络下载进度
+            this.intervalID = setInterval(() => {
+              if (this.progressValue > 1) {
+                clearInterval(this.intervalID)
+                this.progressValue = 0
+                RKTProgressUtil.hideProgress()
+                return
+              }
+              this.progressValue += 0.02
+              this.progressStr = `下载进度` + (this.progressValue * 100).toFixed(0) + `%`
+              this.progressElement02.text = this.progressStr
+
+              RKTProgressUtil.showProgress(this.progressValue, this.progressElement02)
+            }, 200)
+          })
+          .margin({
+            top: 10
+          })
+      }
+    }.layoutWeight(1)
+
   }
 }
