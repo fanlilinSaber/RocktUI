@@ -11,6 +11,7 @@ import router from '@ohos.router'
 import hilog from '@ohos.hilog'
 import RKTEventBus, { RKTEventData } from '../../utils/RKTEventBus'
 import RKTUIConfig from '../../utils/RKTUIConfig'
+import resourceManager from '@ohos.resourceManager'
 
 // show loading event name
 const EVENT_SHOW_LOADING: string = "showLoading"
@@ -296,6 +297,7 @@ export struct RKTProgress {
 
   // MARK: - 组件即将出现时
   async aboutToAppear() {
+    RKTUIConfig
     this.registerEvent()
     this.reloadAnimation()
   }
@@ -372,31 +374,28 @@ export struct RKTProgress {
         let animatePath = '';
         switch (this.style) {
           case RKTProgressStyle.sandClock:
-            animatePath = 'animation_shalou.json'
+            animatePath = 'ru_animation_shalou.json'
             break;
           case RKTProgressStyle.wordDance:
-            animatePath = 'loading_7.json'
+            animatePath = 'ru_loading_7.json'
             break;
           case RKTProgressStyle.forward:
-            animatePath = 'animation_forward.json'
+            animatePath = 'ru_animation_forward.json'
             break;
           case RKTProgressStyle.rotate:
           default:
-            animatePath = 'loading_2.json'
+            animatePath = 'ru_loading_2.json'
             break;
         }
 
-        let resStr = util.TextDecoder.create('utf-8', { ignoreBOM: true })
-        let context = getContext(this) as common.UIAbilityContext
-
-        if (RKTUIConfig.moduleName) {
-           context = getContext(this).createModuleContext(RKTUIConfig.moduleName) as common.UIAbilityContext
-        }
+        let context = RKTUIConfig.context
+        if (context == null) { return }
 
         // 这里是一个异步方法，可能在build - Canvas - onReady之后执行
         let data = await context.resourceManager.getRawFileContent(animatePath)
         if(data === null || data === undefined || data.buffer === undefined){ return }
 
+        let resStr = util.TextDecoder.create('utf-8', { ignoreBOM: true })
         let lottieStr = resStr.decodeWithStream(new Uint8Array(data.buffer))
         this.progressItem.lottieData = JSON.parse(lottieStr);
       }
