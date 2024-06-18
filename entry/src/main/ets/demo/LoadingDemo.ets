@@ -118,7 +118,7 @@ export default struct LoadingDemo {
       })
 
     if(this.isloding02) {
-      RKTProgress({ style: RKTProgressStyle.sandClock, message: '正在抓取数据请稍后...' })
+      RKTProgress({ style: RKTProgressStyle.SandClock, message: '正在抓取数据请稍后...' })
     }
   }
 
@@ -137,7 +137,7 @@ export default struct LoadingDemo {
       })
 
     if(this.isloding03) {
-      RKTProgress({ style: RKTProgressStyle.wordDance })
+      RKTProgress({ style: RKTProgressStyle.WordDance })
     }
   }
 
@@ -171,7 +171,7 @@ export default struct LoadingDemo {
       })
 
     if(this.isloding05) {
-      RKTProgress({ style: RKTProgressStyle.custom, progressItem: this.progressItem01 })
+      RKTProgress({ style: RKTProgressStyle.Custom, progressItem: this.progressItem01 })
     }
   }
 
@@ -199,7 +199,7 @@ export default struct LoadingDemo {
       })
 
     if(this.isProgress01) {
-      RKTProgress({ autoplay: false, progress: this.progressValue, message: this.progressStr, style: RKTProgressStyle.forward})
+      RKTProgress({ autoplay: false, progress: this.progressValue, message: this.progressStr, style: RKTProgressStyle.Forward})
     }
   }
 
@@ -226,7 +226,7 @@ export default struct LoadingDemo {
       })
 
     if(this.isProgress02) {
-      RKTProgress({ autoplay: false, progress: this.progressValue, message: this.progressStr, style: RKTProgressStyle.custom, progressItem: this.progressItem02 })
+      RKTProgress({ autoplay: false, progress: this.progressValue, message: this.progressStr, style: RKTProgressStyle.Custom, progressItem: this.progressItem02 })
     }
   }
 

@@ -10,11 +10,17 @@ import common from '@ohos.app.ability.common'
 import promptAction from '@ohos.promptAction'
 import { RKTProgressElement } from '@zjos/rocketUI/src/main/ets/components/progress/RKTProgress'
 
+interface Demo {
+  title: string;
+  value: string;
+}
+
 @Component
 export default struct RKTLoadingDemo {
   @State count: number = 0;
   @State progressStr: string = '下载进度0%'
   @State progressValue: number = 0
+  @LocalStorageLink("pageStack") pageStack: NavPathStack = new NavPathStack()
   private intervalID: number = 0
 
   progressElement01: RKTProgressElement = { animateSize: { width: 200, height: 200 }, boxBorderSize: { width: 220, height: 220 }, boxBorderRadius: 10, boxBackgroundColor: Color.Red}
@@ -80,6 +86,9 @@ export default struct RKTLoadingDemo {
         setTimeout(()=>{
           RKTProgressUtil.hideLoading()
         },3000)
+
+        // let params: Demo = { title: "使用RKTPage加载Loading", value: "RKTLoadingDemo" }
+        // this.pageStack.pushPathByName('pages/DetailsPage02', params, true)
       })
       .margin({
         top: 10
@@ -91,7 +100,7 @@ export default struct RKTLoadingDemo {
       .fontSize(30)
       .fontWeight(FontWeight.Bold)
       .onClick(() => {
-        RKTProgressUtil.showLoading({ style: RKTProgressStyle.sandClock, message: '正在抓取数据请稍后...'})
+        RKTProgressUtil.showLoading({ style: RKTProgressStyle.SandClock, message: '正在抓取数据请稍后...'})
         setTimeout(()=>{
           RKTProgressUtil.hideLoading()
         },3000)
@@ -106,7 +115,7 @@ export default struct RKTLoadingDemo {
       .fontSize(30)
       .fontWeight(FontWeight.Bold)
       .onClick(() => {
-        RKTProgressUtil.showLoading(RKTProgressStyle.wordDance)
+        RKTProgressUtil.showLoading(RKTProgressStyle.WordDance)
         setTimeout(()=>{
           RKTProgressUtil.hideLoading()
         },3000)
@@ -185,7 +194,7 @@ export default struct RKTLoadingDemo {
 
   @Builder test07() {
     Column() {
-      RKTPage() {
+      // RKTPage() {
         Text("自定义任务进度")
           .fontSize(30)
           .fontWeight(FontWeight.Bold)
@@ -212,8 +221,8 @@ export default struct RKTLoadingDemo {
           .margin({
             top: 10
           })
-      }
-    }.layoutWeight(1)
+      // }
+    }
 
   }
 }

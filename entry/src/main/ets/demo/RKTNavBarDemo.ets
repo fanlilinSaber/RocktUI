@@ -4,7 +4,7 @@
  * Descrobe:
  */
 
-import { RKTNavBar, RKTNavBarMenuItem, RKTEventData } from '@zjos/rocketUI'
+import { RKTNavBar, RKTNavBarMenuItem, RKTEventData, RKTNavBarAppearanceMode } from '@zjos/rocketUI'
 import promptAction from '@ohos.promptAction'
 import emitter from '@ohos.events.emitter'
 import hilog from '@ohos.hilog'
@@ -92,7 +92,7 @@ export default struct RKTLoadingDemo {
   build() {
     Column({space: 2}) {
 
-      RKTNavBar({ title: 'RKTNavBar使用', rightMemus: this.rightMemus })
+      RKTNavBar({ title: 'RKTNavBar使用', rightMemus: this.rightMemus, appearanceMode: RKTNavBarAppearanceMode.WhiteMode })
 
       RKTNavBar({ title: 'RKTNavBar使用', leftMemus: this.leftMemus })
 

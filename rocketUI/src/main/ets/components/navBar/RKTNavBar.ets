@@ -4,6 +4,7 @@
  * Descrobe:
  */
 import router from '@ohos.router'
+import { NAVBAR_HEIGHT } from '../../constants/Constants'
 
 /**
  * 导航栏菜单
@@ -26,11 +27,38 @@ export interface RKTNavBarMenuItem {
 }
 
 /**
+ * 外观属性
+ */
+export interface RKTNavBarAppearance {
+  // 标题颜色
+  titleColor?: ResourceColor
+  // 标题字体大小
+  titleSize?: number | string
+  // 标题字体字重
+  titleWeight?: number | FontWeight | string
+  // 背景色
+  barColor?: ResourceColor
+  // 返回按钮
+  backIcon?
+  // 返回按钮颜色（svg）
+  backFillColor?: ResourceColor
+}
+
+/**
+ * 外观样式快捷模板
+ */
+export enum RKTNavBarAppearanceMode {
+  // 红底+白色辅助
+  RedMode,
+  // 白底+黑色辅助
+  WhiteMode
+}
+
+/**
  * 通用导航栏
  */
 @Component
 export struct RKTNavBar {
-
   // 导航栏标题
   @Prop title: string = ''
   titleColor: ResourceColor = Color.White
@@ -41,8 +69,20 @@ export struct RKTNavBar {
   barColor?: ResourceColor = $r("app.color.ru_main_color")
   // 返回按钮
   backIcon?: string | PixelMap | Resource = $r("app.media.ru_navbar_back_svg")
+  // 返回按钮颜色（svg）
+  backFillColor: ResourceColor = Color.White
   // 是否隐藏返回按钮
   hideBack: boolean = false
+  // 返回按钮拦截事件
+  onClickBack?: () => boolean
+
+  // 外观属性集中配置（外面可以直接实现接口如：ANavBarAppearance implements RKTNavBarAppearance，BNavBarAppearance implements RKTNavBarAppearance 来集中配置）
+  appearance?: RKTNavBarAppearance
+  // 外观默认模板（appearance、appearanceMode、barColor...等属性互斥，自定义 appearance 优先级最高）
+  appearanceMode: RKTNavBarAppearanceMode = RKTNavBarAppearanceMode.RedMode
+
+  // 如果是基于Navigation的路由管理，必须外部传进来用来做自动显示返回按钮和back操作
+  navPathStack?: NavPathStack
 
   // 左右常规菜单
   leftMemus?: RKTNavBarMenuItem[] = undefined
@@ -56,6 +96,10 @@ export struct RKTNavBar {
   @BuilderParam customLeftMemus: CustomBuilder = this.doNothingBuilder
   // 自定义右菜单（受内部约束影响，不想被约束就使用`customTitle`）
   @BuilderParam customRightMemus: CustomBuilder = this.doNothingBuilder
+
+  aboutToAppear(): void {
+    this.configAppearance()
+  }
 
   // MARK: - 布局UI
   build() {
@@ -73,18 +117,20 @@ export struct RKTNavBar {
         // 右侧菜单栏
         this.rightMemuBar()
       }
-      .height($r('app.float.ru_navBar_height')).width('100%')
+      .height(NAVBAR_HEIGHT).width('100%')
     }
     .width('100%')
-    .backgroundColor(this.barColor ?? $r("app.color.ru_main_color"))
+    .backgroundColor(this.appearance?.barColor ?? this.barColor)
     // 设置顶部绘制延伸到状态栏
     .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP])
   }
 
   // 是否有返回按钮
   private isBackButton(): boolean {
-    console.log('routerLength' + router.getLength())
-    if (router.getLength() == '1') {
+    if (this.navPathStack) {
+      if (this.navPathStack.size() < 1) { return false }
+      return !this.hideBack
+    } else if (router.getState().index <= 1) {
       return false
     }
     return !this.hideBack
@@ -136,7 +182,7 @@ export struct RKTNavBar {
       Column() {
         Text(this.title)
           .align(Alignment.Center)
-          .fontSize(this.titleSize).fontWeight(this.titleWeight).fontColor(this.titleColor)
+          .fontSize(this.appearance?.titleSize ?? this.titleSize).fontWeight(this.appearance?.titleWeight ?? this.titleWeight).fontColor(this.appearance?.titleColor ?? this.titleColor)
           .textOverflow({ overflow: TextOverflow.Ellipsis }) // 限制为一行 ellipses
           .maxLines(1)
       }
@@ -180,15 +226,24 @@ export struct RKTNavBar {
   // 默认返回按钮
   @Builder leftBackBar() {
     Row(){
-      Image(this.backIcon)
+      Image(this.appearance?.backIcon ?? this.backIcon)
         .width(10).height(20)
         .margin({ left: 15 })
-        .fillColor(Color.White)
+        .fillColor(this.appearance?.backFillColor ?? this.backFillColor)
     }
     .width('44').height('44')
     .justifyContent(FlexAlign.Start).alignItems(VerticalAlign.Center)
     .onClick(() => {
-      router.back()
+      let next = true
+      if (this.onClickBack) {
+        next = this.onClickBack()
+      }
+      if (!next) { return }
+      if (this.navPathStack) {
+        this.navPathStack.pop()
+      } else {
+        router.back()
+      }
     })
   }
 
@@ -204,7 +259,7 @@ export struct RKTNavBar {
           if (item.title) {
             Text(item.title)
               .align(Alignment.Center)
-              .fontSize(item.titleSize ? item.titleSize : 15).fontWeight(item.titleWeight ? item.titleWeight : FontWeight.Medium).fontColor(item.titleColor ? item.titleColor : Color.White)
+              .fontSize(item.titleSize ?? 15).fontWeight(item.titleWeight ?? FontWeight.Medium).fontColor(item.titleColor ?? this.titleColor)
               .onClick(() => {
                 if (item.action) {
                   item.action(item.tag)
@@ -224,5 +279,25 @@ export struct RKTNavBar {
       }
     }
     .padding(padding)
+  }
+
+  /**
+   * 外观配置
+   */
+  configAppearance() {
+    switch (this.appearanceMode) {
+      case RKTNavBarAppearanceMode.WhiteMode:
+        this.titleColor = $r('app.color.ru_color_FF000000')
+        this.titleSize = 17
+        this.titleWeight = FontWeight.Medium
+        this.barColor = Color.White
+        this.backIcon = $r("app.media.ru_navbar_back_svg")
+        this.backFillColor = $r('app.color.ru_color_FF000000')
+        this
+        break;
+      default:
+      // redMode 用属性初始化值
+        break;
+    }
   }
 }

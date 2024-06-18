@@ -46,7 +46,7 @@ export namespace RKTProgressUtil {
    */
   export function showLoading(options?: RKTProgressStyle | RKTProgressOptions | RKTProgressElement, tag?: string, extraParams?: Record<string, UAny>) {
     let data: Record<string, string | number | undefined | boolean | RKTProgressElement | object> = {
-      'style': RKTProgressStyle.rotate,
+      'style': RKTProgressStyle.Rotate,
       'tag': tag,
       'offsetEnable': true,
     }
@@ -56,11 +56,11 @@ export namespace RKTProgressUtil {
     } else if (typeof options === 'object') {
       let any = options as RKTProgressElement
       if (any.animateSize != undefined && any.boxBorderSize != undefined) {
-        data['style'] = RKTProgressStyle.custom
+        data['style'] = RKTProgressStyle.Custom
         data['progressElement'] = any
       } else {
         let any = options as RKTProgressOptions
-        data['style'] = any.style ?? RKTProgressStyle.rotate
+        data['style'] = any.style ?? RKTProgressStyle.Rotate
         data['message'] = any.message
       }
     }
@@ -94,15 +94,15 @@ export namespace RKTProgressUtil {
   export function showProgress(value: number, options?: RKTProgressOptions | RKTProgressElement, tag?: string) {
     let data: Record<string, number | string | undefined | RKTProgressElement> = { 'progress': value, 'tag': tag }
     if (options === undefined) {
-      data['style'] = RKTProgressStyle.forward
+      data['style'] = RKTProgressStyle.Forward
     } else if (typeof options === 'object') {
       let any = options as RKTProgressElement
       if (any.animateSize != undefined && any.boxBorderSize != undefined) {
-        data['style'] = RKTProgressStyle.custom
+        data['style'] = RKTProgressStyle.Custom
         data['progressElement'] = any
       } else {
         let any = options as RKTProgressOptions
-        data['style'] = any.style ?? RKTProgressStyle.forward
+        data['style'] = any.style ?? RKTProgressStyle.Forward
         data['message'] = any.message
       }
     }
@@ -154,15 +154,15 @@ export enum RKTProgressFastAbility {
  */
 export enum RKTProgressStyle {
   // 转圈
-  rotate = 0,
+  Rotate = 0,
   // 沙漏效果
-  sandClock,
+  SandClock,
   // '经营帮'字跳舞
-  wordDance,
+  WordDance,
   // 线条百分比动画（暂时的）
-  forward,
+  Forward,
   // 自定义动画样式（需配合`RKTProgressItem`使用）
-  custom
+  Custom
 }
 
 /**
@@ -190,13 +190,13 @@ export interface RKTProgressElement {
  */
 @Observed
 export class RKTProgressItem implements RKTProgressElement {
-  animateSize: SizeOptions = { width: 50, height: 50 }
-  boxBorderSize: SizeOptions = { width: 80, height: 80 }
-  boxBorderRadius?: Length = 10
-  boxBackgroundColor?: ResourceColor = `#80000000`
+  @Track animateSize: SizeOptions = { width: 50, height: 50 }
+  @Track boxBorderSize: SizeOptions = { width: 80, height: 80 }
+  @Track boxBorderRadius?: Length = 10
+  @Track boxBackgroundColor?: ResourceColor = `#80000000`
+  @Track text?: string | null = null
+  @Track textColor?: ResourceColor = `#FFFFFFFF`
   lottieData?: object | null | string = null
-  text?: string | null = null
-  textColor?: ResourceColor = `#FFFFFFFF`
 
   constructor(t?: RKTProgressElement) {
     this.animateSize = t?.animateSize ?? this.animateSize
@@ -215,10 +215,10 @@ export class RKTProgressItem implements RKTProgressElement {
    */
   public reload(style: RKTProgressStyle, text?: string) {
     switch (style) {
-      case RKTProgressStyle.custom:
+      case RKTProgressStyle.Custom:
         // 自定义动画在外面配置
         break;
-      case RKTProgressStyle.sandClock:
+      case RKTProgressStyle.SandClock:
         this.animateSize = { width: 62, height: 62 }
         this.boxBorderSize = { width: 100, height: 100 }
         this.boxBorderRadius = 10
@@ -226,14 +226,14 @@ export class RKTProgressItem implements RKTProgressElement {
         this.text = text
         this.textColor = '#FFFFFFFF'
         break;
-      case RKTProgressStyle.wordDance:
+      case RKTProgressStyle.WordDance:
         this.animateSize = { width: 200, height: 200 }
         this.boxBorderSize = { width: 220, height: 220 }
         this.boxBorderRadius = 0
         this.boxBackgroundColor = Color.Transparent
         this.text = text
         break;
-      case RKTProgressStyle.forward:
+      case RKTProgressStyle.Forward:
         this.animateSize = { width: 300, height: 20 }
         this.boxBorderSize = { width: 310, height: 30 }
         this.boxBorderRadius = 0
@@ -241,7 +241,7 @@ export class RKTProgressItem implements RKTProgressElement {
         this.text = text
         this.textColor = '#FFEF4033'
         break;
-      case RKTProgressStyle.rotate:
+      case RKTProgressStyle.Rotate:
       default:
         this.animateSize = { width: 80, height: 80 }
         this.boxBorderSize = { width: 80, height: 80 } // 因动画属性有内动画边距这里保持一致
@@ -259,7 +259,7 @@ export class RKTProgressItem implements RKTProgressElement {
 export struct RKTProgress {
   controller: CustomDialogController
   // 外部自定义样式配合 progressItem 使用
-  style: RKTProgressStyle = RKTProgressStyle.rotate
+  style: RKTProgressStyle = RKTProgressStyle.Rotate
   // 动画自动播放(禁用自动播放通过 `progress` 来外部控制进度，以实现需要任务进度条的功能)
   autoplay: boolean = true
   // 是否允许交互
@@ -276,7 +276,7 @@ export struct RKTProgress {
   @State show: boolean = true
   // 动画item
   @State progressItem: RKTProgressItem = new RKTProgressItem()
-  // 组件中心点偏移量
+  // 组件起点偏移量；默认y:0（用于控制遮挡区域）
   @State offsetY: number = 0
   // 偏移量属性是否激活
   @State offsetEnable: boolean = true
@@ -342,11 +342,11 @@ export struct RKTProgress {
       .borderRadius(this.progressItem.boxBorderRadius)
       .width(this.progressItem.boxBorderSize.width)
       .constraintSize({ minHeight: this.progressItem.boxBorderSize.height })
-      .offset({ x: 0, y: this.offsetEnable ? -this.offsetY / 2 : 0 })
+      // .offset({ x: 0, y: this.offsetEnable ? -this.offsetY / 2 : 0 })
     }
     .justifyContent(FlexAlign.Center).alignItems(HorizontalAlign.Center).align(Alignment.Center)
     .backgroundColor(Color.Transparent)
-    .width('100%').height('100%')
+    .width('100%').height(`calc(100% - ${this.offsetY}vp)`)
     .position({ x: 0, y: this.offsetEnable ? this.offsetY : 0 })
     .zIndex(9999)
     .visibility(this.show ? Visibility.Visible : Visibility.Hidden)
@@ -365,24 +365,24 @@ export struct RKTProgress {
       }
 
       // 自定义动画样式需传入json格式的动画数据
-      if (this.style == RKTProgressStyle.custom && this.progressItem.lottieData == null) {
-        hilog.error(RKT_LOG_DOMAIN , `RocketUI`, "RKTProgress 自定义动画样式需传入json格式的动画数据")
+      if (this.style == RKTProgressStyle.Custom && this.progressItem.lottieData == null) {
+        hilog.error(RKT_LOG_DOMAIN , 'RocketUI', "RKTProgress 自定义动画样式需传入json格式的动画数据")
         return
       }
 
       if (this.progressItem.lottieData == null) {
         let animatePath = '';
         switch (this.style) {
-          case RKTProgressStyle.sandClock:
+          case RKTProgressStyle.SandClock:
             animatePath = 'ru_animation_shalou.json'
             break;
-          case RKTProgressStyle.wordDance:
+          case RKTProgressStyle.WordDance:
             animatePath = 'ru_loading_7.json'
             break;
-          case RKTProgressStyle.forward:
+          case RKTProgressStyle.Forward:
             animatePath = 'ru_animation_forward.json'
             break;
-          case RKTProgressStyle.rotate:
+          case RKTProgressStyle.Rotate:
           default:
             animatePath = 'ru_loading_2.json'
             break;
@@ -635,3 +635,4 @@ export struct RKTProgress {
     RKTEventBus.off(EVENT_HIDE_RKT_PROGRESS, this)
   }
 }
+

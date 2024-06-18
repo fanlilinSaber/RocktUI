@@ -14,26 +14,22 @@ interface DemoParams{
 
 
 @Builder
-export function DetailsPage01Builder(): void {
-  NavDestination() {
-    DetailsPage01()
-  }
+export function DetailsPage01Builder(param: Object) {
+  DetailsPage01({ param: param })
 }
 
 @Entry
 @Component
 struct DetailsPage01 {
-
+  param?: Object
   @State title: string = "";
   @State value: string = "";
 
-  pageStack: NavPathStack = new NavPathStack()
-
   aboutToAppear(){
-    let params = (router.getParams()||{}) as DemoParams
+    let params = (this.param || {}) as DemoParams
     if(params.title){
-      this.title = params.title;
-      this.value = params.value??"";
+      this.title = params.title
+      this.value = params.value ?? ""
     }
   }
 
@@ -41,27 +37,10 @@ struct DetailsPage01 {
     Column() {
       this.buildNavbar()
       this.buildPageFrame()
-      // Navigation() {
-      //
-      // }
-      // .title('测试标题')
-      // .hideNavBar(false)
     }
     .width('100%')
     .height('100%')
   }
-
-  // build() {
-  //   Navigation(this.pageStack) {
-  //     Column() {
-  //     }
-  //     .width('100%')
-  //     .height('100%')
-  //   }
-  //   .title(this.buildNavbar)
-  //   .backButtonIcon($r('app.media.ru_navbar_back'))
-  //   .mode(NavigationMode.Stack)
-  // }
 
   // 页面主内容
   @Builder buildPageFrame() {

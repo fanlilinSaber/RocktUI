@@ -2,55 +2,56 @@ import { RKTProgress } from "@zjos/rocketUI"
 import Prompt from '@system.prompt'
 import router from '@ohos.router'
 import { DetailsPage01Builder } from './DetailsPage01';
+import { DetailsPage02Builder } from './DetailsPage02';
+import { DetailsPage03Builder } from './DetailsPage03';
 
 interface Demo {
-  text: string;
+  title: string;
   value: string;
 }
 
 let demos: Demo[] = [
-  { text: "加载Loading", value: "LoadingDemo" },
-  { text: "使用RKTPage加载Loading", value: "RKTLoadingDemo" },
-  { text: "消息提示Toast", value: "RKTToastDemo" },
-  { text: "弹出窗口Popup", value: "RKTPopupDemo" },
-  { text: "RKTNavBar使用", value: "RKTNavBarDemo" },
-  { text: "ItemInputText", value: "RKTItemInputTextDemo" },
-  { text: "下拉刷新/上拉加载更多", value: "RKTRefreshDemo" },
-  { text: "其它弹窗demo", value: "RKTDialogDemo" },
-  { text: "选择图片/视频demo", value: "RKTSelectPicturesDemo" },
-  { text: "条件筛选框", value: "RKTConditionalFilteringDemo" }
+  { title: "加载Loading", value: "LoadingDemo" },
+  { title: "使用RKTPage加载Loading", value: "RKTLoadingDemo" },
+  { title: "消息提示Toast", value: "RKTToastDemo" },
+  { title: "弹出窗口Popup", value: "RKTPopupDemo" },
+  { title: "RKTNavBar使用", value: "RKTNavBarDemo" },
+  { title: "ItemInputText", value: "RKTItemInputTextDemo" },
+  { title: "下拉刷新/上拉加载更多", value: "RKTRefreshDemo" },
+  { title: "其它弹窗demo", value: "RKTDialogDemo" },
+  { title: "选择图片/视频demo", value: "RKTSelectPicturesDemo" },
+  { title: "条件筛选框", value: "RKTConditionalFilteringDemo" }
 ];
+
+let storage = LocalStorage.getShared();
 
 @Entry
 @Component
 struct Index {
   @State message: string = 'Hello World';
   @State visible: boolean = false;
-  pageStack: NavPathStack = new NavPathStack()
+  // pageStack: NavPathStack = new NavPathStack()
+  @LocalStorageLink("pageStack") pageStack: NavPathStack = new NavPathStack()
 
   build() {
-    // Navigation(this.pageStack) {
-      Column() {
-        // RKTNavBar()
-        // Test001()
-        this.buildContent()
-      }
-      .width('100%')
-    // }
-    // .title("测试表示")
-    // .navDestination(this.pageMap)
-    // .mode(NavigationMode.Stack)
+    Navigation(this.pageStack) {
+      this.buildContent()
+    }
+    .hideTitleBar(true)
+    .navDestination(this.pageMap)
   }
 
-  @Builder pageMap(name: string) {
-
-    if (name === 'DetailsPage01') {
-
-      // 路由到hsp包中的登录页面
-
-      DetailsPage01Builder()
-
-    }
+  @Builder pageMap(name: string, param: Object) {
+    NavDestination() {
+      if (name === 'pages/DetailsPage01') {
+        // 路由到hsp包中的登录页面
+        DetailsPage01Builder(param)
+      } else if (name === 'pages/DetailsPage02') {
+        DetailsPage02Builder(param, this.pageStack)
+      } else if (name === 'pages/DetailsPage03') {
+        DetailsPage03Builder(param)
+      }
+    }.hideTitleBar(true)
   }
 
   @Builder
@@ -63,7 +64,7 @@ struct Index {
       ForEach(demos, (item: Demo, index: number) => {
         ListItem() {
           Row() {
-            Text(item.text);
+            Text(item.title);
           }
           .width('100%')
           .backgroundColor(Color.White)
@@ -95,21 +96,13 @@ struct Index {
 
   onDemoClick(item: Demo) {
     let url = 'pages/DetailsPage02'
-    if (item.text == '加载Loading') {
+    if (item.title == '加载Loading') {
       url = 'pages/DetailsPage01'
-      // this.pageStack.pushPathByName("DetailsPage01", null, true)
-      // return
-    } else if (item.text == "条件筛选框") {
+    } else if (item.title == "条件筛选框") {
       url = 'pages/DetailsPage03'
     }
 
-    router.pushUrl({
-      url: url,
-      params: {
-        value: item.value,
-        title: item.text
-      }
-    })
-
+    let params: Demo = { value: item.value, title: item.title }
+    this.pageStack.pushPathByName(url, params, true)
   }
 }

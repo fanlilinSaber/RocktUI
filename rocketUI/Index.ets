@@ -8,7 +8,7 @@ export { RKTProgress,
 
 export { RKTPage } from "./src/main/ets/pageFrames/RKTPage"
 
-export { RKTNavBar, RKTNavBarMenuItem } from "./src/main/ets/components/navBar/RKTNavBar"
+export { RKTNavBar, RKTNavBarMenuItem, RKTNavBarAppearance, RKTNavBarAppearanceMode } from "./src/main/ets/components/navBar/RKTNavBar"
 
 export { RKTFilterBoxComponent
 } from "./src/main/ets/components/filterBox/components/RKTFilterBoxComponent"

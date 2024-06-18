@@ -15,6 +15,11 @@ import {
   RKTFilterExpandComponentType
 } from '@zjos/rocketUI/src/main/ets/components/filterBox/viewModel/RKTFilterExpandViewModel'
 
+@Builder
+export function DetailsPage03Builder(param: Object) {
+  DetailsPage03()
+}
+
 @Entry
 @Component
 export struct DetailsPage03 {

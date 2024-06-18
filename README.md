@@ -5,9 +5,6 @@
 
 ## 注意
 此库是静态库har，被动态库依赖会被打进包里，被多个动态库依赖会造成重复依赖。
-```
-RKTUIConfig.moduleName = "xx"
-```
 
 ## 下载安装
 
@@ -42,6 +39,8 @@ import lottie from '@zjos/rocketUI'
 ```
 
 2.使用RKTPage
+
+在有@Entry装饰的组件使用如下：
 ```
 build() {
     Column() {
@@ -51,6 +50,15 @@ build() {
     }
     .width('100%')
     .height('100%')
+  }
+}
+```
+在只有@Component装饰的组件使用如下：
+```
+build() {
+    RKTPage({ title: this.title, appearanceMode: RKTNavBarAppearanceMode.WhiteMode }) {
+        ...
+      }
   }
 }
 ```
