@@ -174,7 +174,9 @@ export struct RKTNavBar {
       .height('100%')
       .alignRules({
         center: {anchor: "__container__", align: VerticalAlign.Center},
-        middle: {anchor: "__container__", align: HorizontalAlign.Center}
+        middle: {anchor: "__container__", align: HorizontalAlign.Center},
+        left: {anchor: "__leftMemuBar", align: HorizontalAlign.End},
+        right: {anchor: "__rightMemuBar", align: HorizontalAlign.Start},
       })
       .displayPriority(101)
       .id("__titleBar1")

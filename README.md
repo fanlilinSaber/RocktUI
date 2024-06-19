@@ -8,34 +8,38 @@
 
 ## 下载安装
 
-```
- 1.通过npm安装源代码，安装在根目录（存放目录：./node_modules/rocket-ui/RocketUI）
- 
+1.通过npm安装源代码，安装在根目录（存放目录：./node_modules/rocket-ui/RocketUI）
+``` 
  https:
  npm install 'git+https://codehub.devcloud.cn-east-3.huaweicloud.com/HarmonyOS00001/RocketUI.git#release'
  ssh:
  npm install 'git+ssh://git@codehub.devcloud.cn-east-3.huaweicloud.com:HarmonyOS00001/RocketUI.git#release'
- 
- 2.在工程级下build-profile.json5文件下配置手动新增module
-
+ ```
+2.在工程级下build-profile.json5文件下配置手动新增module
+```
  "modules": [
     {
       "name": "rocketUI",
       "srcPath": "./node_modules/rocket-ui/rocketUI"
     }
   ]
-
- 3.然后通过ohpm安装本地文件
+```
+3.然后在依赖的module或entry下通过ohpm依赖本地包，oh-package.json5中如下配置
+```
  "dependencies": {
     "@zjos/rocketUI": 'file:../node_modules/rocket-ui/rocketUI'
   },
+```
+4.更新版本 终端根目录执行：
+```
+ npm update rocket-ui
 ```
 
 ## 使用说明
 
 1.在相应的类中引入组件：
 ```
-import lottie from '@zjos/rocketUI'
+import import { RKTPage, RKTNavBar, RKTProgressUtil } from '@zjos/rocketUI'
 ```
 
 2.使用RKTPage
@@ -49,7 +53,7 @@ build() {
       // 第一次进入页面就showLoading，在这里时机最合适
       RKTProgressUtil.showLoading()
     } }) {
-        // 业务内容代码
+        // 业务UI代码
         ...
       }
     }
@@ -66,7 +70,7 @@ build() {
       // 第一次进入页面就showLoading，在这里时机最合适
       RKTProgressUtil.showLoading()
     } }) {
-        // 业务内容代码
+        // 业务UI代码
         ...
       }
   }

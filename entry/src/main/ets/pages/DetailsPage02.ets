@@ -5,7 +5,7 @@
  */
 
 import router from '@ohos.router';
-import { RKTPage, RKTNavBar, RKTProgressUtil } from '@zjos/rocketUI'
+import { RKTPage, RKTNavBar, RKTProgressUtil, RKTEventBus } from '@zjos/rocketUI'
 import RKTLoadingDemo from '../demo/RKTLoadingDemo'
 import RKTNavBarDemo from '../demo/RKTNavBarDemo';
 import promptAction from '@ohos.promptAction'
@@ -26,7 +26,7 @@ export function DetailsPage02Builder(param: Object, pageStack: NavPathStack) {
   DetailsPage02({ param: param, pageStack: pageStack })
 }
 
-// @Entry
+// @Entry({ routeName: "pages/DetailsPage02" })
 @Component
 struct DetailsPage02 {
   pageStack?: NavPathStack
@@ -43,14 +43,18 @@ struct DetailsPage02 {
   }
 
   build() {
-    RKTPage({ navPathStack: this.pageStack, title: this.title, titleColor: Color.White, backFillColor: Color.Yellow,
+    RKTPage({ navPathStack: this.pageStack, title: this.title, titleColor: Color.White,
       onReady: () => {
-      // RKTProgressUtil.showLoading()
+        RKTProgressUtil.showLoading()
+
+        setTimeout(()=>{
+          RKTProgressUtil.hideLoading()
+        }, 1000)
     } }) {
       if (this.value == 'RKTLoadingDemo') {
         RKTLoadingDemo()
       } else if (this.value == 'RKTNavBarDemo') {
-        RKTNavBarDemo()
+        RKTNavBarDemo({ pageStack: this.pageStack })
       } else if (this.value == 'RKTItemInputTextDemo') {
         RKTItemInputTextDemo()
       } else if (this.value == 'RKTRefreshDemo') {
@@ -66,6 +70,7 @@ struct DetailsPage02 {
       }
     }
   }
+
 
   // build() {
   //   Column() {

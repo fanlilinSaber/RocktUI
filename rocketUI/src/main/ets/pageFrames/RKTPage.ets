@@ -74,6 +74,17 @@ export struct RKTPage {
 
   // MARK: -布局UI
   build() {
+    if (this.navPathStack) {
+      NavDestination() {
+        this.contentView()
+      }.hideTitleBar(true)
+    } else {
+      this.contentView()
+    }
+  }
+
+  @Builder
+  private contentView() {
     Column() {
       if (this.navBar) {
         RKTNavBar({
@@ -114,4 +125,9 @@ export struct RKTPage {
     .backgroundColor(this.bgcolor)
     .onAppear(this.onReady)
   }
+
+  // public onReady1<T>(event: () => void): T {
+  //
+  //   return this
+  // }
 }

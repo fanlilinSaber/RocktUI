@@ -42,7 +42,7 @@ struct Index {
   }
 
   @Builder pageMap(name: string, param: Object) {
-    NavDestination() {
+    // NavDestination() {
       if (name === 'pages/DetailsPage01') {
         // 路由到hsp包中的登录页面
         DetailsPage01Builder(param)
@@ -51,7 +51,7 @@ struct Index {
       } else if (name === 'pages/DetailsPage03') {
         DetailsPage03Builder(param)
       }
-    }.hideTitleBar(true)
+    // }.hideTitleBar(true)
   }
 
   @Builder
@@ -101,6 +101,7 @@ struct Index {
     } else if (item.title == "条件筛选框") {
       url = 'pages/DetailsPage03'
     }
+    // router.pushNamedRoute({ name: url })
 
     let params: Demo = { value: item.value, title: item.title }
     this.pageStack.pushPathByName(url, params, true)

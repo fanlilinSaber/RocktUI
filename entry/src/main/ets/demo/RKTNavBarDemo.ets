@@ -20,6 +20,8 @@ export interface DemoTabItem {
 @Component
 export default struct RKTLoadingDemo {
 
+  pageStack?: NavPathStack
+
   leftMemus: Array<RKTNavBarMenuItem> = []
 
   rightMemus: Array<RKTNavBarMenuItem> = []
@@ -92,7 +94,7 @@ export default struct RKTLoadingDemo {
   build() {
     Column({space: 2}) {
 
-      RKTNavBar({ title: 'RKTNavBar使用', rightMemus: this.rightMemus, appearanceMode: RKTNavBarAppearanceMode.WhiteMode })
+      RKTNavBar({ title: 'RKTNavBar使用', rightMemus: this.rightMemus, appearanceMode: RKTNavBarAppearanceMode.WhiteMode, navPathStack: this.pageStack })
 
       RKTNavBar({ title: 'RKTNavBar使用', leftMemus: this.leftMemus })
 
@@ -109,7 +111,9 @@ export default struct RKTLoadingDemo {
 
       RKTNavBar({ title: 'RKTNavBar使用', customTitle: this.customTitle02, rightMemus: [{title: '搜索', action: this.searchAction}, {title: '搜索', action: this.searchAction}] })
 
-      RKTNavBar({ title: 'RKTNavBar使用', customTitle: (): void => { this.customTitle03() }})
+      RKTNavBar({ title: 'RKTNavBar使用', customTitle: (): void => { this.customTitle03() }, navPathStack: this.pageStack })
+
+      RKTNavBar({hideBack: true, title: 'RKTNavBar使用', customTitle: (): void => { this.customTitle03() }, navPathStack: this.pageStack })
 
       RKTNavBar({ hideBack: true, customTitle: (): void => { this.customTitle04() } })
 
@@ -208,16 +212,17 @@ export default struct RKTLoadingDemo {
           .tabBar(new SubTabBarStyle(item.title))
         })
       }
-      .backgroundColor(Color.White)
+      .backgroundColor('#FFEF4033')
       .scrollable(true)
       .barMode(BarMode.Scrollable)
-      .width(320)
+      // .width(320)
       .onChange((index: number) => {
         console.info(index.toString())
       })
     }
     .justifyContent(FlexAlign.Center)
-    .backgroundColor(Color.Yellow)
+    .backgroundColor('#FFEF4033')
+    .border({ width: '1vp', color: Color.Black })
   }
 
   @Builder customTitle04() {
