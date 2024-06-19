@@ -388,7 +388,12 @@ export struct RKTProgress {
             break;
         }
 
-        let context = RKTUIConfig.context
+        let context: Context | null = null
+        if (RKTUIConfig.rootModuleName) {
+          context = getContext(this).createModuleContext(RKTUIConfig.rootModuleName) as common.UIAbilityContext
+        } else {
+          context = getContext(this) as common.UIAbilityContext
+        }
         if (context == null) { return }
 
         // 这里是一个异步方法，可能在build - Canvas - onReady之后执行

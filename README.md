@@ -44,7 +44,12 @@ import lottie from '@zjos/rocketUI'
 ```
 build() {
     Column() {
-      RKTPage({ title: this.title, titleColor: Color.Black }) {
+      RKTPage({ title: this.title, titleColor: Color.Black, 
+      onReady: () => {
+      // 第一次进入页面就showLoading，在这里时机最合适
+      RKTProgressUtil.showLoading()
+    } }) {
+        // 业务内容代码
         ...
       }
     }
@@ -56,7 +61,12 @@ build() {
 在只有@Component装饰的组件使用如下：
 ```
 build() {
-    RKTPage({ title: this.title, appearanceMode: RKTNavBarAppearanceMode.WhiteMode }) {
+    RKTPage({ title: this.title, appearanceMode: RKTNavBarAppearanceMode.WhiteMode, 
+    onReady: () => {
+      // 第一次进入页面就showLoading，在这里时机最合适
+      RKTProgressUtil.showLoading()
+    } }) {
+        // 业务内容代码
         ...
       }
   }

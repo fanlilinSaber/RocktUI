@@ -8,8 +8,6 @@ import { common } from '@kit.AbilityKit'
 export class RKTUIConfig {
   // 用于被HSP包依赖，需要指定对应被依赖的HSP module的下文context寻找资源（默认自动获取了）
   public rootModuleName?: string | null = null
-  // 上下文
-  public context: Context | null = null
   // 实例
   private static instance: RKTUIConfig
 
@@ -19,12 +17,6 @@ export class RKTUIConfig {
       let self = RKTUIConfig.instance
       // TODO: 暂时用这种办法获取当包所存在的module
       self.rootModuleName = $rawfile('ru_animation_forward.json').moduleName
-
-      if (self.rootModuleName) {
-        self.context = getContext(self).createModuleContext(self.rootModuleName) as common.UIAbilityContext
-      } else {
-        self.context = getContext(self) as common.UIAbilityContext
-      }
     }
     return RKTUIConfig.instance
   }

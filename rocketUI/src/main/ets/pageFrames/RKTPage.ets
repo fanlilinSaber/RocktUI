@@ -69,8 +69,8 @@ export struct RKTPage {
   // 尾随闭包初始化 (此场景下自定义组件内有且仅有一个使用@BuilderParam装饰的属性。)
   @BuilderParam closer: () => void
 
-  // 外部函数绑定
-  private innerReady?: () => void
+  // 准备好了，可以在这里下一步操作，比如一进页面要显示快速显示loading：RKTProgressUtil.showLoading()（因鸿蒙特性，凡是跟UI相关组件都必须build函数里面，所以想要进入页面就调用快速能力，在这个回调时机最合适）
+  private onReady?: () => void
 
   // MARK: -布局UI
   build() {
@@ -112,14 +112,6 @@ export struct RKTPage {
     }
     .width('100%').height('100%')
     .backgroundColor(this.bgcolor)
-    .onAppear(this.innerReady)
-  }
-
-  /**
-   * 组件准备好了，可以在这里下一步操作，比如一进页面要显示快速显示loading：RKTProgressUtil.showLoading()
-   * @param event
-   */
-  public onReady(event: () => void) {
-    this.innerReady = event
+    .onAppear(this.onReady)
   }
 }
