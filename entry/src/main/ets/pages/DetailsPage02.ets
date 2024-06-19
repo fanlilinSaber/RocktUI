@@ -45,7 +45,7 @@ struct DetailsPage02 {
   build() {
     RKTPage({ navPathStack: this.pageStack, title: this.title, titleColor: Color.White, backFillColor: Color.Yellow,
       onReady: () => {
-      RKTProgressUtil.showLoading()
+      // RKTProgressUtil.showLoading()
     } }) {
       if (this.value == 'RKTLoadingDemo') {
         RKTLoadingDemo()
