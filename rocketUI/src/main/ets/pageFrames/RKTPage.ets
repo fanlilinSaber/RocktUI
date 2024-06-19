@@ -126,7 +126,7 @@ export struct RKTPage {
     .onAppear(this.onReady)
   }
 
-  // public onReady1<T>(event: () => void): T {
+  // public onReady1<T extends RKTPage>(event: () => void): RKTPage {
   //
   //   return this
   // }
