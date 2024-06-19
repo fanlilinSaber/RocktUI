@@ -70,7 +70,7 @@ export struct RKTPage {
   @BuilderParam closer: () => void
 
   // 准备好了，可以在这里下一步操作，比如一进页面要显示快速显示loading：RKTProgressUtil.showLoading()（因鸿蒙特性，凡是跟UI相关组件都必须build函数里面，所以想要进入页面就调用快速能力，在这个回调时机最合适）
-  private onReady?: () => void
+  onReady?: () => void
 
   // MARK: -布局UI
   build() {
