@@ -5,6 +5,7 @@
  */
 import router from '@ohos.router'
 import { NAVBAR_HEIGHT } from '../../constants/Constants'
+import RKTEventBus, { RKTEventData } from '../../utils/RKTEventBus'
 
 /**
  * 导航栏菜单

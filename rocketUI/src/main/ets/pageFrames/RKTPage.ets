@@ -11,6 +11,7 @@ import { RKTNavBar, RKTNavBarAppearance,
 import { RKTAlertComponent } from '../components/dialog/RKTAlertComponent';
 import { RKTToast } from '../components/toast/RKTToast';
 import { NAVBAR_HEIGHT } from '../constants/Constants'
+import { hilog } from '@kit.PerformanceAnalysisKit';
 
 @Builder
 function empty() {
@@ -51,7 +52,7 @@ export struct RKTPage {
   appearanceMode: RKTNavBarAppearanceMode = RKTNavBarAppearanceMode.RedMode
 
   // 如果是基于Navigation的路由管理，必须外部传进来用来做自动显示返回按钮和back操作
-  navPathStack?: NavPathStack
+  @State navPathStack?: NavPathStack = undefined
 
   // 左右常规菜单
   leftMemus?: RKTNavBarMenuItem[] = undefined
@@ -71,13 +72,24 @@ export struct RKTPage {
 
   // 准备好了，可以在这里下一步操作，比如一进页面要显示快速显示loading：RKTProgressUtil.showLoading()（因鸿蒙特性，凡是跟UI相关组件都必须build函数里面，所以想要进入页面就调用快速能力，在这个回调时机最合适）
   onReady?: () => void
+  // 页面显示回调（用了Navigation的方式才有这个回调，需要设置navPathStack）
+  onShown?: () => void
+  // 页面消失回调，(用了Navigation的方式才有这个回调，需要设置navPathStack)
+  onHidden?: () => void
 
   // MARK: -布局UI
   build() {
     if (this.navPathStack) {
       NavDestination() {
         this.contentView()
-      }.hideTitleBar(true)
+      }
+      .hideTitleBar(true)
+      .onShown(this.onShown)
+      .onHidden(this.onHidden)
+      .onReady((context: NavDestinationContext) => {
+        this.navPathStack = context.pathStack
+        hilog.info(0x00503, `NavDestination`, "页面onReady")
+      })
     } else {
       this.contentView()
     }
@@ -101,7 +113,8 @@ export struct RKTPage {
           backFillColor: this.backFillColor,
           onClickBack: this.onClickBack,
           appearance: this.appearance,
-          appearanceMode: this.appearanceMode })
+          appearanceMode: this.appearanceMode
+        })
       }
       this.closer()
 
@@ -125,9 +138,4 @@ export struct RKTPage {
     .backgroundColor(this.bgcolor)
     .onAppear(this.onReady)
   }
-
-  // public onReady1<T extends RKTPage>(event: () => void): RKTPage {
-  //
-  //   return this
-  // }
 }

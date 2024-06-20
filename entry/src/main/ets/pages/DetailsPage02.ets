@@ -15,6 +15,7 @@ import { RKTPopupDemo } from '../demo/RKTPopupDemo';
 import RKTDialogDemo from '../demo/RKTDialogDemo';
 import { RKTSelectPicturesDemo } from '../demo/RKTSelectPicturesDemo';
 import RKTToastDemo from '../demo/RKTToastDemo'
+import { hilog } from '@kit.PerformanceAnalysisKit';
 
 interface DemoParams{
   title?: string
@@ -44,13 +45,22 @@ struct DetailsPage02 {
 
   build() {
     RKTPage({ navPathStack: this.pageStack, title: this.title, titleColor: Color.White,
-      onReady: () => {
+      onReady:() => {
+        hilog.info(0x00503, `DetailsPage02`, "页面onReady")
         RKTProgressUtil.showLoading()
-
         setTimeout(()=>{
           RKTProgressUtil.hideLoading()
         }, 1000)
-    } }) {
+      },
+      onShown:() => {
+        hilog.info(0x00503, `DetailsPage02`, "页面onShown" + this.title)
+      },
+      onHidden:() => {
+        hilog.info(0x00503, `DetailsPage02`, "页面onHidden")
+
+      }
+      })
+    {
       if (this.value == 'RKTLoadingDemo') {
         RKTLoadingDemo()
       } else if (this.value == 'RKTNavBarDemo') {

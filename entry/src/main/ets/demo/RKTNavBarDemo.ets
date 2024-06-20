@@ -113,7 +113,7 @@ export default struct RKTLoadingDemo {
 
       RKTNavBar({ title: 'RKTNavBar使用', customTitle: (): void => { this.customTitle03() }, navPathStack: this.pageStack })
 
-      RKTNavBar({hideBack: true, title: 'RKTNavBar使用', customTitle: (): void => { this.customTitle03() }, navPathStack: this.pageStack })
+      RKTNavBar({ hideBack: true, title: 'RKTNavBar使用', customTitle: (): void => { this.customTitle03() }, navPathStack: this.pageStack })
 
       RKTNavBar({ hideBack: true, customTitle: (): void => { this.customTitle04() } })
 
