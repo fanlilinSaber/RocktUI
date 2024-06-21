@@ -20,7 +20,8 @@ let demos: Demo[] = [
   { title: "下拉刷新/上拉加载更多", value: "RKTRefreshDemo" },
   { title: "其它弹窗demo", value: "RKTDialogDemo" },
   { title: "选择图片/视频demo", value: "RKTSelectPicturesDemo" },
-  { title: "条件筛选框", value: "RKTConditionalFilteringDemo" }
+  { title: "条件筛选框", value: "RKTConditionalFilteringDemo" },
+  { title: "常用TabDemo", value: "RKTTabDemo" },
 ];
 
 let storage = LocalStorage.getShared();

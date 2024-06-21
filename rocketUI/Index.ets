@@ -77,3 +77,5 @@ export { RKTToast, RKTToastUtil, RKTToastPosition } from './src/main/ets/compone
 
 export { RKTAlertDialog, RKTAlertComponent } from './src/main/ets/components/dialog/RKTAlertComponent'
 
+export { RKTTabComponent, RKTTabDataListType, RKTTabType } from './src/main/ets/components/tab/RKTTab'
+

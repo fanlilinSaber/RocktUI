@@ -15,6 +15,7 @@ import { RKTPopupDemo } from '../demo/RKTPopupDemo';
 import RKTDialogDemo from '../demo/RKTDialogDemo';
 import { RKTSelectPicturesDemo } from '../demo/RKTSelectPicturesDemo';
 import RKTToastDemo from '../demo/RKTToastDemo'
+import { RKTTabDemo } from "../demo/RKTTabDemo"
 import { hilog } from '@kit.PerformanceAnalysisKit';
 
 interface DemoParams{
@@ -77,6 +78,8 @@ struct DetailsPage02 {
         RKTSelectPicturesDemo()
       } else if (this.value == 'RKTToastDemo') {
         RKTToastDemo()
+      } else if (this.value == 'RKTTabDemo'){
+        RKTTabDemo()
       }
     }
   }
