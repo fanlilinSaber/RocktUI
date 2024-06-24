@@ -15,17 +15,10 @@ import {
   RUFilterExpandComponentType
 } from '@zjos/rocketUI/src/main/ets/components/filterBox/viewModel/RUFilterExpandViewModel'
 
-@Builder
-export function DetailsPage03Builder(param: Object) {
-  NavDestination() {
-    DetailsPage03()
-  }.hideTitleBar(true)
-
-}
 
 @Entry
 @Component
-export struct DetailsPage03 {
+export struct RUFilterDemo {
   /*外部引用RUFilterBoxViewModel，并且@Provide装饰器修饰*/
   @Provide @Watch("change") filterBoxViewModel: RUFilterBoxViewModel = new RUFilterBoxViewModel()
   /*外部引用RUFilterExpandViewModel，并且@Provide装饰器修饰*/

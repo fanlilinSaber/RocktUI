@@ -39,19 +39,19 @@
 
 1.在相应的类中引入组件：
 ```
-import import { RKTPage, RKTNavBar, RKTProgressUtil } from '@zjos/rocketUI'
+import import { RUPage, RUNavBar, RUProgressUtil } from '@zjos/rocketUI'
 ```
 
-2.使用RKTPage
+2.使用RUPage
 
 在有@Entry装饰的组件使用如下：
 ```
 build() {
     Column() {
-      RKTPage({ title: this.title, titleColor: Color.Black, 
+      RUPage({ title: this.title, titleColor: Color.Black, 
       onReady: () => {
       // 第一次进入页面就showLoading，在这里时机最合适
-      RKTProgressUtil.showLoading()
+      RUProgressUtil.showLoading()
     } }) {
         // 业务UI代码
         ...
@@ -65,10 +65,10 @@ build() {
 在只有@Component装饰的组件使用如下：
 ```
 build() {
-    RKTPage({ title: this.title, appearanceMode: RKTNavBarAppearanceMode.WhiteMode, 
+    RUPage({ title: this.title, appearanceMode: RUNavBarAppearanceMode.WhiteMode, 
     onReady: () => {
       // 第一次进入页面就showLoading，在这里时机最合适
-      RKTProgressUtil.showLoading()
+      RUProgressUtil.showLoading()
     } }) {
         // 业务UI代码
         ...
@@ -76,17 +76,17 @@ build() {
   }
 }
 ```
-3.使用RKTProgress
+3.使用RUProgress
 ```
-1.配合RKTPage使用
+1.配合RUPage使用
 显示loding
-RKTProgressUtil.showLoading()
+RUProgressUtil.showLoading()
 隐藏loading
-RKTProgressUtil.hideLoading()
+RUProgressUtil.hideLoading()
 
 2.单独使用
 结合arkUI语法，用条件语句控制是否加载
 if(this.isloding) {
-   RKTProgress()
+   RUProgress()
 }
 ```

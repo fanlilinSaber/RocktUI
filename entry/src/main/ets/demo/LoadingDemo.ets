@@ -4,7 +4,7 @@
  * Descrobe:
  */
 
-import { RKTProgress, RKTProgressStyle, RKTProgressItem } from "@zjos/rocketUI"
+import { RUProgress, RUProgressStyle, RUProgressItem } from "@zjos/rocketUI"
 import promptAction from '@ohos.promptAction'
 import util from '@ohos.util'
 import common from '@ohos.app.ability.common'
@@ -24,12 +24,12 @@ export default struct LoadingDemo {
 
   private intervalID: number = 0
 
-  progressItem01: RKTProgressItem = new RKTProgressItem({ animateSize: { width: 200, height: 200 }, boxBorderSize: { width: 220, height: 220 }, boxBorderRadius: 10, boxBackgroundColor: Color.Red })
+  progressItem01: RUProgressItem = new RUProgressItem({ animateSize: { width: 200, height: 200 }, boxBorderSize: { width: 220, height: 220 }, boxBorderRadius: 10, boxBackgroundColor: Color.Red })
 
-  progressItem02: RKTProgressItem = new RKTProgressItem({ animateSize: { width: 300, height: 300 }, boxBorderSize: { width: 300, height: 300 }, boxBorderRadius: 0, boxBackgroundColor: Color.Transparent })
+  progressItem02: RUProgressItem = new RUProgressItem({ animateSize: { width: 300, height: 300 }, boxBorderSize: { width: 300, height: 300 }, boxBorderRadius: 0, boxBackgroundColor: Color.Transparent })
 
   loading: CustomDialogController = new CustomDialogController({
-    builder: RKTProgress({}),
+    builder: RUProgress({}),
     customStyle: true
   })
 
@@ -99,7 +99,7 @@ export default struct LoadingDemo {
       })
 
     if(this.isloding01) {
-      RKTProgress()
+      RUProgress()
     }
   }
 
@@ -118,7 +118,7 @@ export default struct LoadingDemo {
       })
 
     if(this.isloding02) {
-      RKTProgress({ style: RKTProgressStyle.SandClock, message: '正在抓取数据请稍后...' })
+      RUProgress({ style: RUProgressStyle.SandClock, message: '正在抓取数据请稍后...' })
     }
   }
 
@@ -137,7 +137,7 @@ export default struct LoadingDemo {
       })
 
     if(this.isloding03) {
-      RKTProgress({ style: RKTProgressStyle.WordDance })
+      RUProgress({ style: RUProgressStyle.WordDance })
     }
   }
 
@@ -171,7 +171,7 @@ export default struct LoadingDemo {
       })
 
     if(this.isloding05) {
-      RKTProgress({ style: RKTProgressStyle.Custom, progressItem: this.progressItem01 })
+      RUProgress({ style: RUProgressStyle.Custom, progressItem: this.progressItem01 })
     }
   }
 
@@ -199,7 +199,7 @@ export default struct LoadingDemo {
       })
 
     if(this.isProgress01) {
-      RKTProgress({ autoplay: false, progress: this.progressValue, message: this.progressStr, style: RKTProgressStyle.Forward})
+      RUProgress({ autoplay: false, progress: this.progressValue, message: this.progressStr, style: RUProgressStyle.Forward})
     }
   }
 
@@ -226,7 +226,7 @@ export default struct LoadingDemo {
       })
 
     if(this.isProgress02) {
-      RKTProgress({ autoplay: false, progress: this.progressValue, message: this.progressStr, style: RKTProgressStyle.Custom, progressItem: this.progressItem02 })
+      RUProgress({ autoplay: false, progress: this.progressValue, message: this.progressStr, style: RUProgressStyle.Custom, progressItem: this.progressItem02 })
     }
   }
 

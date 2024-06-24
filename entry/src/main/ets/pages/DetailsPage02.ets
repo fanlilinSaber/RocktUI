@@ -5,18 +5,19 @@
  */
 
 import router from '@ohos.router';
-import { RKTPage, RKTNavBar, RKTProgressUtil, RKTEventBus } from '@zjos/rocketUI'
-import RKTLoadingDemo from '../demo/RKTLoadingDemo'
-import RKTNavBarDemo from '../demo/RKTNavBarDemo';
+import { RUPage, RUNavBar, RUProgressUtil, RUEventBus } from '@zjos/rocketUI'
+import RULoadingDemo from '../demo/RULoadingDemo'
+import RUNavBarDemo from '../demo/RUNavBarDemo';
 import promptAction from '@ohos.promptAction'
-import RKTItemInputTextDemo from '../demo/RKTItemInputTextDemo';
-import RKTRefreshDemo from '../demo/RKTRefreshDemo';
-import { RKTPopupDemo } from '../demo/RKTPopupDemo';
-import RKTDialogDemo from '../demo/RKTDialogDemo';
-import { RKTSelectPicturesDemo } from '../demo/RKTSelectPicturesDemo';
-import RKTToastDemo from '../demo/RKTToastDemo'
-import { RKTTabDemo } from "../demo/RKTTabDemo"
+import RUItemInputTextDemo from '../demo/RUItemInputTextDemo';
+import RURefreshDemo from '../demo/RURefreshDemo';
+import { RUPopupDemo } from '../demo/RUPopupDemo';
+import RUDialogDemo from '../demo/RUDialogDemo';
+import { RUSelectPicturesDemo } from '../demo/RUSelectPicturesDemo';
+import RUToastDemo from '../demo/RUToastDemo'
+import { RUTabDemo } from "../demo/RUTabDemo"
 import { hilog } from '@kit.PerformanceAnalysisKit';
+import { RUFilterDemo } from '../demo/RUFilterDemo';
 
 interface DemoParams{
   title?: string
@@ -45,12 +46,12 @@ struct DetailsPage02 {
   }
 
   build() {
-    RKTPage({ navPathStack: this.pageStack, title: this.title, titleColor: Color.White,
+    RUPage({ navPathStack: this.pageStack, title: this.title, titleColor: Color.White,
       onReady:() => {
         hilog.info(0x00503, `DetailsPage02`, "页面onReady")
-        RKTProgressUtil.showLoading()
+        RUProgressUtil.showLoading()
         setTimeout(()=>{
-          RKTProgressUtil.hideLoading()
+          RUProgressUtil.hideLoading()
         }, 1000)
       },
       onShown:() => {
@@ -62,24 +63,26 @@ struct DetailsPage02 {
       }
       })
     {
-      if (this.value == 'RKTLoadingDemo') {
-        RKTLoadingDemo()
-      } else if (this.value == 'RKTNavBarDemo') {
-        RKTNavBarDemo({ pageStack: this.pageStack })
-      } else if (this.value == 'RKTItemInputTextDemo') {
-        RKTItemInputTextDemo()
-      } else if (this.value == 'RKTRefreshDemo') {
-        RKTRefreshDemo()
-      } else if (this.value == 'RKTPopupDemo') {
-        RKTPopupDemo()
-      } else if (this.value == 'RKTDialogDemo') {
-        RKTDialogDemo()
-      } else if (this.value == 'RKTSelectPicturesDemo') {
-        RKTSelectPicturesDemo()
-      } else if (this.value == 'RKTToastDemo') {
-        RKTToastDemo()
-      } else if (this.value == 'RKTTabDemo'){
-        RKTTabDemo()
+      if (this.value == 'RULoadingDemo') {
+        RULoadingDemo()
+      } else if (this.value == 'RUNavBarDemo') {
+        RUNavBarDemo({ pageStack: this.pageStack })
+      } else if (this.value == 'RUItemInputTextDemo') {
+        RUItemInputTextDemo()
+      } else if (this.value == 'RURefreshDemo') {
+        RURefreshDemo()
+      } else if (this.value == 'RUPopupDemo') {
+        RUPopupDemo()
+      } else if (this.value == 'RUDialogDemo') {
+        RUDialogDemo()
+      } else if (this.value == 'RUSelectPicturesDemo') {
+        RUSelectPicturesDemo()
+      } else if (this.value == 'RUToastDemo') {
+        RUToastDemo()
+      } else if (this.value == 'RUFilterDemo') {
+        RUFilterDemo()
+      } else if (this.value == 'RUTabDemo') {
+        RUTabDemo()
       }
     }
   }
@@ -87,28 +90,28 @@ struct DetailsPage02 {
 
   // build() {
   //   Column() {
-  //     RKTPage({ title: this.title, titleColor: Color.White }) {
-  //       if (this.value == 'RKTLoadingDemo') {
-  //         RKTLoadingDemo()
-  //       } else if (this.value == 'RKTNavBarDemo') {
-  //         RKTNavBarDemo()
-  //       } else if (this.value == 'RKTItemInputTextDemo') {
-  //         RKTItemInputTextDemo()
-  //       } else if (this.value == 'RKTRefreshDemo') {
-  //         RKTRefreshDemo()
-  //       } else if (this.value == 'RKTPopupDemo') {
-  //         RKTPopupDemo()
-  //       } else if (this.value == 'RKTDialogDemo') {
-  //         RKTDialogDemo()
-  //       } else if (this.value == 'RKTSelectPicturesDemo') {
-  //         RKTSelectPicturesDemo()
-  //       } else if (this.value == 'RKTToastDemo') {
-  //         RKTToastDemo()
+  //     RUPage({ title: this.title, titleColor: Color.White }) {
+  //       if (this.value == 'RULoadingDemo') {
+  //         RULoadingDemo()
+  //       } else if (this.value == 'RUNavBarDemo') {
+  //         RUNavBarDemo()
+  //       } else if (this.value == 'RUItemInputTextDemo') {
+  //         RUItemInputTextDemo()
+  //       } else if (this.value == 'RURefreshDemo') {
+  //         RURefreshDemo()
+  //       } else if (this.value == 'RUPopupDemo') {
+  //         RUPopupDemo()
+  //       } else if (this.value == 'RUDialogDemo') {
+  //         RUDialogDemo()
+  //       } else if (this.value == 'RUSelectPicturesDemo') {
+  //         RUSelectPicturesDemo()
+  //       } else if (this.value == 'RUToastDemo') {
+  //         RUToastDemo()
   //       }
   //     }
   //
-  //     // RKTPage({title: this.title, navBar: false }) {
-  //     //   RKTNavBar({title: `` })
+  //     // RUPage({title: this.title, navBar: false }) {
+  //     //   RUNavBar({title: `` })
   //     //
   //     //   Text()
   //     // }

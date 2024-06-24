@@ -1,4 +1,4 @@
-import { RKTProgress } from "@zjos/rocketUI"
+import { RUProgress } from "@zjos/rocketUI"
 import Prompt from '@system.prompt'
 import router from '@ohos.router'
 import { DetailsPage01Builder } from './DetailsPage01';
@@ -12,16 +12,16 @@ interface Demo {
 
 let demos: Demo[] = [
   { title: "加载Loading", value: "LoadingDemo" },
-  { title: "使用RKTPage加载Loading", value: "RKTLoadingDemo" },
-  { title: "消息提示Toast", value: "RKTToastDemo" },
-  { title: "弹出窗口Popup", value: "RKTPopupDemo" },
-  { title: "RKTNavBar使用", value: "RKTNavBarDemo" },
-  { title: "ItemInputText", value: "RKTItemInputTextDemo" },
-  { title: "下拉刷新/上拉加载更多", value: "RKTRefreshDemo" },
-  { title: "其它弹窗demo", value: "RKTDialogDemo" },
-  { title: "选择图片/视频demo", value: "RKTSelectPicturesDemo" },
-  { title: "条件筛选框", value: "RKTConditionalFilteringDemo" },
-  { title: "常用TabDemo", value: "RKTTabDemo" },
+  { title: "使用RUPage加载Loading", value: "RULoadingDemo" },
+  { title: "消息提示Toast", value: "RUToastDemo" },
+  { title: "弹出窗口Popup", value: "RUPopupDemo" },
+  { title: "RUNavBar使用", value: "RUNavBarDemo" },
+  { title: "ItemInputText", value: "RUItemInputTextDemo" },
+  { title: "下拉刷新/上拉加载更多", value: "RURefreshDemo" },
+  { title: "其它弹窗demo", value: "RUDialogDemo" },
+  { title: "选择图片/视频demo", value: "RUSelectPicturesDemo" },
+  { title: "条件筛选框", value: "RUFilterDemo" },
+  { title: "常用TabDemo", value: "RUTabDemo" },
 ];
 
 let storage = LocalStorage.getShared();
@@ -99,8 +99,6 @@ struct Index {
     let url = 'pages/DetailsPage02'
     if (item.title == '加载Loading') {
       url = 'pages/DetailsPage01'
-    } else if (item.title == "条件筛选框") {
-      url = 'pages/DetailsPage03'
     }
     // router.pushNamedRoute({ name: url })
 

@@ -15,7 +15,9 @@ interface DemoParams{
 
 @Builder
 export function DetailsPage01Builder(param: Object) {
-  DetailsPage01({ param: param })
+  NavDestination() {
+    DetailsPage01({ param: param })
+  }.hideTitleBar(true)
 }
 
 @Entry
