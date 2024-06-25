@@ -94,30 +94,30 @@ export default struct RULoadingDemo {
   build() {
     Column({space: 2}) {
 
-      RUNavBar({ title: 'RUNavBar使用', rightMemus: this.rightMemus, appearanceMode: RUNavBarAppearanceMode.WhiteMode, navPathStack: this.pageStack })
+      RUNavBar({ title: 'RUNavBar使用', rightMemus: this.rightMemus, appearanceMode: RUNavBarAppearanceMode.WhiteMode, navPathStack: this.pageStack, safeArea: false })
 
-      RUNavBar({ title: 'RUNavBar使用', leftMemus: this.leftMemus })
+      RUNavBar({ title: 'RUNavBar使用', leftMemus: this.leftMemus, safeArea: false })
 
-      RUNavBar({ title: 'RUNavBar使用', leftMemus: this.leftMemus, rightMemus: this.rightMemus })
+      RUNavBar({ title: 'RUNavBar使用', leftMemus: this.leftMemus, rightMemus: this.rightMemus, safeArea: false })
 
-      RUNavBar({ title: 'RUNavBar使用', customLeftMemus: this.customLeftMemus01, rightMemus: this.rightMemus, barColor: Color.Gray })
+      RUNavBar({ title: 'RUNavBar使用', customLeftMemus: this.customLeftMemus01, rightMemus: this.rightMemus, barColor: Color.Gray, safeArea: false })
 
-      RUNavBar({ title: 'RUNavBar使用', customTitle: this.customTitle01, barColor: Color.Orange })
+      RUNavBar({ title: 'RUNavBar使用', customTitle: this.customTitle01, barColor: Color.Orange, safeArea: false, navPathStack: this.pageStack })
 
       RUNavBar({
         title: 'RUNavBar使用',
         customTitle: this.customTitle02,
-        rightMemus: [{icon: $r('app.media.common_Search'), action: this.searchAction, iconSize: {width:35, height: 35}}], barColor: Color.Yellow})
+        rightMemus: [{icon: $r('app.media.common_Search'), action: this.searchAction, iconSize: {width:35, height: 35}}], barColor: Color.Yellow, safeArea: false, navPathStack: this.pageStack })
 
-      RUNavBar({ title: 'RUNavBar使用', customTitle: this.customTitle02, rightMemus: [{title: '搜索', action: this.searchAction}, {title: '搜索', action: this.searchAction}] })
+      RUNavBar({ navPathStack: this.pageStack, customTitle: this.customTitle02, rightMemus: [{title: '搜索', action: this.searchAction}, {title: '|'}, {title: '发布', action: this.searchAction}], safeArea: false, forceCenter: false })
 
-      RUNavBar({ title: 'RUNavBar使用', customTitle: (): void => { this.customTitle03() }, navPathStack: this.pageStack })
+      RUNavBar({ title: 'RUNavBar使用', customTitle: (): void => { this.customTitle03() }, navPathStack: this.pageStack, safeArea: false })
 
-      RUNavBar({ hideBack: true, title: 'RUNavBar使用', customTitle: (): void => { this.customTitle03() }, navPathStack: this.pageStack })
+      RUNavBar({ hideBack: true, title: 'RUNavBar使用', customTitle: (): void => { this.customTitle03() }, navPathStack: this.pageStack, safeArea: false })
 
-      RUNavBar({ hideBack: true, customTitle: (): void => { this.customTitle04() } })
+      RUNavBar({ hideBack: true, customTitle: (): void => { this.customTitle04() }, safeArea: false })
 
-      RUNavBar({ title: this.title, rightMemus: [{title: '变化1', action: (tag?: string): void => { this.changeTitleAction(tag) }, tag: '1'}, {title: '变化2', action: (tag?: string): void => { this.changeTitleAction(tag) }, tag: '2'}] })
+      RUNavBar({ title: this.title, rightMemus: [{title: '变化1', action: (tag?: string): void => { this.changeTitleAction(tag) }, tag: '1'}, {title: '变化2', action: (tag?: string): void => { this.changeTitleAction(tag) }, tag: '2'}], safeArea: false })
 
       Text(`变化标题测试: ${this.count1} + ${this.count2}`)
         .onClick(() => {
@@ -195,7 +195,7 @@ export default struct RULoadingDemo {
   @Builder customTitle02() {
     Column() {
       TextInput({placeholder: '请输入搜索内容'})
-        .width('200')
+        // .width('200')
         .backgroundColor(Color.Pink)
     }
     .justifyContent(FlexAlign.Center)
@@ -235,14 +235,14 @@ export default struct RULoadingDemo {
               .align(Alignment.Center)
               .fontSize(16).fontWeight(FontWeight.Regular).fontColor('#FFEF4033')
               .onClick(() => {
-                item.action(item.tag)
+                item.action && item.action(item.tag)
               })
           } else if (item.icon) {
             Image(item.icon)
               .width(item.iconSize ? item.iconSize.width : 20).height(item.iconSize ? item.iconSize.height : 20)
               .objectFit(ImageFit.Auto)
               .onClick(() => {
-                item.action(item.tag)
+                item.action && item.action(item.tag)
               })
           }
         })

@@ -37,12 +37,24 @@
 
 ## 使用说明
 
-1.在相应的类中引入组件：
+1.初始化：
+
+一定要在windowStage.loadContent完成之后调用，按鸿蒙的解释：windowStage.loadContent是初始化ArkUI，只有当初始化完成后，px2vp才会根据设备得到具体的值。
+```
+windowStage.loadContent('pages/Index', (err, data) => {
+  ...
+
+  // 初始化RocketUI
+  RUConfig.init(this.context)
+});
+```
+
+2.在相应的类中引入组件：
 ```
 import import { RUPage, RUNavBar, RUProgressUtil } from '@zjos/rocketUI'
 ```
 
-2.使用RUPage
+3.使用RUPage
 
 在有@Entry装饰的组件使用如下：
 ```
@@ -76,7 +88,7 @@ build() {
   }
 }
 ```
-3.使用RUProgress
+4.使用RUProgress
 ```
 1.配合RUPage使用
 显示loding

@@ -3,6 +3,7 @@ import hilog from '@ohos.hilog';
 import UIAbility from '@ohos.app.ability.UIAbility';
 import Want from '@ohos.app.ability.Want';
 import window from '@ohos.window';
+import RUConfig from '@zjos/rocketUI/src/main/ets/utils/RUConfig'
 
 export default class EntryAbility extends UIAbility {
   onCreate(want: Want, launchParam: AbilityConstant.LaunchParam): void {
@@ -23,6 +24,20 @@ export default class EntryAbility extends UIAbility {
         return;
       }
       hilog.info(0x0000, 'testTag', 'Succeeded in loading the content. Data: %{public}s', JSON.stringify(data) ?? '');
+
+      let windowClass: window.Window = windowStage.getMainWindowSync(); // 获取应用主窗口
+      // 1. 设置窗口全屏
+      let isLayoutFullScreen = true;
+      windowClass.setWindowLayoutFullScreen(isLayoutFullScreen)
+        .then(() => {
+          console.info('Succeeded in setting the window layout to full-screen mode.');
+        })
+        .catch((err: Error) => {
+          console.error('Failed to set the window layout to full-screen mode. Cause:' + JSON.stringify(err));
+        });
+
+      // 初始化RocketUI
+      RUConfig.init(this.context)
     });
   }
 

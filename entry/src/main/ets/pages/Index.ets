@@ -4,6 +4,7 @@ import router from '@ohos.router'
 import { DetailsPage01Builder } from './DetailsPage01';
 import { DetailsPage02Builder } from './DetailsPage02';
 import { DetailsPage03Builder } from './DetailsPage03';
+import RUConfig from '@zjos/rocketUI/src/main/ets/utils/RUConfig'
 
 interface Demo {
   title: string;
@@ -60,6 +61,7 @@ struct Index {
     Text("RocketUI Demo示列")
       .height(64)
       .fontSize(25)
+      .margin({ top: 40 })
 
     List({ space: 10 }) {
       ForEach(demos, (item: Demo, index: number) => {

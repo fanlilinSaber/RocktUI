@@ -6,6 +6,7 @@
 
 import router from '@ohos.router';
 import LoadingDemo from '../demo/LoadingDemo'
+import RUConfig from '@zjos/rocketUI/src/main/ets/utils/RUConfig'
 
 interface DemoParams{
   title?: string
@@ -73,13 +74,14 @@ struct DetailsPage01 {
           .padding({
             right: 30
           })
-      }.height('100%')
-    }.height('64')
+      }.height('56')
+    }
     .shadow({
       radius: 10,
       color: Color.Gray,
       offsetX: 0,
       offsetY: -1
     })
+    .padding({ top: RUConfig.statusBarHeight })
   }
 }

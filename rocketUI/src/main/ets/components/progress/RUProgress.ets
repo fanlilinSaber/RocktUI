@@ -10,7 +10,7 @@ import common from '@ohos.app.ability.common'
 import router from '@ohos.router'
 import hilog from '@ohos.hilog'
 import RUEventBus, { RUEventData } from '../../utils/RUEventBus'
-import RUUIConfig from '../../utils/RUConfig'
+import RUConfig from '../../utils/RUConfig'
 import resourceManager from '@ohos.resourceManager'
 
 // show loading event name
@@ -297,7 +297,7 @@ export struct RUProgress {
 
   // MARK: - 组件即将出现时
   async aboutToAppear() {
-    RUUIConfig
+    RUConfig
     this.registerEvent()
     this.reloadAnimation()
   }
@@ -389,8 +389,8 @@ export struct RUProgress {
         }
 
         let context: Context | null = null
-        if (RUUIConfig.rootModuleName) {
-          context = getContext(this).createModuleContext(RUUIConfig.rootModuleName) as common.UIAbilityContext
+        if (RUConfig.rootModuleName) {
+          context = getContext(this).createModuleContext(RUConfig.rootModuleName) as common.UIAbilityContext
         } else {
           context = getContext(this) as common.UIAbilityContext
         }

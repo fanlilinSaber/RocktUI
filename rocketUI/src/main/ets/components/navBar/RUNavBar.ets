@@ -5,6 +5,7 @@
  */
 import router from '@ohos.router'
 import { NAVBAR_HEIGHT } from '../../constants/RUConstants'
+import RUConfig from '../../utils/RUConfig'
 import RUEventBus, { RUEventData } from '../../utils/RUEventBus'
 
 /**
@@ -22,7 +23,7 @@ export interface RUNavBarMenuItem {
   iconSize?: SizeOptions
   // 点击事件；注意：外部需要通过bind绑定，是为了在对应的函数里this指向self（例： {title: '删除', action: this.deleteAction.bind(this)}
   // 新的ARUS语法上不支持bind函数了，要用新的action: (): void => { this.xxAction() }
-  action: (tag?: string) => void
+  action?: (tag?: string) => void
   // 标签；当共用一个`action`的时候可以传入tag来区分不同的事件
   tag?: string
 }
@@ -81,6 +82,10 @@ export struct RUNavBar {
   appearance?: RUNavBarAppearance
   // 外观默认模板（appearance、appearanceMode、barColor...等属性互斥，自定义 appearance 优先级最高）
   appearanceMode: RUNavBarAppearanceMode = RUNavBarAppearanceMode.RedMode
+  // 适配安全区域，会额外加上系统状态栏高度，暂时没找到是否属于最顶部的元素的方法，通过手动控制是否需要额外的高度
+  safeArea: boolean = true
+  // 自定义Title部分是否强制居中显示（为了使默认标题始终居中显示，如果有自定义Title不想保持居中模式，可设置为false，鸿蒙坑就在不能对布局设置优先级）
+  forceCenter: boolean = true
 
   // 如果是基于Navigation的路由管理，必须外部传进来用来做自动显示返回按钮和back操作
   navPathStack?: NavPathStack
@@ -123,7 +128,8 @@ export struct RUNavBar {
     .width('100%')
     .backgroundColor(this.appearance?.barColor ?? this.barColor)
     // 设置顶部绘制延伸到状态栏
-    .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP])
+    // .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP])
+    .padding({ top: this.safeArea ? RUConfig.statusBarHeight : 0 })
   }
 
   // 是否有返回按钮
@@ -173,13 +179,8 @@ export struct RUNavBar {
       }
       .justifyContent(FlexAlign.Center)
       .height('100%')
-      .alignRules({
-        center: {anchor: "__container__", align: VerticalAlign.Center},
-        middle: {anchor: "__container__", align: HorizontalAlign.Center},
-        left: {anchor: "__leftMemuBar", align: HorizontalAlign.End},
-        right: {anchor: "__rightMemuBar", align: HorizontalAlign.Start},
-      })
-      .displayPriority(101)
+      .alignRules(this.titleBarAlignRule())
+      .displayPriority(99)
       .id("__titleBar1")
     } else  {
       Column() {
@@ -188,6 +189,7 @@ export struct RUNavBar {
           .fontSize(this.appearance?.titleSize ?? this.titleSize).fontWeight(this.appearance?.titleWeight ?? this.titleWeight).fontColor(this.appearance?.titleColor ?? this.titleColor)
           .textOverflow({ overflow: TextOverflow.Ellipsis }) // 限制为一行 ellipses
           .maxLines(1)
+          .constraintSize({ maxWidth: '80%' })
       }
       .justifyContent(FlexAlign.Center)
       .alignItems(HorizontalAlign.Center)
@@ -195,8 +197,8 @@ export struct RUNavBar {
       .alignRules({
         center: {anchor: "__container__", align: VerticalAlign.Center},
         middle: {anchor: "__container__", align: HorizontalAlign.Center},
-        left: {anchor: 'leftMemuBar', align: HorizontalAlign.End},
-        right: {anchor: 'rightMemuBar', align: HorizontalAlign.Start}
+        left: {anchor: '__leftMemuBar', align: HorizontalAlign.End},
+        right: {anchor: '__rightMemuBar', align: HorizontalAlign.Start}
       })
       .displayPriority(99)
       .id("__titleBar2")
@@ -220,7 +222,7 @@ export struct RUNavBar {
     .height('100%')
     .alignRules({
       center: {anchor: "__container__", align: VerticalAlign.Center},
-      right: {anchor: "__container__", align: HorizontalAlign.End}
+      right: {anchor: "__container__", align: HorizontalAlign.End},
     })
     .displayPriority(100)
     .id("__rightMemuBar")
@@ -301,6 +303,22 @@ export struct RUNavBar {
       default:
       // redMode 用属性初始化值
         break;
+    }
+  }
+
+  titleBarAlignRule(): AlignRuleOption {
+    if (this.forceCenter) {
+      return {
+        center: {anchor: "__container__", align: VerticalAlign.Center},
+        middle: {anchor: "__container__", align: HorizontalAlign.Center},
+        left: {anchor: "__leftMemuBar", align: HorizontalAlign.End},
+        right: {anchor: "__rightMemuBar", align: HorizontalAlign.Start},
+      }
+    }
+    return {
+      center: {anchor: "__container__", align: VerticalAlign.Center},
+      left: {anchor: "__leftMemuBar", align: HorizontalAlign.End},
+      right: {anchor: "__rightMemuBar", align: HorizontalAlign.Start},
     }
   }
 }

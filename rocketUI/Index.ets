@@ -32,7 +32,7 @@ export { RUFilterAreaComponent, } from "./src/main/ets/components/filterBox/comp
 
 export { RUEvent, RUEventBus, RUEventData } from "./src/main/ets/utils/RUEventBus"
 
-export { RUUIConfig } from "./src/main/ets/utils/RUConfig"
+export { RUConfig } from "./src/main/ets/utils/RUConfig"
 
 export { RUItemInputTextView,
   RUOrientation } from './src/main/ets/components/itemInputText/RUItemInputTextView'
