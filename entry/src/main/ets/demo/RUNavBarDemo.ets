@@ -92,41 +92,45 @@ export default struct RULoadingDemo {
   }
 
   build() {
-    Column({space: 2}) {
+    Scroll() {
+      Column({space: 2}) {
 
-      RUNavBar({ title: 'RUNavBar使用', rightMemus: this.rightMemus, appearanceMode: RUNavBarAppearanceMode.WhiteMode, navPathStack: this.pageStack, safeArea: false })
+        RUNavBar({ title: 'RUNavBar使用', rightMemus: this.rightMemus, appearanceMode: RUNavBarAppearanceMode.WhiteMode, navPathStack: this.pageStack, safeArea: false })
 
-      RUNavBar({ title: 'RUNavBar使用', leftMemus: this.leftMemus, safeArea: false })
+        RUNavBar({ title: 'RUNavBar使用', leftMemus: this.leftMemus, safeArea: false })
 
-      RUNavBar({ title: 'RUNavBar使用', leftMemus: this.leftMemus, rightMemus: this.rightMemus, safeArea: false })
+        RUNavBar({ title: 'RUNavBar使用', leftMemus: this.leftMemus, rightMemus: this.rightMemus, safeArea: false })
 
-      RUNavBar({ title: 'RUNavBar使用', customLeftMemus: this.customLeftMemus01, rightMemus: this.rightMemus, barColor: Color.Gray, safeArea: false })
+        RUNavBar({ title: 'RUNavBar使用', customLeftMemus: this.customLeftMemus01, rightMemus: this.rightMemus, barColor: Color.Gray, safeArea: false })
 
-      RUNavBar({ title: 'RUNavBar使用', customTitle: this.customTitle01, barColor: Color.Orange, safeArea: false, navPathStack: this.pageStack })
+        RUNavBar({ title: 'RUNavBar使用', customTitle: this.customTitle01, barColor: Color.Orange, safeArea: false, navPathStack: this.pageStack })
 
-      RUNavBar({
-        title: 'RUNavBar使用',
-        customTitle: this.customTitle02,
-        rightMemus: [{icon: $r('app.media.common_Search'), action: this.searchAction, iconSize: {width:35, height: 35}}], barColor: Color.Yellow, safeArea: false, navPathStack: this.pageStack })
+        RUNavBar({
+          title: 'RUNavBar使用',
+          customTitle: this.customTitle02,
+          rightMemus: [{icon: $r('app.media.common_Search'), action: this.searchAction, iconSize: {width:35, height: 35}}], barColor: Color.Yellow, safeArea: false, navPathStack: this.pageStack })
 
-      RUNavBar({ navPathStack: this.pageStack, customTitle: this.customTitle02, rightMemus: [{title: '搜索', action: this.searchAction}, {title: '|'}, {title: '发布', action: this.searchAction}], safeArea: false, forceCenter: false })
+        RUNavBar({ navPathStack: this.pageStack, customTitle: this.customTitle02, rightMemus: [{title: '搜索', action: this.searchAction}, {title: '|'}, {title: '发布', action: this.searchAction}], safeArea: false, forceCenter: false })
 
-      RUNavBar({ title: 'RUNavBar使用', customTitle: (): void => { this.customTitle03() }, navPathStack: this.pageStack, safeArea: false })
+        RUNavBar({ title: 'RUNavBar使用', customTitle: (): void => { this.customTitle03() }, navPathStack: this.pageStack, safeArea: false })
 
-      RUNavBar({ hideBack: true, title: 'RUNavBar使用', customTitle: (): void => { this.customTitle03() }, navPathStack: this.pageStack, safeArea: false })
+        RUNavBar({ title: 'RUNavBar使用', customTitle: (): void => { this.customTitle03() }, navPathStack: this.pageStack, safeArea: false, forceCenter: false })
 
-      RUNavBar({ hideBack: true, customTitle: (): void => { this.customTitle04() }, safeArea: false })
+        RUNavBar({ hideBack: true, title: 'RUNavBar使用', customTitle: (): void => { this.customTitle03() }, navPathStack: this.pageStack, safeArea: false })
 
-      RUNavBar({ title: this.title, rightMemus: [{title: '变化1', action: (tag?: string): void => { this.changeTitleAction(tag) }, tag: '1'}, {title: '变化2', action: (tag?: string): void => { this.changeTitleAction(tag) }, tag: '2'}], safeArea: false })
+        RUNavBar({ hideBack: true, customTitle: (): void => { this.customTitle04() }, safeArea: false })
 
-      Text(`变化标题测试: ${this.count1} + ${this.count2}`)
-        .onClick(() => {
-          this.count1 += 1
-          this.count2 += 1
-        })
+        RUNavBar({ title: this.title, rightMemus: [{title: '变化1', action: (tag?: string): void => { this.changeTitleAction(tag) }, tag: '1'}, {title: '变化2', action: (tag?: string): void => { this.changeTitleAction(tag) }, tag: '2'}], safeArea: false })
+
+        Text(`变化标题测试: ${this.count1} + ${this.count2}`)
+          .onClick(() => {
+            this.count1 += 1
+            this.count2 += 1
+          })
+      }
+      .width('100%')
+      .margin({ top: 2})
     }
-    .width('100%')
-    .margin({ top: 2})
   }
 
   addAction() {
@@ -194,12 +198,22 @@ export default struct RULoadingDemo {
 
   @Builder customTitle02() {
     Column() {
-      TextInput({placeholder: '请输入搜索内容'})
-        // .width('200')
-        .backgroundColor(Color.Pink)
+      Row() {
+        Image($r('app.media.common_Search'))
+          .height(20).width(20).margin({ left: 10 })
+        TextInput({placeholder: '请输入搜索内容'})
+          .backgroundColor(Color.Transparent)
+          .layoutWeight(1)
+          .placeholderFont({ size: 13 })
+          // .height('100%')
+      }
+      .borderRadius(8)
+      .backgroundColor(Color.White)
+      .height(33)
+      .justifyContent(FlexAlign.Center)
+      .clip(true)
     }
     .justifyContent(FlexAlign.Center)
-    .backgroundColor(Color.Yellow)
   }
 
   @Builder customTitle03() {
