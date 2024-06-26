@@ -79,3 +79,7 @@ export { RUAlertDialog, RUAlertComponent } from './src/main/ets/components/dialo
 
 export { RUTabComponent, RUTabDataListType, RUTabType } from './src/main/ets/components/tab/RUTab'
 
+export { RUFramePickerView } from './src/main/ets/components/datePicker/RUFramePickerView'
+
+export { IPickerViewData } from './src/main/ets/components/datePicker/data/IPickerViewData'
+

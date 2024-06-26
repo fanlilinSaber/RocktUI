@@ -1,5 +1,5 @@
-import { IPickerViewData } from '../data/IPickerViewData'
-import { FrameComponent, FrameOptions } from './FrameComponent'
+import { IPickerViewData } from './data/IPickerViewData'
+import { FrameComponent, FrameOptions } from './frame/FrameComponent'
 
 /**
  * 框架选择器
