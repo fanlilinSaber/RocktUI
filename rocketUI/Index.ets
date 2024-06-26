@@ -13,7 +13,7 @@ export { RUNavBar, RUNavBarMenuItem, RUNavBarAppearance, RUNavBarAppearanceMode 
 export { RUFilterBoxComponent
 } from "./src/main/ets/components/filterBox/components/RUFilterBoxComponent"
 
-export { AreaData
+export { RUAreaData as AreaData
 } from "./src/main/ets/components/filterBox/other/RUAreaData"
 
 export { RUFilterBoxComponentConfig
@@ -32,7 +32,7 @@ export { RUFilterAreaComponent, } from "./src/main/ets/components/filterBox/comp
 
 export { RUEvent, RUEventBus, RUEventData } from "./src/main/ets/utils/RUEventBus"
 
-export { RUConfig } from "./src/main/ets/utils/RUConfig"
+export { RUConfig } from "./src/main/ets/config/RUConfig"
 
 export { RUItemInputTextView,
   RUOrientation } from './src/main/ets/components/itemInputText/RUItemInputTextView'

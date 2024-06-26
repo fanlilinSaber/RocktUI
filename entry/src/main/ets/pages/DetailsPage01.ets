@@ -6,7 +6,7 @@
 
 import router from '@ohos.router';
 import LoadingDemo from '../demo/LoadingDemo'
-import RUConfig from '@zjos/rocketUI/src/main/ets/utils/RUConfig'
+import RUConfig from '@zjos/rocketUI/src/main/ets/config/RUConfig'
 
 interface DemoParams{
   title?: string

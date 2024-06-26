@@ -10,7 +10,7 @@ import common from '@ohos.app.ability.common'
 import router from '@ohos.router'
 import hilog from '@ohos.hilog'
 import RUEventBus, { RUEventData } from '../../utils/RUEventBus'
-import RUConfig from '../../utils/RUConfig'
+import RUConfig from '../../config/RUConfig'
 import resourceManager from '@ohos.resourceManager'
 
 // show loading event name

@@ -4,7 +4,7 @@ import router from '@ohos.router'
 import { DetailsPage01Builder } from './DetailsPage01';
 import { DetailsPage02Builder } from './DetailsPage02';
 import { DetailsPage03Builder } from './DetailsPage03';
-import RUConfig from '@zjos/rocketUI/src/main/ets/utils/RUConfig'
+import RUConfig from '@zjos/rocketUI/src/main/ets/config/RUConfig'
 
 interface Demo {
   title: string;
