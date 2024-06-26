@@ -3,7 +3,7 @@ import hilog from '@ohos.hilog';
 import UIAbility from '@ohos.app.ability.UIAbility';
 import Want from '@ohos.app.ability.Want';
 import window from '@ohos.window';
-import RUConfig from '@zjos/rocketUI/src/main/ets/config/RUConfig'
+import RocketUI from '@zjos/rocketUI'
 
 export default class EntryAbility extends UIAbility {
   onCreate(want: Want, launchParam: AbilityConstant.LaunchParam): void {
@@ -17,6 +17,9 @@ export default class EntryAbility extends UIAbility {
   onWindowStageCreate(windowStage: window.WindowStage): void {
     // Main window is created, set main page for this ability
     hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onWindowStageCreate');
+
+    // 初始化RocketUI
+    RocketUI.init(this.context)
 
     windowStage.loadContent('pages/Index', (err, data) => {
       if (err.code) {
@@ -35,9 +38,6 @@ export default class EntryAbility extends UIAbility {
         .catch((err: Error) => {
           console.error('Failed to set the window layout to full-screen mode. Cause:' + JSON.stringify(err));
         });
-
-      // 初始化RocketUI
-      RUConfig.init(this.context)
     });
   }
 

@@ -39,13 +39,15 @@
 
 1.初始化：
 
-一定要在windowStage.loadContent完成之后调用，按鸿蒙的解释：windowStage.loadContent是初始化ArkUI，只有当初始化完成后，px2vp才会根据设备得到具体的值。
+一定要在windowStage.loadContent完成之前调用，保证进入页面之前已获取到初始化值
 ```
+import RocketUI from '@zjos/rocketUI'
+
+// 初始化RocketUI
+RocketUI.init(this.context)
+
 windowStage.loadContent('pages/Index', (err, data) => {
   ...
-
-  // 初始化RocketUI
-  RUConfig.init(this.context)
 });
 ```
 

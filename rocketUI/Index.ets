@@ -1,3 +1,5 @@
+import RocketUI from './src/main/ets/config/RUConfig'
+export default RocketUI
 
 export { RUProgress,
   RUProgressStyle,
@@ -84,4 +86,3 @@ export { RUFramePickerView , FrameOptionsController} from './src/main/ets/compon
 export { IPickerViewData } from './src/main/ets/components/datePicker/data/IPickerViewData'
 
 export { FrameOptions } from './src/main/ets/components/datePicker/frame/FrameComponent'
-

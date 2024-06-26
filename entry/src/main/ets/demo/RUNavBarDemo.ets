@@ -33,6 +33,7 @@ export default struct RULoadingDemo {
   @State title: string = 'RUNavBar变化标题'
   @State count1: number = 0
   count2: number = 0
+  @State keyword: string = '111111'
 
 
   aboutToAppear() {
@@ -107,10 +108,10 @@ export default struct RULoadingDemo {
 
         RUNavBar({
           title: 'RUNavBar使用',
-          customTitle: this.customTitle02,
+          customTitle: (): void => { this.customTitle02() },
           rightMemus: [{icon: $r('app.media.common_Search'), action: this.searchAction, iconSize: {width:35, height: 35}}], barColor: Color.Yellow, safeArea: false, navPathStack: this.pageStack })
 
-        RUNavBar({ navPathStack: this.pageStack, customTitle: this.customTitle02, rightMemus: [{title: '搜索', action: this.searchAction}, {title: '|'}, {title: '发布', action: this.searchAction}], safeArea: false, forceCenter: false })
+        RUNavBar({ navPathStack: this.pageStack, customTitle: (): void => { this.customTitle02() }, rightMemus: [{title: '搜索', action: this.searchAction}, {title: '|'}, {title: '发布', action: this.searchAction}], safeArea: false, forceCenter: false })
 
         RUNavBar({ title: 'RUNavBar使用', customTitle: (): void => { this.customTitle03() }, navPathStack: this.pageStack, safeArea: false })
 
@@ -201,11 +202,13 @@ export default struct RULoadingDemo {
       Row() {
         Image($r('app.media.common_Search'))
           .height(20).width(20).margin({ left: 10 })
-        TextInput({placeholder: '请输入搜索内容'})
+        TextInput({ text: $$this.keyword, placeholder: '请输入搜索内容'})
           .backgroundColor(Color.Transparent)
           .layoutWeight(1)
           .placeholderFont({ size: 13 })
           .padding(0)
+          .onChange((value: string) => {console.log('TextInput: ' + value)
+          })
       }
       .borderRadius(8)
       .backgroundColor(Color.White)
