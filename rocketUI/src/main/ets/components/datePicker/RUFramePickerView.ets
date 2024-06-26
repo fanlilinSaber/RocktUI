@@ -149,7 +149,9 @@ export struct RUFramePickerView {
   notifyUI() {
     let refreshData = new FrameOptions()
     refreshData.data = this.frameOptions.data
-    refreshData.isMultipleSelect = true
+    refreshData.isMultipleSelect = this.frameOptions.isMultipleSelect
+    refreshData.isFirstMutex = this.frameOptions.isFirstMutex
+    refreshData.currentIndex = this.frameOptions.currentIndex
     this.frameOptions = refreshData
   }
 }

@@ -38,7 +38,7 @@ export struct FrameComponent {
         .columnsTemplate('1fr 1fr 1fr 1fr')
         .edgeEffect(EdgeEffect.None)
         .scrollBar(BarState.Off)
-        .height(this.isExpand ? this.frameOptions.data.length > 20 ? 280 : Math.ceil(this.frameOptions.data.length / 4) * 47 : 0)
+        .height(this.isExpand ? this.frameOptions.data.length > 20 ? 280 : this.getViewHeight(this.frameOptions.data.length) : 0)
         .nestedScroll({
           scrollForward: NestedScrollMode.PARENT_FIRST,
           scrollBackward: NestedScrollMode.SELF_FIRST
@@ -64,6 +64,11 @@ export struct FrameComponent {
         })
       }
     }
+  }
+
+  getViewHeight(length: number) {
+    let num = Math.ceil(length / 4)
+    return num * 40 + (num - 1) * 3 + 20
   }
 
   @Builder
