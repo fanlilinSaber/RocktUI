@@ -3,7 +3,7 @@ import hilog from '@ohos.hilog';
 import UIAbility from '@ohos.app.ability.UIAbility';
 import Want from '@ohos.app.ability.Want';
 import window from '@ohos.window';
-import RUConfig from '@zjos/rocketUI/src/main/ets/utils/RUConfig'
+import RUConfig from '@zjos/rocketUI/src/main/ets/config/RUConfig'
 
 export default class EntryAbility extends UIAbility {
   onCreate(want: Want, launchParam: AbilityConstant.LaunchParam): void {

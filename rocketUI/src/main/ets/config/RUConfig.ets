@@ -9,12 +9,19 @@ export class RUConfig {
   // 用于被HSP包依赖，需要指定对应被依赖的HSP module的下文context寻找资源（默认自动获取了）
   public rootModuleName?: string | null = null
   // 状态栏高度
-  public statusBarHeight: number | undefined = undefined
+  public get statusBarHeight(): number | undefined {
+    return this._statusBarHeight;
+  }
   // 底部导航条区域的高度
-  public indicatorHeight: number | undefined = undefined
+  public get indicatorHeight(): number | undefined {
+    return this._indicatorHeight;
+  }
   // 实例
   private static instance: RUConfig
+  // 当前上下文
   private context?: Context
+  private _statusBarHeight: number | undefined = undefined
+  private _indicatorHeight: number | undefined = undefined
 
   public static getInstance(): RUConfig {
     if (!RUConfig.instance) {
@@ -45,8 +52,8 @@ export class RUConfig {
       let avoidArea2 = data.getWindowAvoidArea(window.AvoidAreaType.TYPE_NAVIGATION_INDICATOR);
       // 获取到导航条区域的高度
       let indicatorHeight = px2vp(avoidArea2.bottomRect.height);
-      this.statusBarHeight = statusBarHeight
-      this.indicatorHeight = indicatorHeight
+      this._statusBarHeight = statusBarHeight
+      this._indicatorHeight = indicatorHeight
       console.info(`voidArea statusBarHeight is ${statusBarHeight}`);
       console.info(`voidArea bottomNavHeight is ${bottomNavHeight}`);
       console.info(`voidArea indicatorHeight is ${indicatorHeight}`);

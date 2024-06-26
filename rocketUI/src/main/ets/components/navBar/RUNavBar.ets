@@ -5,7 +5,7 @@
  */
 import router from '@ohos.router'
 import { NAVBAR_HEIGHT } from '../../constants/RUConstants'
-import RUConfig from '../../utils/RUConfig'
+import RUConfig from '../../config/RUConfig'
 import RUEventBus, { RUEventData } from '../../utils/RUEventBus'
 
 /**

@@ -14,7 +14,7 @@ export interface RUAreaModel {
   parentId?: number
 }
 
-export class AreaData {
+export class RUAreaData {
   static getData(): RUAreaModel[] {
     return [
       {
