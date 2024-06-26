@@ -65,17 +65,13 @@ export struct RUFramePickerView {
                   })
                   this.frameOptions.data[0].optionSelected = true
                 } else {
-                  this.frameOptions.data[0].optionSelected = false
-                }
-              } else {
-                let flag: boolean = false
-                this.frameOptions.data.forEach((item: IPickerViewData) => {
-                  if (item.optionSelected) {
-                    flag = true
-                  }
-                })
-                if (!flag) {
-                  this.frameOptions.data[0].optionSelected = true
+                  let flag: boolean = false
+                  this.frameOptions.data.forEach((item: IPickerViewData) => {
+                    if (item.optionSelected) {
+                      flag = true
+                    }
+                  })
+                  this.frameOptions.data[0].optionSelected = !flag
                 }
               }
               this.notifyUI()
