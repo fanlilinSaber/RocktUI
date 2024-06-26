@@ -84,8 +84,8 @@ export struct RUNavBar {
   appearanceMode: RUNavBarAppearanceMode = RUNavBarAppearanceMode.RedMode
   // 适配安全区域，会额外加上系统状态栏高度，暂时没找到是否属于最顶部的元素的方法，通过手动控制是否需要额外的高度
   safeArea: boolean = true
-  // 自定义Title部分是否强制居中显示（为了使默认标题始终居中显示，如果有自定义Title不想保持居中模式，可设置为false，鸿蒙坑就在不能对布局设置优先级）
-  forceCenter: boolean = true
+  // 自定义Title部分是否强制居中显示（如果有自定义Title想保持居中模式，可设置为true，鸿蒙坑就在不能对布局设置优先级）
+  forceCenter: boolean = false
 
   // 如果是基于Navigation的路由管理，必须外部传进来用来做自动显示返回按钮和back操作
   navPathStack?: NavPathStack
