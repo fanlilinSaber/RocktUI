@@ -114,7 +114,7 @@ export default struct RULoadingDemo {
 
         RUNavBar({ title: 'RUNavBar使用', customTitle: (): void => { this.customTitle03() }, navPathStack: this.pageStack, safeArea: false })
 
-        RUNavBar({ title: 'RUNavBar使用', customTitle: (): void => { this.customTitle03() }, navPathStack: this.pageStack, safeArea: false, forceCenter: false })
+        RUNavBar({ title: 'RUNavBar使用', customTitle: (): void => { this.customTitle03() }, navPathStack: this.pageStack, safeArea: false, forceCenter: true })
 
         RUNavBar({ hideBack: true, title: 'RUNavBar使用', customTitle: (): void => { this.customTitle03() }, navPathStack: this.pageStack, safeArea: false })
 
@@ -205,7 +205,7 @@ export default struct RULoadingDemo {
           .backgroundColor(Color.Transparent)
           .layoutWeight(1)
           .placeholderFont({ size: 13 })
-          // .height('100%')
+          .padding(0)
       }
       .borderRadius(8)
       .backgroundColor(Color.White)
