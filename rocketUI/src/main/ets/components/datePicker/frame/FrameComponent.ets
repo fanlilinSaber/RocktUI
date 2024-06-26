@@ -68,7 +68,7 @@ export struct FrameComponent {
 
   getViewHeight(length: number) {
     let num = Math.ceil(length / 4)
-    return num * 40 + (num - 1) * 3 + 20
+    return num * 40 + (num - 1) * 10 + 20
   }
 
   @Builder
