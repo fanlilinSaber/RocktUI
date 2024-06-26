@@ -69,7 +69,7 @@ export class RUConfig {
   }
 
   private error(): Error {
-    return new Error('未初始化RocketKit；请在EntryAbility中的windowStage.loadContent之前调用 RKConfig.init(this.context)')
+    return new Error('未初始化RocketUI；请在EntryAbility中的windowStage.loadContent之前调用 RocketUI.init(this.context)')
   }
 }
 

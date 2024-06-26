@@ -1,4 +1,5 @@
-import RocketUI from './src/main/ets/config/RUConfig'
+import { RUConfig } from './src/main/ets/config/RUConfig'
+declare const RocketUI: RUConfig
 export default RocketUI
 
 export { RUProgress,
