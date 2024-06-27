@@ -8,14 +8,14 @@ import { window } from '@kit.ArkUI';
 export class RUConfig {
   // 用于被HSP包依赖，需要指定对应被依赖的HSP module的下文context寻找资源（默认自动获取了）
   public rootModuleName?: string | null = null
-  // 状态栏高度
+  // 状态栏高度（获取的单位是px，需要vp用px2vp转换）
   public get statusBarHeight(): number {
     if (this._statusBarHeight == undefined) {
       throw this.error()
     }
     return this._statusBarHeight
   }
-  // 底部导航条区域的高度
+  // 底部导航条区域的高度（获取的单位是px，需要vp用px2vp转换）
   public get indicatorHeight(): number {
     if (this._indicatorHeight == undefined) {
       throw this.error()
@@ -49,20 +49,20 @@ export class RUConfig {
 
     window.getLastWindow(context).then((data) => {
       // 获取系统默认区域，一般包括状态栏、导航栏
-      let avoidArea1 = data.getWindowAvoidArea(window.AvoidAreaType.TYPE_SYSTEM);
+      let avoidArea1 = data.getWindowAvoidArea(window.AvoidAreaType.TYPE_SYSTEM)
       // 顶部状态栏高度
-      let statusBarHeight = px2vp(avoidArea1.topRect.height);
+      let statusBarHeight = avoidArea1.topRect.height
       // 底部导航栏高度
-      let bottomNavHeight = px2vp(avoidArea1.bottomRect.height);
+      let bottomNavHeight = avoidArea1.bottomRect.height
       // 获取导航条区域
-      let avoidArea2 = data.getWindowAvoidArea(window.AvoidAreaType.TYPE_NAVIGATION_INDICATOR);
+      let avoidArea2 = data.getWindowAvoidArea(window.AvoidAreaType.TYPE_NAVIGATION_INDICATOR)
       // 获取到导航条区域的高度
-      let indicatorHeight = px2vp(avoidArea2.bottomRect.height);
+      let indicatorHeight = avoidArea2.bottomRect.height
       this._statusBarHeight = statusBarHeight
       this._indicatorHeight = indicatorHeight
-      console.info(`voidArea statusBarHeight is ${statusBarHeight}`);
-      console.info(`voidArea bottomNavHeight is ${bottomNavHeight}`);
-      console.info(`voidArea indicatorHeight is ${indicatorHeight}`);
+      console.info(`avoidArea statusBarHeight is ${statusBarHeight}px`);
+      console.info(`avoidArea bottomNavHeight is ${bottomNavHeight}px`);
+      console.info(`avoidArea indicatorHeight is ${indicatorHeight}px`);
     }).catch((err: Error) => {
       console.error(`Failed to obtain the window. Cause: ${JSON.stringify(err)}`);
     });

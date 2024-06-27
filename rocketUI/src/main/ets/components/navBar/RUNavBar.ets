@@ -129,7 +129,7 @@ export struct RUNavBar {
     .backgroundColor(this.appearance?.barColor ?? this.barColor)
     // 设置顶部绘制延伸到状态栏
     // .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP])
-    .padding({ top: this.safeArea ? RUConfig.statusBarHeight : 0 })
+    .padding({ top: this.safeArea ? `${RUConfig.statusBarHeight}px` : 0 })
   }
 
   // 是否有返回按钮
@@ -181,7 +181,7 @@ export struct RUNavBar {
       .height('100%')
       .alignRules(this.titleBarAlignRule())
       .displayPriority(99)
-      .id("__titleBar1")
+      .id("__titleBar")
     } else  {
       Column() {
         Text(this.title)
@@ -201,7 +201,7 @@ export struct RUNavBar {
         right: {anchor: '__rightMemuBar', align: HorizontalAlign.Start}
       })
       .displayPriority(99)
-      .id("__titleBar2")
+      .id("__titleBar")
     }
   }
 
