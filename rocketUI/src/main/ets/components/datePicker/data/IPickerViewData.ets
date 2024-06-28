@@ -14,4 +14,8 @@ export interface IPickerViewData {
    * 对应的item的选中状态
    */
   optionSelected?: boolean
+  /**
+   * 对应的item的泛型数据
+   */
+  optionChildren?: IPickerViewData[]
 }
