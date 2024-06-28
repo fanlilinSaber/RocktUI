@@ -11,7 +11,7 @@ export struct FrameComponent {
   @Link isShow: boolean
   backResult: (index: number, result: IPickerViewData) => void = (): void => {
   }
-  refreshUI: (index: number) => void = () => {
+  refreshUI: () => void = () => {
   }
 
   build() {
@@ -92,6 +92,7 @@ export struct FrameComponent {
       .onClick(() => {
         this.frameOptions.currentIndex = index
         this.backResult(index, this.frameOptions.data[index])
+        this.isExpand = false
       })
   }
 
@@ -115,7 +116,25 @@ export struct FrameComponent {
       .width('100%')
       .onClick(() => {
         item.optionSelected ? item.optionSelected = false : item.optionSelected = true
-        this.refreshUI(index)
+        if (this.frameOptions.isMultipleSelect) {
+          if (this.frameOptions.isFirstMutex) {
+            if (index == 0) {
+              this.frameOptions.data.forEach((item: IPickerViewData) => {
+                item.optionSelected = false
+              })
+              this.frameOptions.data[0].optionSelected = true
+            } else {
+              let flag: boolean = false
+              this.frameOptions.data.forEach((item: IPickerViewData) => {
+                if (item.optionSelected) {
+                  flag = true
+                }
+              })
+              this.frameOptions.data[0].optionSelected = !flag
+            }
+          }
+        }
+        this.refreshUI()
       })
   }
 }
@@ -138,8 +157,4 @@ export class FrameOptions {
    * 多选后是否支持头内容互斥
    */
   isFirstMutex: boolean = true
-  /*
-   * 设置默认已选数据（多选）
-   */
-  // selectedData: Array<IPickerViewData> = []
 }

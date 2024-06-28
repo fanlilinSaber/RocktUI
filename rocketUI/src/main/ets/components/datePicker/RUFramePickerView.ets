@@ -20,7 +20,10 @@ export struct RUFramePickerView {
   @State isShow: boolean = false
 
   aboutToAppear(): void {
-    this.frameOptionsController.setFrameOptions = (frameOptions: FrameOptions) => {
+    this.frameOptionsController.setPickerData = (frameOptions: FrameOptions, setValue: (item: IPickerViewData, index: number) => void) => {
+      frameOptions.data.forEach((item: IPickerViewData, index: number) => {
+        setValue(item, index)
+      })
       this.frameOptions = frameOptions
     }
     this.frameOptionsController.showPicker = () => {
@@ -56,26 +59,8 @@ export struct RUFramePickerView {
           isShow: this.isShow,
           frameOptions: this.frameOptions,
           backResult: this.backSingleResult,
-          refreshUI: (index: number) => {
-            if (this.frameOptions.isMultipleSelect) {
-              if (this.frameOptions.isFirstMutex) {
-                if (index == 0) {
-                  this.frameOptions.data.forEach((item: IPickerViewData) => {
-                    item.optionSelected = false
-                  })
-                  this.frameOptions.data[0].optionSelected = true
-                } else {
-                  let flag: boolean = false
-                  this.frameOptions.data.forEach((item: IPickerViewData) => {
-                    if (item.optionSelected) {
-                      flag = true
-                    }
-                  })
-                  this.frameOptions.data[0].optionSelected = !flag
-                }
-              }
-              this.notifyUI()
-            }
+          refreshUI: () => {
+            this.notifyUI()
           }
         })
         Row() {
@@ -160,18 +145,7 @@ export class FrameOptionsController {
   /**
    * 设置数据源(不支持调用)
    */
-  setFrameOptions?: (frameOptions: FrameOptions) => void
-  /**
-   * 设置数据源实现方法
-   */
-  setPickerData(frameOptions: FrameOptions, setValue: (item: IPickerViewData, index: number) => void) {
-    frameOptions.data.forEach((item: IPickerViewData, index: number) => {
-      setValue(item, index)
-    })
-    if (this.setFrameOptions) {
-      this.setFrameOptions(frameOptions);
-    }
-  }
+  setPickerData?: (frameOptions: FrameOptions, setValue: (item: IPickerViewData, index: number) => void) => void
   /**
    * 显示布局
    */
