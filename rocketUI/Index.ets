@@ -86,3 +86,7 @@ export { RUFramePickerView , FrameOptionsController} from './src/main/ets/compon
 export { IPickerViewData } from './src/main/ets/components/datePicker/data/IPickerViewData'
 
 export { FrameOptions } from './src/main/ets/components/datePicker/frame/FrameComponent'
+
+export { RUPickerView, PickerOptionsController, PickerResult } from './src/main/ets/components/datePicker/RUPickerView'
+
+export { PickerOptions } from './src/main/ets/components/datePicker/wheel/WheelComponent'
