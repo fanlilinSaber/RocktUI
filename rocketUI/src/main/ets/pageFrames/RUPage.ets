@@ -67,6 +67,7 @@ export struct RUPage {
   // 任务进度能力；默认 = true
   progressAbility: boolean = true
 
+  @Builder private closerBuilder() {}
   // 尾随闭包初始化 (此场景下自定义组件内有且仅有一个使用@BuilderParam装饰的属性。)
   @BuilderParam closer: () => void
 
@@ -116,7 +117,10 @@ export struct RUPage {
           appearanceMode: this.appearanceMode
         })
       }
-      this.closer()
+
+      Column(){
+        this.closer()
+      }.layoutWeight(1)
 
       if (this.loadingAbility) {
         RUProgress({ show: false, fastAbility: RUProgressFastAbility.Loading, offsetY: this.navBar ? NAVBAR_HEIGHT : 0 })

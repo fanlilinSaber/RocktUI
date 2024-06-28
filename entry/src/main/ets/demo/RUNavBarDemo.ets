@@ -34,6 +34,7 @@ export default struct RULoadingDemo {
   @State count1: number = 0
   count2: number = 0
   @State keyword: string = '111111'
+  scroller: Scroller = new Scroller();
 
 
   aboutToAppear() {
@@ -46,6 +47,7 @@ export default struct RULoadingDemo {
 
     this.rightMemus = [
       {title: '刷新', action: (): void => this.refreshAction() },
+      {title: '重装', action: (): void => this.reloadAction() },
       {title: '重装', action: (): void => this.reloadAction() }
     ]
     
@@ -93,14 +95,14 @@ export default struct RULoadingDemo {
   }
 
   build() {
-    Scroll() {
+    Scroll(this.scroller) {
       Column({space: 2}) {
 
         RUNavBar({ title: 'RUNavBar使用', rightMemus: this.rightMemus, appearanceMode: RUNavBarAppearanceMode.WhiteMode, navPathStack: this.pageStack, safeArea: false })
 
         RUNavBar({ title: 'RUNavBar使用', leftMemus: this.leftMemus, safeArea: false })
 
-        RUNavBar({ title: 'RUNavBar使用', leftMemus: this.leftMemus, rightMemus: this.rightMemus, safeArea: false })
+        RUNavBar({ title: 'RUNavBar使用RUNavBar使用', leftMemus: this.leftMemus, rightMemus: this.rightMemus, safeArea: false })
 
         RUNavBar({ title: 'RUNavBar使用', customLeftMemus: this.customLeftMemus01, rightMemus: this.rightMemus, barColor: Color.Gray, safeArea: false })
 
@@ -128,10 +130,19 @@ export default struct RULoadingDemo {
             this.count1 += 1
             this.count2 += 1
           })
+
+        RUNavBar({ title: this.title, rightMemus: [{title: '变化1', action: (tag?: string): void => { this.changeTitleAction(tag) }, tag: '1'}, {title: '变化2', action: (tag?: string): void => { this.changeTitleAction(tag) }, tag: '2'}], safeArea: false })
+
+        RUNavBar({ title: this.title, rightMemus: [{title: '变化1', action: (tag?: string): void => { this.changeTitleAction(tag) }, tag: '1'}, {title: '变化2', action: (tag?: string): void => { this.changeTitleAction(tag) }, tag: '2'}], safeArea: false })
+
+        RUNavBar({ title: this.title, rightMemus: [{title: '变化1', action: (tag?: string): void => { this.changeTitleAction(tag) }, tag: '1'}, {title: '变化2', action: (tag?: string): void => { this.changeTitleAction(tag) }, tag: '2'}], safeArea: false })
+
       }
       .width('100%')
       .margin({ top: 2})
     }
+    .scrollable(ScrollDirection.Vertical)
+    .height('100%')
   }
 
   addAction() {

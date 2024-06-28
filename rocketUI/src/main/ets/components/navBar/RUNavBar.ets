@@ -7,6 +7,7 @@ import router from '@ohos.router'
 import { NAVBAR_HEIGHT } from '../../constants/RUConstants'
 import RUConfig from '../../config/RUConfig'
 import RUEventBus, { RUEventData } from '../../utils/RUEventBus'
+import { RUNavBarTextModifier, RUNavBarAttribute, RUNavBarModifier } from './RUNavBarAttribute'
 
 /**
  * 导航栏菜单
@@ -103,7 +104,15 @@ export struct RUNavBar {
   // 自定义右菜单（受内部约束影响，不想被约束就使用`customTitle`）
   @BuilderParam customRightMemus: CustomBuilder = this.doNothingBuilder
 
+  attribute?: RUNavBarAttribute
+  @State containerModifier: RUNavBarModifier = new RUNavBarModifier('__container')
+  @State leftMemuBarModifier: RUNavBarModifier = new RUNavBarModifier('__leftMemuBar')
+  @State rightMemuBarModifier: RUNavBarModifier = new RUNavBarModifier('__rightMemuBar')
+  @State titleBarModifier: RUNavBarModifier = new RUNavBarModifier('__titleBar')
+  @State textBarModifier: RUNavBarTextModifier = new RUNavBarTextModifier('__titleText')
+
   aboutToAppear(): void {
+    this.attribute = new RUNavBarAttribute(this.containerModifier, this.leftMemuBarModifier, this.rightMemuBarModifier, this.titleBarModifier, this.textBarModifier)
     this.configAppearance()
   }
 
@@ -129,7 +138,17 @@ export struct RUNavBar {
     .backgroundColor(this.appearance?.barColor ?? this.barColor)
     // 设置顶部绘制延伸到状态栏
     // .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP])
-    .padding({ top: this.safeArea ? `${RUConfig.statusBarHeight}px` : 0 })
+    // .padding({ top: this.safeArea ? `${RUConfig.statusBarHeight}px` : 0 })
+    .attributeModifier(this.containerModifier as RUNavBarModifier)
+    // .padding({ top: this.attribute.top })
+    // .onAreaChange((oldValue: Area, newValue: Area) => {
+    //   let vpY = px2vp(RUConfig.statusBarHeight)
+    //   if (newValue.position.y as number > vpY) {
+    //     this.attribute.top = 0
+    //   } else {
+    //     this.attribute.top = `${RUConfig.statusBarHeight}px`
+    //   }
+    // })
   }
 
   // 是否有返回按钮
@@ -169,6 +188,7 @@ export struct RUNavBar {
     })
     .displayPriority(100)
     .id("__leftMemuBar")
+    .attributeModifier(this.leftMemuBarModifier as RUNavBarModifier)
   }
 
   // 中间标题栏
@@ -182,6 +202,7 @@ export struct RUNavBar {
       .alignRules(this.titleBarAlignRule())
       .displayPriority(99)
       .id("__titleBar")
+      .attributeModifier(this.titleBarModifier as RUNavBarModifier)
     } else  {
       Column() {
         Text(this.title)
@@ -190,18 +211,29 @@ export struct RUNavBar {
           .textOverflow({ overflow: TextOverflow.Ellipsis }) // 限制为一行 ellipses
           .maxLines(1)
           .constraintSize({ maxWidth: '80%' })
+          .id("__textBar")
+          .attributeModifier(this.textBarModifier as RUNavBarTextModifier)
+          .borderWidth(1)
+          .borderColor(Color.Yellow)
+          .onAreaChange((oldValue: Area, newValue: Area) => {
+            this.textBarModifier._onAreaChange && this.textBarModifier._onAreaChange("__titleText", oldValue, newValue)
+          })
+
       }
       .justifyContent(FlexAlign.Center)
       .alignItems(HorizontalAlign.Center)
       .height('100%')
       .alignRules({
         center: {anchor: "__container__", align: VerticalAlign.Center},
-        middle: {anchor: "__container__", align: HorizontalAlign.Center},
+        // middle: {anchor: "__container__", align: HorizontalAlign.Center},
         left: {anchor: '__leftMemuBar', align: HorizontalAlign.End},
         right: {anchor: '__rightMemuBar', align: HorizontalAlign.Start}
       })
       .displayPriority(99)
       .id("__titleBar")
+      .attributeModifier(this.titleBarModifier as RUNavBarModifier)
+      .borderWidth(1)
+      .borderColor(Color.Yellow)
     }
   }
 
@@ -226,6 +258,7 @@ export struct RUNavBar {
     })
     .displayPriority(100)
     .id("__rightMemuBar")
+    .attributeModifier(this.rightMemuBarModifier as RUNavBarModifier)
   }
 
   // 默认返回按钮

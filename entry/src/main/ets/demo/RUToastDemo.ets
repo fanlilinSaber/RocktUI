@@ -22,7 +22,6 @@ export default struct RUToastDemo {
       this.test04()
     }
     .width('100%')
-    .height('100%')
   }
 
   @Builder test01() {
