@@ -52,7 +52,7 @@ export struct RUGridMenuPopupView {
       // .rowsTemplate(this.gridRowTemplate)
       .columnsGap(10)
       .rowsGap(10)
-      .padding({ left: 10, right: 10, bottom: 10 })
+      .padding(10)
       .height(this.heightValue)
       .borderRadius({ bottomLeft: 12, bottomRight: 12 })
 
