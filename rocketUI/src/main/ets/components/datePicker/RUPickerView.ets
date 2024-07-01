@@ -11,7 +11,7 @@ export struct RUPickerView {
   @State ArrayOptions: PickerOptions[] = []
   @State isExpand: boolean = false
   @State isShow: boolean = false
-  clickSelected: (item: IPickerViewData, index: number, tag: string) => void = () => {
+  clickSelected: (tag: string, index: number, item?: IPickerViewData) => void = () => {
   }
   onReSet: () => void = () => {
   }
@@ -27,6 +27,9 @@ export struct RUPickerView {
     }
     this.pickerOptionsController.showPicker = () => {
       this.isExpand ? this.isExpand = false : this.isExpand = true
+    }
+    this.pickerOptionsController.closePicker = () => {
+      this.isExpand = false
     }
     this.pickerOptionsController.setPickerCurrentIndex = (tag: string, currentIndex: number) => {
       this.ArrayOptions.forEach((item: PickerOptions, index: number) => {
@@ -66,7 +69,7 @@ export struct RUPickerView {
             WheelComponent({
               pickOptions: item,
               optionsSelect: (item: IPickerViewData, index: number, tag: string) => {
-                this.clickSelected(item, index, tag)
+                this.clickSelected(tag, index, item,)
               },
               refreshUI: () => {
                 this.notifyUI(item, index)
@@ -156,6 +159,13 @@ export struct RUPickerView {
       this.ArrayOptions.push(pickerOptions)
     } else {
       this.ArrayOptions[currentIndex] = pickerOptions
+      if (currentIndex != this.ArrayOptions.length - 1) {
+        if (this.ArrayOptions[currentIndex+1].data.length > 0) {
+          this.clickSelected(this.ArrayOptions[currentIndex+1].tag, 0, this.ArrayOptions[currentIndex+1].data[0])
+        } else {
+          this.clickSelected(this.ArrayOptions[currentIndex+1].tag, -1)
+        }
+      }
     }
   }
 
@@ -214,6 +224,11 @@ export class PickerOptionsController {
    * 当开启头内容互斥关系后则设置selectedData为new Array 后默认选中首个内容
    */
   setPickerSelectedData: (tag: string, selectedData: Array<IPickerViewData>) => void = () => {
+  }
+  /**
+   * 关闭当前筛选界面
+   */
+  closePicker: () => void = () => {
   }
 }
 

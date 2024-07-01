@@ -29,6 +29,9 @@ export struct RUFramePickerView {
     this.frameOptionsController.showPicker = () => {
       this.isExpand ? this.isExpand = false : this.isExpand = true
     }
+    this.frameOptionsController.closePicker = () => {
+      this.isExpand = false
+    }
     this.frameOptionsController.setPickerCurrentIndex = (index: number) => {
       this.frameOptions.currentIndex = index
       this.notifyUI()
@@ -145,7 +148,8 @@ export class FrameOptionsController {
   /**
    * 设置数据源(不支持调用)
    */
-  setPickerData?: (frameOptions: FrameOptions, setValue: (item: IPickerViewData, index: number) => void) => void
+  setPickerData: (frameOptions: FrameOptions, setValue: (item: IPickerViewData, index: number) => void) => void = () => {
+  }
   /**
    * 显示布局
    */
@@ -161,5 +165,10 @@ export class FrameOptionsController {
    * 当开启头内容互斥关系后则设置selectedData为new Array 后默认选中首个内容
    */
   setPickerSelectedData: (selectedData: Array<IPickerViewData>) => void = () => {}
+  /**
+   * 关闭当前筛选界面
+   */
+  closePicker: () => void = () => {
+  }
 }
 
