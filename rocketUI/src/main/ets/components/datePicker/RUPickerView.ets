@@ -159,12 +159,12 @@ export struct RUPickerView {
       this.ArrayOptions.push(pickerOptions)
     } else {
       this.ArrayOptions[currentIndex] = pickerOptions
-      if (currentIndex != this.ArrayOptions.length - 1) {
-        if (pickerOptions.data.length > 0) {
-          this.clickSelected(this.ArrayOptions[currentIndex].tag, 0, this.ArrayOptions[currentIndex].data[0])
-        } else {
-          this.clickSelected(this.ArrayOptions[currentIndex].tag, -1)
-        }
+    }
+    if (currentIndex != this.ArrayOptions.length - 1) {
+      if (pickerOptions.data.length > 0) {
+        this.clickSelected(this.ArrayOptions[currentIndex].tag, 0, this.ArrayOptions[currentIndex].data[0])
+      } else {
+        this.clickSelected(this.ArrayOptions[currentIndex].tag, -1)
       }
     }
   }
