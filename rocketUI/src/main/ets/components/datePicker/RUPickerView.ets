@@ -160,10 +160,10 @@ export struct RUPickerView {
     } else {
       this.ArrayOptions[currentIndex] = pickerOptions
       if (currentIndex != this.ArrayOptions.length - 1) {
-        if (this.ArrayOptions[currentIndex+1].data.length > 0) {
-          this.clickSelected(this.ArrayOptions[currentIndex+1].tag, 0, this.ArrayOptions[currentIndex+1].data[0])
+        if (pickerOptions.data.length > 0) {
+          this.clickSelected(this.ArrayOptions[currentIndex].tag, 0, this.ArrayOptions[currentIndex].data[0])
         } else {
-          this.clickSelected(this.ArrayOptions[currentIndex+1].tag, -1)
+          this.clickSelected(this.ArrayOptions[currentIndex].tag, -1)
         }
       }
     }
