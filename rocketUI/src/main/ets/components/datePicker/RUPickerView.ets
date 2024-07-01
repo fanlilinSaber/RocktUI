@@ -32,10 +32,16 @@ export struct RUPickerView {
       this.isExpand = false
     }
     this.pickerOptionsController.setPickerCurrentIndex = (tag: string, currentIndex: number) => {
-      this.ArrayOptions.forEach((item: PickerOptions, index: number) => {
-        if (tag == item.tag) {
-          item.currentIndex = currentIndex
-          this.notifyUI(item, index)
+      this.ArrayOptions.forEach((pickerOptions: PickerOptions, index: number) => {
+        if (tag == pickerOptions.tag) {
+          pickerOptions.currentIndex = currentIndex
+          this.notifyUI(pickerOptions, index)
+          if (pickerOptions.currentIndex > -1) {
+            pickerOptions.data.length > pickerOptions.currentIndex ?
+            this.clickSelected(pickerOptions.tag, pickerOptions.currentIndex,
+              pickerOptions.data[pickerOptions.currentIndex]) :
+            this.clickSelected(pickerOptions.tag, -1)
+          }
         }
       })
     }
