@@ -7,7 +7,7 @@ import router from '@ohos.router'
 import { NAVBAR_HEIGHT } from '../../constants/RUConstants'
 import RUConfig from '../../config/RUConfig'
 import RUEventBus, { RUEventData } from '../../utils/RUEventBus'
-import { RUNavBarTextModifier, RUNavBarAttribute, RUNavBarModifier } from './RUNavBarAttribute'
+import RUNavBarModifier, { RUNavBarAttribute } from './RUNavBarAttribute'
 
 /**
  * 导航栏菜单
@@ -62,7 +62,7 @@ export enum RUNavBarAppearanceMode {
  */
 @Component
 export struct RUNavBar {
-  // 导航栏标题
+  // 导航栏标题（会根据左右两边菜单占用的宽度控制是否居中显示，如果居中显示有重叠就不相对屏幕居中显示了）
   @Prop title: string = ''
   titleColor: ResourceColor = Color.White
   titleSize?: number | string = 17
@@ -83,12 +83,10 @@ export struct RUNavBar {
   appearance?: RUNavBarAppearance
   // 外观默认模板（appearance、appearanceMode、barColor...等属性互斥，自定义 appearance 优先级最高）
   appearanceMode: RUNavBarAppearanceMode = RUNavBarAppearanceMode.RedMode
-  // 适配安全区域，会额外加上系统状态栏高度，暂时没找到是否属于最顶部的元素的方法，通过手动控制是否需要额外的高度
-  safeArea: boolean = true
-  // 自定义Title部分是否强制居中显示（如果有自定义Title想保持居中模式，可设置为true，鸿蒙坑就在不能对布局设置优先级）
+  // 自定义Title部分是否强制居中显示（如果有自定义Title想保持居中模式，可设置为true，注意自己控制左右区域重叠部分，鸿蒙坑就在不能对布局设置优先级）
   forceCenter: boolean = false
 
-  // 如果是基于Navigation的路由管理，必须外部传进来用来做自动显示返回按钮和back操作
+  // 如果是基于Navigation的路由管理，默认内部做了自动获取，如果有单独的navPathStack可以外部传进来（用来做自动显示返回按钮和back操作）
   navPathStack?: NavPathStack
 
   // 左右常规菜单
@@ -104,14 +102,18 @@ export struct RUNavBar {
   // 自定义右菜单（受内部约束影响，不想被约束就使用`customTitle`）
   @BuilderParam customRightMemus: CustomBuilder = this.doNothingBuilder
 
-  attribute?: RUNavBarAttribute
-  @State containerModifier: RUNavBarModifier = new RUNavBarModifier('__container')
-  @State leftMemuBarModifier: RUNavBarModifier = new RUNavBarModifier('__leftMemuBar')
-  @State rightMemuBarModifier: RUNavBarModifier = new RUNavBarModifier('__rightMemuBar')
-  @State titleBarModifier: RUNavBarModifier = new RUNavBarModifier('__titleBar')
-  @State textBarModifier: RUNavBarTextModifier = new RUNavBarTextModifier('__titleText')
+  private attribute?: RUNavBarAttribute
+  @State containerModifier: RUNavBarModifier = new RUNavBarModifier()
+  @State leftMemuBarModifier: RUNavBarModifier = new RUNavBarModifier()
+  @State rightMemuBarModifier: RUNavBarModifier = new RUNavBarModifier()
+  @State titleBarModifier: RUNavBarModifier = new RUNavBarModifier()
+  @State textBarModifier: RUNavBarModifier = new RUNavBarModifier()
 
-  aboutToAppear(): void {
+  aboutToAppear() {
+    if (!this.navPathStack) {
+      // this指代MyComponent自定义节点，并从该节点向上查找其最近的一个类型为Navigation的父亲节点
+      this.navPathStack = this.queryNavigationInfo()?.pathStack
+    }
     this.attribute = new RUNavBarAttribute(this.containerModifier, this.leftMemuBarModifier, this.rightMemuBarModifier, this.titleBarModifier, this.textBarModifier)
     this.configAppearance()
   }
@@ -140,15 +142,6 @@ export struct RUNavBar {
     // .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP])
     // .padding({ top: this.safeArea ? `${RUConfig.statusBarHeight}px` : 0 })
     .attributeModifier(this.containerModifier as RUNavBarModifier)
-    // .padding({ top: this.attribute.top })
-    // .onAreaChange((oldValue: Area, newValue: Area) => {
-    //   let vpY = px2vp(RUConfig.statusBarHeight)
-    //   if (newValue.position.y as number > vpY) {
-    //     this.attribute.top = 0
-    //   } else {
-    //     this.attribute.top = `${RUConfig.statusBarHeight}px`
-    //   }
-    // })
   }
 
   // 是否有返回按钮
@@ -210,30 +203,21 @@ export struct RUNavBar {
           .fontSize(this.appearance?.titleSize ?? this.titleSize).fontWeight(this.appearance?.titleWeight ?? this.titleWeight).fontColor(this.appearance?.titleColor ?? this.titleColor)
           .textOverflow({ overflow: TextOverflow.Ellipsis }) // 限制为一行 ellipses
           .maxLines(1)
-          .constraintSize({ maxWidth: '80%' })
           .id("__textBar")
-          .attributeModifier(this.textBarModifier as RUNavBarTextModifier)
-          .borderWidth(1)
-          .borderColor(Color.Yellow)
-          .onAreaChange((oldValue: Area, newValue: Area) => {
-            this.textBarModifier._onAreaChange && this.textBarModifier._onAreaChange("__titleText", oldValue, newValue)
-          })
-
+          .attributeModifier(this.textBarModifier as RUNavBarModifier)
+          .onAreaChange(this.textBarModifier._onAreaChange)
       }
       .justifyContent(FlexAlign.Center)
       .alignItems(HorizontalAlign.Center)
       .height('100%')
       .alignRules({
         center: {anchor: "__container__", align: VerticalAlign.Center},
-        // middle: {anchor: "__container__", align: HorizontalAlign.Center},
         left: {anchor: '__leftMemuBar', align: HorizontalAlign.End},
-        right: {anchor: '__rightMemuBar', align: HorizontalAlign.Start}
+        right: {anchor: '__rightMemuBar', align: HorizontalAlign.Start},
       })
       .displayPriority(99)
       .id("__titleBar")
       .attributeModifier(this.titleBarModifier as RUNavBarModifier)
-      .borderWidth(1)
-      .borderColor(Color.Yellow)
     }
   }
 

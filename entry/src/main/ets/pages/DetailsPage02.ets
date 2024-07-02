@@ -14,7 +14,7 @@ import RURefreshDemo from '../demo/RURefreshDemo';
 import { RUPopupDemo } from '../demo/RUPopupDemo';
 import RUDialogDemo from '../demo/RUDialogDemo';
 import { RUSelectPicturesDemo } from '../demo/RUSelectPicturesDemo';
-import RUToastDemo from '../demo/RUToastDemo'
+import { RUToastDemo } from '../demo/RUToastDemo'
 import { RUTabDemo } from "../demo/RUTabDemo"
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { RUFilterDemo } from '../demo/RUFilterDemo';
@@ -46,7 +46,7 @@ struct DetailsPage02 {
   }
 
   build() {
-    RUPage({ navPathStack: this.pageStack, title: this.title, titleColor: Color.White,
+    RUPage({ title: this.title, titleColor: Color.White,
       onReady:() => {
         hilog.info(0x00503, `DetailsPage02`, "页面onReady")
         RUProgressUtil.showLoading()
@@ -59,7 +59,6 @@ struct DetailsPage02 {
       },
       onHidden:() => {
         hilog.info(0x00503, `DetailsPage02`, "页面onHidden")
-
       }
       })
     {
@@ -86,7 +85,6 @@ struct DetailsPage02 {
       }
     }
   }
-
 
   // build() {
   //   Column() {

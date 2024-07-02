@@ -5,6 +5,7 @@ import { DetailsPage01Builder } from './DetailsPage01';
 import { DetailsPage02Builder } from './DetailsPage02';
 import { DetailsPage03Builder } from './DetailsPage03';
 import RUConfig from '@zjos/rocketUI/src/main/ets/config/RUConfig'
+import { it } from '@ohos/hypium/src/main/interface';
 
 interface Demo {
   title: string;
@@ -99,7 +100,7 @@ struct Index {
 
   onDemoClick(item: Demo) {
     let url = 'pages/DetailsPage02'
-    if (item.title == '加载Loading') {
+    if (item.value == 'LoadingDemo') {
       url = 'pages/DetailsPage01'
     }
     // router.pushNamedRoute({ name: url })

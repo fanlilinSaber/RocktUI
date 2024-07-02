@@ -7,7 +7,7 @@
 import { RUToast, RUToastUtil, RUToastPosition } from '@zjos/rocketUI'
 
 @Component
-export default struct RUToastDemo {
+export struct RUToastDemo {
 
   @State isToast: boolean = false
   private timeID: number = 0
@@ -102,3 +102,7 @@ export default struct RUToastDemo {
       })
   }
 }
+
+
+
+

@@ -25,7 +25,7 @@ export class RUConfig {
   // 实例
   private static instance: RUConfig
   // 当前上下文
-  private context?: Context
+  protected context?: Context
   private _statusBarHeight: number | undefined = undefined
   private _indicatorHeight: number | undefined = undefined
 

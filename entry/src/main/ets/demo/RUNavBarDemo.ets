@@ -98,32 +98,32 @@ export default struct RULoadingDemo {
     Scroll(this.scroller) {
       Column({space: 2}) {
 
-        RUNavBar({ title: 'RUNavBar使用', rightMemus: this.rightMemus, appearanceMode: RUNavBarAppearanceMode.WhiteMode, navPathStack: this.pageStack, safeArea: false })
+        RUNavBar({ title: 'RUNavBar使用', rightMemus: this.rightMemus, appearanceMode: RUNavBarAppearanceMode.WhiteMode })
 
-        RUNavBar({ title: 'RUNavBar使用', leftMemus: this.leftMemus, safeArea: false })
+        RUNavBar({ title: 'RUNavBar使用', leftMemus: this.leftMemus })
 
-        RUNavBar({ title: 'RUNavBar使用RUNavBar使用', leftMemus: this.leftMemus, rightMemus: this.rightMemus, safeArea: false })
+        RUNavBar({ title: 'RUNavBar使用', leftMemus: this.leftMemus, rightMemus: this.rightMemus })
 
-        RUNavBar({ title: 'RUNavBar使用', customLeftMemus: this.customLeftMemus01, rightMemus: this.rightMemus, barColor: Color.Gray, safeArea: false })
+        RUNavBar({ title: 'RUNavBar使用', customLeftMemus: this.customLeftMemus01, rightMemus: this.rightMemus, barColor: Color.Gray })
 
-        RUNavBar({ title: 'RUNavBar使用', customTitle: this.customTitle01, barColor: Color.Orange, safeArea: false, navPathStack: this.pageStack })
+        RUNavBar({ title: 'RUNavBar使用', customTitle: this.customTitle01, barColor: Color.Orange, navPathStack: this.pageStack, forceCenter: true })
 
         RUNavBar({
           title: 'RUNavBar使用',
           customTitle: (): void => { this.customTitle02() },
-          rightMemus: [{icon: $r('app.media.common_Search'), action: this.searchAction, iconSize: {width:35, height: 35}}], barColor: Color.Yellow, safeArea: false, navPathStack: this.pageStack })
+          rightMemus: [{icon: $r('app.media.common_Search'), action: this.searchAction, iconSize: {width:35, height: 35}}], barColor: Color.Yellow })
 
-        RUNavBar({ navPathStack: this.pageStack, customTitle: (): void => { this.customTitle02() }, rightMemus: [{title: '搜索', action: this.searchAction}, {title: '|'}, {title: '发布', action: this.searchAction}], safeArea: false, forceCenter: false })
+        RUNavBar({ customTitle: (): void => { this.customTitle02() }, rightMemus: [{title: '搜索', action: this.searchAction}, {title: '|'}, {title: '发布', action: this.searchAction}], forceCenter: false })
 
-        RUNavBar({ title: 'RUNavBar使用', customTitle: (): void => { this.customTitle03() }, navPathStack: this.pageStack, safeArea: false })
+        RUNavBar({ title: 'RUNavBar使用', customTitle: (): void => { this.customTitle03() } })
 
-        RUNavBar({ title: 'RUNavBar使用', customTitle: (): void => { this.customTitle03() }, navPathStack: this.pageStack, safeArea: false, forceCenter: true })
+        RUNavBar({ title: 'RUNavBar使用', customTitle: (): void => { this.customTitle03() }, forceCenter: true })
 
-        RUNavBar({ hideBack: true, title: 'RUNavBar使用', customTitle: (): void => { this.customTitle03() }, navPathStack: this.pageStack, safeArea: false })
+        RUNavBar({ hideBack: true, title: 'RUNavBar使用', customTitle: (): void => { this.customTitle03() } })
 
-        RUNavBar({ hideBack: true, customTitle: (): void => { this.customTitle04() }, safeArea: false })
+        RUNavBar({ hideBack: true, customTitle: (): void => { this.customTitle04() } })
 
-        RUNavBar({ title: this.title, rightMemus: [{title: '变化1', action: (tag?: string): void => { this.changeTitleAction(tag) }, tag: '1'}, {title: '变化2', action: (tag?: string): void => { this.changeTitleAction(tag) }, tag: '2'}], safeArea: false })
+        RUNavBar({ title: this.title, rightMemus: [{title: '变化1', action: (tag?: string): void => { this.changeTitleAction(tag) }, tag: '1'}, {title: '变化2', action: (tag?: string): void => { this.changeTitleAction(tag) }, tag: '2'}] })
 
         Text(`变化标题测试: ${this.count1} + ${this.count2}`)
           .onClick(() => {
@@ -131,18 +131,11 @@ export default struct RULoadingDemo {
             this.count2 += 1
           })
 
-        RUNavBar({ title: this.title, rightMemus: [{title: '变化1', action: (tag?: string): void => { this.changeTitleAction(tag) }, tag: '1'}, {title: '变化2', action: (tag?: string): void => { this.changeTitleAction(tag) }, tag: '2'}], safeArea: false })
-
-        RUNavBar({ title: this.title, rightMemus: [{title: '变化1', action: (tag?: string): void => { this.changeTitleAction(tag) }, tag: '1'}, {title: '变化2', action: (tag?: string): void => { this.changeTitleAction(tag) }, tag: '2'}], safeArea: false })
-
-        RUNavBar({ title: this.title, rightMemus: [{title: '变化1', action: (tag?: string): void => { this.changeTitleAction(tag) }, tag: '1'}, {title: '变化2', action: (tag?: string): void => { this.changeTitleAction(tag) }, tag: '2'}], safeArea: false })
-
       }
       .width('100%')
       .margin({ top: 2})
     }
     .scrollable(ScrollDirection.Vertical)
-    .height('100%')
   }
 
   addAction() {
@@ -150,7 +143,7 @@ export default struct RULoadingDemo {
     promptAction.showToast({ message: `RUNavBar变化标题+${this.count1}` })
 
     let dd: DemoTabItem = { title: '11', desc: ''}
-    RUEventBus.emit("测试showLoading", "aaa")
+    RUEventBus.emit("测试showLoading", dd)
   }
 
   deleteAction() {
@@ -197,9 +190,11 @@ export default struct RULoadingDemo {
 
   @Builder customTitle01() {
     Column() {
-      Text('我是自义定标题')
+      Text('我是自义定标题我是自义定标题我是自义定标题我是自义定标题我是自义定标题')
         .align(Alignment.Center)
         .fontSize(20).fontWeight(FontWeight.Medium).fontColor(Color.Red)
+        .textOverflow({ overflow: TextOverflow.Ellipsis }) // 限制为一行 ellipses
+        .maxLines(1)
       Text('我是副标题')
         .align(Alignment.Center)
         .fontSize(14).fontWeight(FontWeight.Medium).fontColor(Color.Gray)
