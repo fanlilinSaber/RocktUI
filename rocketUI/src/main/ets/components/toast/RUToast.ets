@@ -70,11 +70,11 @@ export struct RUToast {
   fontSize: number | string = 16
   // 赋予组件快速能力
   fastAbility: boolean = false
+  // 绑定父组件id（想要赋予快速能力需要绑定父组件的UniqueId）
+  parentUniqueId: number = -1
   // 是否显示
   @State show: boolean = true
   @State showPositionY: string = '50%'
-  // 当前页面路径, 只有当前页面中的loading才会响应,其他页面的事件不响应
-  private currentPagePath: string = ''
   private timeID: number = 0
 
   // MARK: - 组件即将出现时
@@ -140,16 +140,18 @@ export struct RUToast {
   registerEvent() {
     try {
       let routerState = router.getState();
-      this.currentPagePath = routerState.path + routerState.name
+      let currentPagePath = routerState.path + routerState.name
 
       if (!this.fastAbility) { return }
 
-      // 注册隐藏Loading事件
+      // 注册显示事件
       RUEventBus.on({
         eventName: EVENT_SHOW_TOAST,
         target: this, callback: (next: RUEventData) => {
           // 不是当前页面发来的不处理
-          if (next.pathName != this.currentPagePath) { return }
+          if (next.pathName != currentPagePath) { return }
+          if (next.pathId != -1 && next.pathId != this.parentUniqueId) { return }
+          if (!next.data) { return }
 
           let message = next.data["message"] as string
           if (message && message.length > 0) {

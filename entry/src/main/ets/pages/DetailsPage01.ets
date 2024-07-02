@@ -7,6 +7,7 @@
 import router from '@ohos.router';
 import LoadingDemo from '../demo/LoadingDemo'
 import RUConfig from '@zjos/rocketUI/src/main/ets/config/RUConfig'
+import { RUPage } from '@zjos/rocketUI';
 
 interface DemoParams{
   title?: string
@@ -21,7 +22,7 @@ export function DetailsPage01Builder(param: Object) {
   }.hideTitleBar(true)
 }
 
-@Entry
+@Entry({ routeName: "pages/DetailsPage01" })
 @Component
 struct DetailsPage01 {
   param?: Object
@@ -38,8 +39,10 @@ struct DetailsPage01 {
 
   build() {
     Column() {
-      this.buildNavbar()
-      this.buildPageFrame()
+      // RUPage({ title: "测试" }) {
+        this.buildNavbar()
+        this.buildPageFrame()
+      // }
     }
     .width('100%')
     .height('100%')
@@ -82,6 +85,7 @@ struct DetailsPage01 {
       offsetX: 0,
       offsetY: -1
     })
-    .padding({ top: RUConfig.statusBarHeight })
+    .padding({ top: `${RUConfig.statusBarHeight}px` })
   }
 }
+

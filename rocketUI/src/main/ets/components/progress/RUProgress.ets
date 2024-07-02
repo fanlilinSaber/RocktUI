@@ -268,6 +268,8 @@ export struct RUProgress {
   tag: string = ''
   // 赋予组件快速能力（如果配置成`all`，组件的所有状态共享，即代表所有快速操作都会共用这一个组件来切换，当一个页面存在多个`RUProgress`组件时，不想共享状态就为组件配置单个能力）
   fastAbility: RUProgressFastAbility = RUProgressFastAbility.None
+  // 绑定父组件id（想要赋予快速能力需要绑定父组件的UniqueId）
+  parentUniqueId: number = -1
   // 附带消息内容
   @Prop @Watch('onMessageUpdated') message: string = ''
   // 动画播放进度 progress / 1.0
@@ -346,7 +348,7 @@ export struct RUProgress {
     }
     .justifyContent(FlexAlign.Center).alignItems(HorizontalAlign.Center).align(Alignment.Center)
     .backgroundColor(Color.Transparent)
-    .width('100%').height(`calc(100% - ${this.offsetY}vp)`)
+    .width('100%').height(this.offsetEnable ? `calc(100% - ${this.offsetY}vp)` : '100%')
     .position({ x: 0, y: this.offsetEnable ? this.offsetY : 0 })
     .zIndex(9999)
     .visibility(this.show ? Visibility.Visible : Visibility.Hidden)
@@ -418,7 +420,7 @@ export struct RUProgress {
   startAnimation() {
     if (!this.onReady) { return }
     if (this.animateItem == null && this.progressItem.lottieData != null) {
-      this.animateName = 'rocketProgress' + this.currentPagePath + this.tag + this.currentTaskFlag
+      this.animateName = 'rocketProgress' + this.currentPagePath + this.tag + this.currentTaskFlag + this.parentUniqueId.toString()
       this.animateItem = lottie.loadAnimation({
         container: this.canvasRenderingContext,
         renderer: 'canvas', // canvas 渲染模式
@@ -493,6 +495,9 @@ export struct RUProgress {
           target: this, callback: (next: RUEventData) => {
             // 不是当前页面发来的不处理
             if (next.pathName != this.currentPagePath) { return }
+            if (next.pathId != -1 && next.pathId != this.parentUniqueId) { return }
+            if (!next.data) { return }
+
             // 如果设置了tag；不是当前tag不处理
             let tag = next.data["tag"] as string
             if (tag != undefined && tag != this.tag) { return }
@@ -530,9 +535,12 @@ export struct RUProgress {
         RUEventBus.on({
           eventName: EVENT_HIDE_LOADING,
           target: this, callback: (next: RUEventData) => {
+            if (!next.data) { return }
             let type = next.data["type"] as string
             // 不是当前页面发来的不处理
             if (type == 'current' && next.pathName != this.currentPagePath) { return }
+            if (type == 'current' && next.pathId != -1 && next.pathId != this.parentUniqueId) { return }
+
             // 如果设置了tag；不是当前tag不处理
             let tag = next.data["tag"] as string
             if (tag != undefined && tag != this.tag) { return }
@@ -553,6 +561,9 @@ export struct RUProgress {
           target: this, callback: (next: RUEventData) => {
             // 不是当前页面发来的不处理
             if (next.pathName != this.currentPagePath) { return }
+            if (next.pathId != -1 && next.pathId != this.parentUniqueId) { return }
+
+            if (!next.data) { return }
             // 如果设置了tag；不是当前tag不处理
             let tag = next.data["tag"] as string
             if (tag != undefined && tag != this.tag) { return }
@@ -595,9 +606,12 @@ export struct RUProgress {
         RUEventBus.on({
           eventName: EVENT_HIDE_PROGRESS,
           target: this, callback: (next: RUEventData) => {
+            if (!next.data) { return }
             let type = next.data["type"] as string
             // 不是当前页面发来的不处理
             if (type == 'current' && next.pathName != this.currentPagePath) { return }
+            if (type == 'current' && next.pathId != -1 && next.pathId != this.parentUniqueId) { return }
+
             // 如果设置了tag；不是当前tag不处理
             let tag = next.data["tag"] as string
             if (tag != undefined && tag != this.tag) { return }
@@ -614,9 +628,12 @@ export struct RUProgress {
       RUEventBus.on({
         eventName: EVENT_HIDE_RU_PROGRESS,
         target: this, callback: (next: RUEventData) => {
+          if (!next.data) { return }
           let type = next.data["type"] as string
           // 不是当前页面发来的不处理
           if (type == 'current' && next.pathName != this.currentPagePath) { return }
+          if (type == 'current' && next.pathId != -1 && next.pathId != this.parentUniqueId) { return }
+
           // 如果设置了tag；不是当前tag不处理
           let tag = next.data["tag"] as string
           if (tag != undefined && tag != this.tag) { return }

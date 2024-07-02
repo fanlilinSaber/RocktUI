@@ -94,6 +94,8 @@ export interface  RUAlertDialogElement {
  */
 @Component
 export struct RUAlertComponent {
+  // 绑定父组件id（想要赋予快速能力需要绑定父组件的UniqueId）
+  parentUniqueId: number = -1
 
   //弹窗state
   @State mCommonDialogObserved: RUCommonDialogObserved = new RUCommonDialogObserved({
@@ -143,9 +145,10 @@ export struct RUAlertComponent {
         eventName: EVENT_ALERTDIALOG_OPEN,
         target: this, callback: (next: RUEventData) => {
           // 不是当前页面发来的不处理
-          if (next.pathName != currentPagePath) {
-            return
-          }
+          if (next.pathName != currentPagePath) { return }
+          if (next.pathId != -1 && next.pathId != this.parentUniqueId) { return }
+          if (!next.data) { return }
+
           let mCommonDialogObserved: RUCommonDialogObserved = new RUCommonDialogObserved()
           let content: string = next.data["content"]
           let contentTextColor: Resource | string = next.data["contentTextColor"]

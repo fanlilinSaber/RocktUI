@@ -9,6 +9,7 @@ import util from '@ohos.util'
 import common from '@ohos.app.ability.common'
 import promptAction from '@ohos.promptAction'
 import { RUProgressElement } from '@zjos/rocketUI/src/main/ets/components/progress/RUProgress'
+import { router } from '@kit.ArkUI'
 
 interface Demo {
   title: string;
@@ -82,13 +83,15 @@ export default struct RULoadingDemo {
       .fontSize(30)
       .fontWeight(FontWeight.Bold)
       .onClick(() => {
-        RUProgressUtil.showLoading()
-        setTimeout(()=>{
-          RUProgressUtil.hideLoading()
-        },3000)
+        // RUProgressUtil.showLoading()
+        // setTimeout(()=>{
+        //   RUProgressUtil.hideLoading()
+        // },3000)
 
-        // let params: Demo = { title: "使用RUPage加载Loading", value: "RULoadingDemo" }
-        // this.pageStack.pushPathByName('pages/DetailsPage02', params, true)
+        let params: Demo = { title: "使用RUPage加载Loading", value: "RULoadingDemo" }
+        this.pageStack.pushPathByName('pages/DetailsPage02', params, true)
+
+        // router.pushNamedRoute({ name: 'pages/DetailsPage01' })
       })
       .margin({
         top: 10

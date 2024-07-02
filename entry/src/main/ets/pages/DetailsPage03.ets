@@ -20,7 +20,6 @@ export function DetailsPage03Builder(param: Object) {
   NavDestination() {
     DetailsPage03()
   }.hideTitleBar(true)
-
 }
 
 @Entry
