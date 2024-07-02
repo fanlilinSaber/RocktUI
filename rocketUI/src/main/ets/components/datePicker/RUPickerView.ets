@@ -11,7 +11,7 @@ export struct RUPickerView {
   @State ArrayOptions: PickerOptions[] = []
   @State isExpand: boolean = false
   @State isShow: boolean = false
-  clickSelected: (item: IPickerViewData, index: number, tag: string) => void = () => {
+  clickSelected: (tag: string, index: number, item?: IPickerViewData) => void = () => {
   }
   onReSet: () => void = () => {
   }
@@ -28,11 +28,20 @@ export struct RUPickerView {
     this.pickerOptionsController.showPicker = () => {
       this.isExpand ? this.isExpand = false : this.isExpand = true
     }
+    this.pickerOptionsController.closePicker = () => {
+      this.isExpand = false
+    }
     this.pickerOptionsController.setPickerCurrentIndex = (tag: string, currentIndex: number) => {
-      this.ArrayOptions.forEach((item: PickerOptions, index: number) => {
-        if (tag == item.tag) {
-          item.currentIndex = currentIndex
-          this.notifyUI(item, index)
+      this.ArrayOptions.forEach((pickerOptions: PickerOptions, index: number) => {
+        if (tag == pickerOptions.tag) {
+          pickerOptions.currentIndex = currentIndex
+          this.notifyUI(pickerOptions, index)
+          if (pickerOptions.currentIndex > -1) {
+            pickerOptions.data.length > pickerOptions.currentIndex ?
+            this.clickSelected(pickerOptions.tag, pickerOptions.currentIndex,
+              pickerOptions.data[pickerOptions.currentIndex]) :
+            this.clickSelected(pickerOptions.tag, -1)
+          }
         }
       })
     }
@@ -66,7 +75,7 @@ export struct RUPickerView {
             WheelComponent({
               pickOptions: item,
               optionsSelect: (item: IPickerViewData, index: number, tag: string) => {
-                this.clickSelected(item, index, tag)
+                this.clickSelected(tag, index, item,)
               },
               refreshUI: () => {
                 this.notifyUI(item, index)
@@ -157,6 +166,12 @@ export struct RUPickerView {
     } else {
       this.ArrayOptions[currentIndex] = pickerOptions
     }
+    if (pickerOptions.currentIndex > -1) {
+      pickerOptions.data.length > pickerOptions.currentIndex ?
+      this.clickSelected(pickerOptions.tag, pickerOptions.currentIndex,
+        pickerOptions.data[pickerOptions.currentIndex]) :
+      this.clickSelected(pickerOptions.tag, -1)
+    }
   }
 
   handleResult() {
@@ -214,6 +229,11 @@ export class PickerOptionsController {
    * 当开启头内容互斥关系后则设置selectedData为new Array 后默认选中首个内容
    */
   setPickerSelectedData: (tag: string, selectedData: Array<IPickerViewData>) => void = () => {
+  }
+  /**
+   * 关闭当前筛选界面
+   */
+  closePicker: () => void = () => {
   }
 }
 
