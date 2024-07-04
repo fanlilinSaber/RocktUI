@@ -24,12 +24,13 @@ export struct RUFramePickerView {
   @State isShow: boolean = false
 
   aboutToAppear(): void {
-    this.frameOptionsController.setPickerData = (frameOptions: FrameOptions, setValue: (item: IPickerViewData, index: number) => void) => {
-      frameOptions.data.forEach((item: IPickerViewData, index: number) => {
-        setValue(item, index)
-      })
-      this.frameOptions = frameOptions
-    }
+    this.frameOptionsController.setPickerData =
+      (frameOptions: FrameOptions, setValue: (item: IPickerViewData, index: number) => void) => {
+        frameOptions.data.forEach((item: IPickerViewData, index: number) => {
+          setValue(item, index)
+        })
+        this.frameOptions = frameOptions
+      }
     this.frameOptionsController.showPicker = () => {
       this.isExpand ? this.isExpand = false : this.isExpand = true
     }
@@ -132,18 +133,19 @@ export struct RUFramePickerView {
           bottomRight: 15
         })
         .visibility(this.frameOptions.isMultipleSelect ? Visibility.Visible : Visibility.None)
-      }
 
-      Blank()
-        .onClick(() => {
-          this.isExpand = false
-          this.onDismissListener()
-        })
+        Blank()
+          .onClick(() => {
+            this.isExpand = false
+            this.onDismissListener()
+          })
+      }
+      .height('100%')
+      .backgroundColor('#66000000')
     }
     .width('100%')
     .height(this.isExpand ? '100%' : 0)
     .height('100%')
-    .backgroundColor('#66000000')
     .visibility(this.isExpand ? Visibility.Visible : this.isShow ? Visibility.Visible : Visibility.None)
   }
 
@@ -162,8 +164,9 @@ export class FrameOptionsController {
   /**
    * 设置数据源(不支持调用)
    */
-  setPickerData: (frameOptions: FrameOptions, setValue: (item: IPickerViewData, index: number) => void) => void = () => {
-  }
+  setPickerData: (frameOptions: FrameOptions, setValue: (item: IPickerViewData, index: number) => void) => void =
+    () => {
+    }
   /**
    * 显示布局
    */
@@ -178,7 +181,8 @@ export class FrameOptionsController {
    * 设置多选已选内容
    * 当开启头内容互斥关系后则设置selectedData为new Array 后默认选中首个内容
    */
-  setPickerSelectedData: (selectedData: Array<IPickerViewData>) => void = () => {}
+  setPickerSelectedData: (selectedData: Array<IPickerViewData>) => void = () => {
+  }
   /**
    * 关闭当前筛选界面
    */

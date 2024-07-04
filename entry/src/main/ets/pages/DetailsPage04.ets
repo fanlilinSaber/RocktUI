@@ -40,10 +40,10 @@ export struct DetailsPage04 {
       let retStr = textDecoder.decodeWithStream(rawFile, { stream: false });
       console.info('TAG: =================' + retStr);
       this.data = JSON.parse(retStr) as Array<AddressEntity>
-      PickerOptionsUtils.setFrameOptionsData(0, true, this.data, this.frameOptionsController)
+      // PickerOptionsUtils.setFrameOptionsData(0, true, this.data, this.frameOptionsController)
       // this.setPickerOptionsData("省", 1, false, this.data)
-      // PickerOptionsUtils.setPickerOptionsData("省", 1, false, this.data, this.pickerOptionsController)
-      // this.pickerOptionsController.setPickerCurrentIndex('省', 3)
+      PickerOptionsUtils.setPickerOptionsData("省", 1, false, this.data, this.pickerOptionsController)
+      this.pickerOptionsController.setPickerCurrentIndex('省', 3)
     })
   }
 
@@ -68,59 +68,57 @@ export struct DetailsPage04 {
           .height(50)
           .onClick(() => {
             // this.frameOptionsController.setPickerSelectedData(new Array)
-            this.frameOptionsController.showPicker()
-            //this.pickerOptionsController.showPicker()
+            //this.frameOptionsController.showPicker()
+            this.pickerOptionsController.showPicker()
           })
           .onAreaChange((oldValue: Area, newValue: Area) => {
-           // this.topHeight = 120
-           this.topHeight = Math.ceil(newValue.height as number + 156)
-            console.log(newValue.position.y + '')
+           this.topHeight = Math.ceil(newValue.position.y as number + (newValue.height as number))
           })
           .zIndex(-1)
 
-        // RUPickerView({
-        //   pickerOptionsController: this.pickerOptionsController,
-        //   topHeight: this.topHeight,
-        //   clickSelected: (tag: string, index: number, item?: IPickerViewData) => {
-        //     switch (tag) {
-        //       case "省":
-        //         PickerOptionsUtils.setPickerOptionsData("市", 2, true, item?.optionChildren as Array<AddressEntity>,
-        //           this.pickerOptionsController)
-        //       //this.setOptionsData("市", [])
-        //         this.pickerOptionsController.setPickerSelectedData('市', new Array)
-        //         break
-        //       case "市":
-        //         break
-        //     }
-        //   },
-        //   onReSet: () => {
-        //     PickerOptionsUtils.setPickerOptionsData("省", 1, false, this.data, this.pickerOptionsController)
-        //     PickerOptionsUtils.setPickerOptionsData("市", 2, true, [], this.pickerOptionsController)
-        //   },
-        //   backResult: (result: Array<PickerResult>) => {
-        //     result.forEach((item: PickerResult) => {
-        //       switch (item.tag) {
-        //         case "省":
-        //           console.log("===========", "result=============" + item.singleResult?.optionsName)
-        //           break
-        //         case "市":
-        //           console.log("===========", "result=============" + JSON.stringify(item.multipleResult))
-        //           break
-        //       }
-        //     })
-        //   }
-        // })
-        RUFramePickerView({
-          frameOptionsController: this.frameOptionsController,
+        RUPickerView({
+          pickerOptionsController: this.pickerOptionsController,
           topHeight: this.topHeight,
-          backSingleResult: (index: number, result: IPickerViewData) => {
-            let optionsValue = result.optionsValue as string
-            console.log("=============", "result=================" + optionsValue)
+          clickSelected: (tag: string, index: number, item?: IPickerViewData) => {
+            switch (tag) {
+              case "省":
+                PickerOptionsUtils.setPickerOptionsData("市", 2, true, item?.optionChildren as Array<AddressEntity>,
+                  this.pickerOptionsController)
+              //this.setOptionsData("市", [])
+                this.pickerOptionsController.setPickerSelectedData('市', new Array)
+                break
+              case "市":
+                break
+            }
           },
-          backMultipleResult: (result: Array<IPickerViewData>) => {
-            console.error("=============", "result=================" + JSON.stringify(result))
+          onReSet: () => {
+            PickerOptionsUtils.setPickerOptionsData("省", 1, false, this.data, this.pickerOptionsController)
+            PickerOptionsUtils.setPickerOptionsData("市", 2, true, [], this.pickerOptionsController)
+          },
+          backResult: (result: Array<PickerResult>) => {
+            result.forEach((item: PickerResult) => {
+              switch (item.tag) {
+                case "省":
+                  console.log("===========", "result=============" + item.singleResult?.optionsName)
+                  break
+                case "市":
+                  console.log("===========", "result=============" + JSON.stringify(item.multipleResult))
+                  break
+              }
+            })
           }
         })
+        // RUFramePickerView({
+        //   frameOptionsController: this.frameOptionsController,
+        //   topHeight: this.topHeight,
+        //   backSingleResult: (index: number, result: IPickerViewData) => {
+        //     let optionsValue = result.optionsValue as string
+        //     console.log("=============", "result=================" + optionsValue)
+        //   },
+        //   backMultipleResult: (result: Array<IPickerViewData>) => {
+        //     console.error("=============", "result=================" + JSON.stringify(result))
+        //   }
+        // })
       }
     }
     .width('100%')
