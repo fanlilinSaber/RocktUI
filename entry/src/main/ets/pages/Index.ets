@@ -4,7 +4,7 @@ import router from '@ohos.router'
 import { DetailsPage01Builder } from './DetailsPage01';
 import { DetailsPage02Builder } from './DetailsPage02';
 import { DetailsPage03Builder } from './DetailsPage03';
-import { DetailsPage04Builder } from './DetailsPage04';
+import { DetailsPage05Builder } from './DetailsPage05';
 
 interface Demo {
   title: string;
@@ -53,7 +53,7 @@ struct Index {
       } else if (name === 'pages/DetailsPage03') {
         DetailsPage03Builder(param)
       } else if (name === 'pages/DetailsPage04') {
-        DetailsPage04Builder(param)
+        DetailsPage05Builder(param)
       }
     // }.hideTitleBar(true)
   }

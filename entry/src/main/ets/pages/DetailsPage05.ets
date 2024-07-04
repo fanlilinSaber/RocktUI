@@ -9,12 +9,12 @@ import { hilog } from '@kit.PerformanceAnalysisKit'
 import { DemoParams } from './DemoParams'
 
 @Builder
-export function DetailsPage04Builder(param: Object) {
-  DetailsPage04({ param: param })
+export function DetailsPage05Builder(param: Object) {
+  DetailsPage05({ param: param })
 }
 
 @Component
-struct DetailsPage04 {
+struct DetailsPage05 {
   pageStack?: NavPathStack
   param?: Object
   @State title: string = "";
