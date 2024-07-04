@@ -8,12 +8,7 @@ import router from '@ohos.router';
 import LoadingDemo from '../demo/LoadingDemo'
 import RUConfig from '@zjos/rocketUI/src/main/ets/config/RUConfig'
 import { RUPage } from '@zjos/rocketUI';
-
-interface DemoParams{
-  title?: string
-  value?: string
-}
-
+import { DemoParams } from './DemoParams';
 
 @Builder
 export function DetailsPage01Builder(param: Object) {
@@ -28,6 +23,7 @@ struct DetailsPage01 {
   param?: Object
   @State title: string = "";
   @State value: string = "";
+  @LocalStorageLink("pageStack") pageStack: NavPathStack = new NavPathStack()
 
   aboutToAppear(){
     let params = (this.param || {}) as DemoParams
@@ -65,8 +61,8 @@ struct DetailsPage01 {
           .width('60')
           .fontSize(20)
           .onClick(() => {
-            router.back()
-            // this.pageStack.pop()
+            // router.back()
+            this.pageStack.pop()
           })
 
         Text(this.title)

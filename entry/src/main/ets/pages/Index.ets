@@ -4,8 +4,7 @@ import router from '@ohos.router'
 import { DetailsPage01Builder } from './DetailsPage01';
 import { DetailsPage02Builder } from './DetailsPage02';
 import { DetailsPage03Builder } from './DetailsPage03';
-import RUConfig from '@zjos/rocketUI/src/main/ets/config/RUConfig'
-import { it } from '@ohos/hypium/src/main/interface';
+import { DetailsPage04Builder } from './DetailsPage04';
 
 interface Demo {
   title: string;
@@ -13,8 +12,9 @@ interface Demo {
 }
 
 let demos: Demo[] = [
-  { title: "加载Loading", value: "LoadingDemo" },
+  { title: "普通加载Loading", value: "LoadingDemo" },
   { title: "使用RUPage加载Loading", value: "RULoadingDemo" },
+  { title: "使用RUPage自定义title", value: "RUPageCustomTitleDemo" },
   { title: "消息提示Toast", value: "RUToastDemo" },
   { title: "弹出窗口Popup", value: "RUPopupDemo" },
   { title: "RUNavBar使用", value: "RUNavBarDemo" },
@@ -33,7 +33,6 @@ let storage = LocalStorage.getShared();
 struct Index {
   @State message: string = 'Hello World';
   @State visible: boolean = false;
-  // pageStack: NavPathStack = new NavPathStack()
   @LocalStorageLink("pageStack") pageStack: NavPathStack = new NavPathStack()
 
   build() {
@@ -50,9 +49,11 @@ struct Index {
         // 路由到hsp包中的登录页面
         DetailsPage01Builder(param)
       } else if (name === 'pages/DetailsPage02') {
-        DetailsPage02Builder(param, this.pageStack)
+        DetailsPage02Builder(param)
       } else if (name === 'pages/DetailsPage03') {
         DetailsPage03Builder(param)
+      } else if (name === 'pages/DetailsPage04') {
+        DetailsPage04Builder(param)
       }
     // }.hideTitleBar(true)
   }
@@ -102,6 +103,8 @@ struct Index {
     let url = 'pages/DetailsPage02'
     if (item.value == 'LoadingDemo') {
       url = 'pages/DetailsPage01'
+    } else if (item.value == 'RUPageCustomTitleDemo') {
+      url = 'pages/DetailsPage04'
     }
     // router.pushNamedRoute({ name: url })
 

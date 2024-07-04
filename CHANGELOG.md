@@ -1,3 +1,7 @@
+## v1.0.9
+    1.RUPage支持使用`WrappedBuilder`自定义title
+    2.优化组件快速能力逻辑代码
+
 ## v1.0.8
     1.RUPage适配基于Navigation管理路由栈方式
     2.RUNavBar适配基于Navigation管理路由栈方式

@@ -10,7 +10,7 @@ import { RUNavBar, RUNavBarAppearance,
   RUNavBarMenuItem } from '../components/navBar/RUNavBar'
 import { RUAlertComponent } from '../components/dialog/RUAlertComponent';
 import { RUToast } from '../components/toast/RUToast';
-import { NAVBAR_HEIGHT } from '../constants/RUConstants'
+import { CURRENT_PAGE_TAG, NAVBAR_HEIGHT } from '../constants/RUConstants'
 import RUEventBus from '../utils/RUEventBus'
 import RUConfig from '../config/RUConfig';
 
@@ -78,6 +78,8 @@ export struct RUPage {
   onShown?: () => void
   // 页面消失回调，(用了Navigation的方式才有这个回调)
   onHidden?: () => void
+  // 自定义title，这里为了保持尾随闭包使用效果使用组件工厂`WrappedBuilder`方式，但是`WrappedBuilder`只能引用全局的@Builder，如还是不满足自己的使用，请直接使用RUNavBar或者自定义
+  customTitle?: WrappedBuilder<[]>
 
   private navOffsetY?: number
 
@@ -98,11 +100,11 @@ export struct RUPage {
       }
       .hideTitleBar(true)
       .onShown(() => {
-        RUEventBus.currentPathId = this.getUniqueId()
+        AppStorage.setOrCreate(CURRENT_PAGE_TAG, this.getUniqueId())
         this.onShown && this.onShown()
       })
       .onHidden(() => {
-        RUEventBus.currentPathId = -1
+        AppStorage.setOrCreate(CURRENT_PAGE_TAG, -1)
         this.onHidden && this.onHidden()
       })
     } else {
@@ -128,7 +130,8 @@ export struct RUPage {
           backFillColor: this.backFillColor,
           onClickBack: this.onClickBack,
           appearance: this.appearance,
-          appearanceMode: this.appearanceMode
+          appearanceMode: this.appearanceMode,
+          customTitle: this.customTitle ? (): void => { this.titleBuilder() } : undefined
         })
       }
 
@@ -137,24 +140,28 @@ export struct RUPage {
       }.layoutWeight(1)
 
       if (this.loadingAbility) {
-        RUProgress({ show: false, fastAbility: RUProgressFastAbility.Loading, offsetY: this.navBar ? this.navOffsetY : 0, parentUniqueId: this.getUniqueId() })
+        RUProgress({ show: false, fastAbility: RUProgressFastAbility.Loading, offsetY: this.navBar ? this.navOffsetY : 0, tag: this.getUniqueId() })
       }
 
       if (this.toastAbility) {
-        RUToast({ show: false, fastAbility: true, parentUniqueId: this.getUniqueId() })
+        RUToast({ show: false, fastAbility: true, tag: this.getUniqueId() })
       }
 
       if (this.alertAbility) {
-        RUAlertComponent({ parentUniqueId: this.getUniqueId() })
+        RUAlertComponent({ tag: this.getUniqueId() })
       }
 
       if (this.progressAbility) {
-        RUProgress({ show: false, fastAbility: RUProgressFastAbility.Progress, parentUniqueId: this.getUniqueId() })
+        RUProgress({ show: false, fastAbility: RUProgressFastAbility.Progress, tag: this.getUniqueId() })
       }
     }
     .width('100%').height('100%')
     .backgroundColor(this.bgcolor)
     .onAppear(this.onReady)
+  }
+
+  @Builder titleBuilder() {
+    this.customTitle?.builder()
   }
 }
 
