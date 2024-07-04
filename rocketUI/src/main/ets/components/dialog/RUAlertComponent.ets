@@ -1,4 +1,5 @@
 import router from '@ohos.router';
+import { CURRENT_PAGE_TAG } from '../../constants/RUConstants';
 import RUEventBus, { RUEventData } from '../../utils/RUEventBus'
 import { RUCommonDialogObserved, RUCommonObservedDialog } from './RUCommonDialog';
 
@@ -61,7 +62,9 @@ export class RUAlertDialog {
         "isOneBtn": message?.isOneBtn??true,
       }
     }
-    RUEventBus.emit(EVENT_ALERTDIALOG_OPEN, data)
+
+    let aTag = AppStorage.get(CURRENT_PAGE_TAG) as number
+    RUEventBus.emit(EVENT_ALERTDIALOG_OPEN, data, aTag)
   }
 
   /**
@@ -94,8 +97,8 @@ export interface  RUAlertDialogElement {
  */
 @Component
 export struct RUAlertComponent {
-  // 绑定父组件id（想要赋予快速能力需要绑定父组件的UniqueId）
-  parentUniqueId: number = -1
+  // 组件唯一tag，用于同一个页面存在多个同一源的组件区分
+  tag?: string | number = undefined
 
   //弹窗state
   @State mCommonDialogObserved: RUCommonDialogObserved = new RUCommonDialogObserved({
@@ -143,10 +146,12 @@ export struct RUAlertComponent {
       // 注册显示提示框事件
       RUEventBus.on({
         eventName: EVENT_ALERTDIALOG_OPEN,
+        tag: this.tag,
         target: this, callback: (next: RUEventData) => {
           // 不是当前页面发来的不处理
+          if (next.tag && next.tag != this.tag) { return }
           if (next.pathName != currentPagePath) { return }
-          if (next.pathId != -1 && next.pathId != this.parentUniqueId) { return }
+
           if (!next.data) { return }
 
           let mCommonDialogObserved: RUCommonDialogObserved = new RUCommonDialogObserved()
@@ -192,11 +197,12 @@ export struct RUAlertComponent {
       // 注册关闭提示框事件
       RUEventBus.on({
         eventName: EVENT_ALERTDIALOG_CLOSE,
+        tag: this.tag,
         target: this, callback: (next: RUEventData) => {
           // 不是当前页面发来的不处理
-          if (next.pathName != currentPagePath) {
-            return
-          }
+          if (next.tag && next.tag != this.tag) { return }
+          if (next.pathName != currentPagePath) { return }
+
           this.mMessageDialog.close()
         }
       })

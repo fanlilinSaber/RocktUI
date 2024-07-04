@@ -9,7 +9,6 @@ import emitter from '@ohos.events.emitter'
 import hilog from '@ohos.hilog';
 import router from '@ohos.router';
 
-
 const RU_LOG_DOMAIN = 0x00503;
 
 /**
@@ -24,6 +23,8 @@ export interface RUEvent {
   callback?: (eventData: RUEventData) => void
   // 谁来响应 谁on就写谁的this
   target?: object
+  // 同一个事件可以指定不同的标识符来响应
+  tag?: string | number
 }
 
 /**
@@ -34,8 +35,8 @@ export interface RUEventData {
   eventName: string
   // 当前页面路径
   pathName?: string
-  // 当前Component的UniqueId
-  pathId?: number
+  // 同一个事件指定不同的标识符来相应（可以和当前Component的UniqueId进行绑定）
+  tag?: string | number
   // 数据
   data?: object | string
 }
@@ -43,8 +44,6 @@ export interface RUEventData {
 export class RUEventBus {
   private static instance: RUEventBus;
   private subscribes: Map<string, Map<object | string, RUEvent>> = new Map()
-  // 用了Navigation管理页面，暂时么有系统的全局获取方法，配合页面显示和消失绑定页面的UniqueId，当前Component的UniqueId。UniqueId为系统为每个组件分配的Id，可保证唯一性，-1 = 无效
-  currentPathId: number = -1
 
   public static getInstance() {
     if(!RUEventBus.instance){
@@ -66,6 +65,8 @@ export class RUEventBus {
     let subs = this.subscribes.get(eventName)
     subs?.forEach((value) => {
       try {
+        // 如果接收到tag，但是接收到的tag不是事件对象的tag就跳过当前循环
+        if (eventData.tag && eventData.tag != value.tag) { return }
         value.callback && value.callback(eventData)
         hilog.info(RU_LOG_DOMAIN , `RocketUI`, `RUEventBus.onEvent() 事件${eventName}触发成功`)
       } catch (error) {
@@ -105,14 +106,15 @@ export class RUEventBus {
    * 发送事件消息
    * @param eventName 事件名称
    * @param data 发送的数据
+   * @param tag 唯一标识符（默认取值）
    */
-  public emit(eventName: string, data?: object | string){
+  public emit(eventName: string, data?: object | string, tag?: string | number){
     try {
       let routerState = router.getState()
       let eventData: RUEventData = {
         eventName: eventName,
         pathName: routerState.path + routerState.name,
-        pathId: this.currentPathId,
+        tag: tag,
         data: data
       }
       this.onEvent(eventData)

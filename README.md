@@ -36,6 +36,13 @@
 ```
 
 ## 使用说明
+注意：
+
+如果使用 import { RUProgress } from '@zjos/rocketUI'方式编译报错，请导入全路径，如下：
+```
+import { RUProgress } from '@zjos/rocketUI/src/main/ets/components/progress/RUProgress'
+这块应该属于鸿蒙的bug，暂时没找到解决方案
+```
 
 1.初始化：
 

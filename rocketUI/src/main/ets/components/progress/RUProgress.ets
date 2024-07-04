@@ -12,6 +12,7 @@ import hilog from '@ohos.hilog'
 import RUEventBus, { RUEventData } from '../../utils/RUEventBus'
 import RUConfig from '../../config/RUConfig'
 import resourceManager from '@ohos.resourceManager'
+import { CURRENT_PAGE_TAG } from '../../constants/RUConstants'
 
 // show loading event name
 const EVENT_SHOW_LOADING: string = "showLoading"
@@ -44,10 +45,9 @@ export namespace RUProgressUtil {
    * @param tag 指定组件唯一tag
    * @param extraParams 组件内可额外修改的参数（根据业务需求新增维护）
    */
-  export function showLoading(options?: RUProgressStyle | RUProgressOptions | RUProgressElement, tag?: string, extraParams?: Record<string, UAny>) {
+  export function showLoading(options?: RUProgressStyle | RUProgressOptions | RUProgressElement, tag?: string | number, extraParams?: Record<string, UAny>) {
     let data: Record<string, string | number | undefined | boolean | RUProgressElement | object> = {
       'style': RUProgressStyle.Rotate,
-      'tag': tag,
       'offsetEnable': true,
     }
 
@@ -71,7 +71,9 @@ export namespace RUProgressUtil {
         data[key] = extraParams[key]
       })
     }
-    RUEventBus.emit(EVENT_SHOW_LOADING, data)
+
+    let aTag = tag ?? AppStorage.get(CURRENT_PAGE_TAG)
+    RUEventBus.emit(EVENT_SHOW_LOADING, data, aTag)
   }
 
   /**
@@ -79,7 +81,7 @@ export namespace RUProgressUtil {
    * @param options 样式 | 可选参数 | 自定义动画参数
    * @param tag 指定组件唯一tag
    */
-  export function showWindowLoading(options?: RUProgressStyle | RUProgressOptions | RUProgressElement, tag?: string) {
+  export function showWindowLoading(options?: RUProgressStyle | RUProgressOptions | RUProgressElement, tag?: string | number) {
     let data: Record<string, boolean> = {}
     data['offsetEnable'] = false
     RUProgressUtil.showLoading(options, tag, data)
@@ -91,8 +93,8 @@ export namespace RUProgressUtil {
    * @param options 可选参数 | 自定义动画参数
    * @param tag 指定组件唯一tag
    */
-  export function showProgress(value: number, options?: RUProgressOptions | RUProgressElement, tag?: string) {
-    let data: Record<string, number | string | undefined | RUProgressElement> = { 'progress': value, 'tag': tag }
+  export function showProgress(value: number, options?: RUProgressOptions | RUProgressElement, tag?: string | number) {
+    let data: Record<string, number | string | undefined | RUProgressElement> = { 'progress': value }
     if (options === undefined) {
       data['style'] = RUProgressStyle.Forward
     } else if (typeof options === 'object') {
@@ -106,16 +108,21 @@ export namespace RUProgressUtil {
         data['message'] = any.message
       }
     }
-    RUEventBus.emit(EVENT_SHOW_PROGRESS, data)
+
+    let aTag = tag ?? AppStorage.get(CURRENT_PAGE_TAG)
+    RUEventBus.emit(EVENT_SHOW_PROGRESS, data, aTag)
   }
 
   /**
    * @param all all = true 隐藏所有页面的
-   * @param tag 指定组件唯一tag
+   * @param tag 指定组件唯一tag（如果 all = true，忽略tag值）
    */
-  export function hideLoading(all: boolean = false, tag?: string) {
-    let data: Record<string, boolean | string | undefined> = { 'type': all ? 'all' : 'current', 'tag': tag }
-    RUEventBus.emit(EVENT_HIDE_LOADING, data)
+  export function hideLoading(all: boolean = false, tag?: string | number) {
+    let aTag: string | number | undefined = undefined
+    if (!all) {
+      aTag = tag ?? AppStorage.get(CURRENT_PAGE_TAG)
+    }
+    RUEventBus.emit(EVENT_HIDE_LOADING, undefined, aTag)
   }
 
   /**
@@ -123,9 +130,12 @@ export namespace RUProgressUtil {
    * @param all all = true 隐藏所有页面的
    * @param tag 指定组件唯一tag
    */
-  export function hideProgress(all: boolean = false, tag?: string) {
-    let data: Record<string, boolean | string | undefined> = { 'type': all ? 'all' : 'current', 'tag': tag }
-    RUEventBus.emit(EVENT_HIDE_PROGRESS, data)
+  export function hideProgress(all: boolean = false, tag?: string | number) {
+    let aTag: string | number | undefined = undefined
+    if (!all) {
+      aTag = tag ?? AppStorage.get(CURRENT_PAGE_TAG)
+    }
+    RUEventBus.emit(EVENT_HIDE_PROGRESS, undefined, aTag)
   }
 
   /**
@@ -133,9 +143,12 @@ export namespace RUProgressUtil {
    * @param all all = true 隐藏所有页面的
    * @param tag 指定组件唯一tag
    */
-  export function hide(all: boolean = false, tag?: string) {
-    let data: Record<string, boolean | string | undefined> = { 'type': all ? 'all' : 'current', 'tag': tag }
-    RUEventBus.emit(EVENT_HIDE_RU_PROGRESS, data)
+  export function hide(all: boolean = false, tag?: string | number) {
+    let aTag: string | number | undefined = undefined
+    if (!all) {
+      aTag = tag ?? AppStorage.get(CURRENT_PAGE_TAG)
+    }
+    RUEventBus.emit(EVENT_HIDE_RU_PROGRESS, undefined, aTag)
   }
 }
 
@@ -265,11 +278,11 @@ export struct RUProgress {
   // 是否允许交互
   interaction: boolean = false
   // 组件唯一tag，用于同一个页面存在多个同一源的组件区分
-  tag: string = ''
+  tag?: string | number = undefined
   // 赋予组件快速能力（如果配置成`all`，组件的所有状态共享，即代表所有快速操作都会共用这一个组件来切换，当一个页面存在多个`RUProgress`组件时，不想共享状态就为组件配置单个能力）
   fastAbility: RUProgressFastAbility = RUProgressFastAbility.None
-  // 绑定父组件id（想要赋予快速能力需要绑定父组件的UniqueId）
-  parentUniqueId: number = -1
+  // 可以绑定页面级的父组件id（想要赋予快速能力需要绑定父组件的UniqueId）
+  pathId: number = -1
   // 附带消息内容
   @Prop @Watch('onMessageUpdated') message: string = ''
   // 动画播放进度 progress / 1.0
@@ -420,7 +433,7 @@ export struct RUProgress {
   startAnimation() {
     if (!this.onReady) { return }
     if (this.animateItem == null && this.progressItem.lottieData != null) {
-      this.animateName = 'rocketProgress' + this.currentPagePath + this.tag + this.currentTaskFlag + this.parentUniqueId.toString()
+      this.animateName = 'rocketProgress' + this.currentPagePath + this.tag + this.currentTaskFlag + this.pathId.toString()
       this.animateItem = lottie.loadAnimation({
         container: this.canvasRenderingContext,
         renderer: 'canvas', // canvas 渲染模式
@@ -492,15 +505,12 @@ export struct RUProgress {
         // 注册显示Loading事件
         RUEventBus.on({
           eventName: EVENT_SHOW_LOADING,
+          tag: this.tag,
           target: this, callback: (next: RUEventData) => {
             // 不是当前页面发来的不处理
+            if (next.tag && next.tag != this.tag) { return }
             if (next.pathName != this.currentPagePath) { return }
-            if (next.pathId != -1 && next.pathId != this.parentUniqueId) { return }
             if (!next.data) { return }
-
-            // 如果设置了tag；不是当前tag不处理
-            let tag = next.data["tag"] as string
-            if (tag != undefined && tag != this.tag) { return }
 
             this.autoplay = true
             this.currentTaskFlag = EVENT_SHOW_LOADING
@@ -534,16 +544,12 @@ export struct RUProgress {
         // 注册隐藏Loading事件
         RUEventBus.on({
           eventName: EVENT_HIDE_LOADING,
+          tag: this.tag,
           target: this, callback: (next: RUEventData) => {
-            if (!next.data) { return }
-            let type = next.data["type"] as string
             // 不是当前页面发来的不处理
-            if (type == 'current' && next.pathName != this.currentPagePath) { return }
-            if (type == 'current' && next.pathId != -1 && next.pathId != this.parentUniqueId) { return }
+            if (next.tag && next.tag != this.tag) { return }
+            if (next.pathName != this.currentPagePath) { return }
 
-            // 如果设置了tag；不是当前tag不处理
-            let tag = next.data["tag"] as string
-            if (tag != undefined && tag != this.tag) { return }
             if (!this.show || this.currentTaskFlag != EVENT_SHOW_LOADING) { return }
 
             this.currentTaskFlag = EVENT_HIDE_LOADING
@@ -558,15 +564,12 @@ export struct RUProgress {
         // 注册显示任务进度事件
         RUEventBus.on({
           eventName: EVENT_SHOW_PROGRESS,
+          tag: this.tag,
           target: this, callback: (next: RUEventData) => {
             // 不是当前页面发来的不处理
+            if (next.tag && next.tag != this.tag) { return }
             if (next.pathName != this.currentPagePath) { return }
-            if (next.pathId != -1 && next.pathId != this.parentUniqueId) { return }
-
             if (!next.data) { return }
-            // 如果设置了tag；不是当前tag不处理
-            let tag = next.data["tag"] as string
-            if (tag != undefined && tag != this.tag) { return }
 
             this.autoplay = false
             this.currentTaskFlag = EVENT_SHOW_PROGRESS
@@ -605,16 +608,12 @@ export struct RUProgress {
         // 注册隐藏进度事件
         RUEventBus.on({
           eventName: EVENT_HIDE_PROGRESS,
+          tag: this.tag,
           target: this, callback: (next: RUEventData) => {
-            if (!next.data) { return }
-            let type = next.data["type"] as string
             // 不是当前页面发来的不处理
-            if (type == 'current' && next.pathName != this.currentPagePath) { return }
-            if (type == 'current' && next.pathId != -1 && next.pathId != this.parentUniqueId) { return }
+            if (next.tag && next.tag != this.tag) { return }
+            if (next.pathName != this.currentPagePath) { return }
 
-            // 如果设置了tag；不是当前tag不处理
-            let tag = next.data["tag"] as string
-            if (tag != undefined && tag != this.tag) { return }
             if (!this.show || this.currentTaskFlag != EVENT_SHOW_PROGRESS) { return }
 
             this.currentTaskFlag = EVENT_HIDE_PROGRESS
@@ -627,16 +626,11 @@ export struct RUProgress {
       // 注册隐藏当前组件事件
       RUEventBus.on({
         eventName: EVENT_HIDE_RU_PROGRESS,
+        tag: this.tag,
         target: this, callback: (next: RUEventData) => {
-          if (!next.data) { return }
-          let type = next.data["type"] as string
           // 不是当前页面发来的不处理
-          if (type == 'current' && next.pathName != this.currentPagePath) { return }
-          if (type == 'current' && next.pathId != -1 && next.pathId != this.parentUniqueId) { return }
-
-          // 如果设置了tag；不是当前tag不处理
-          let tag = next.data["tag"] as string
-          if (tag != undefined && tag != this.tag) { return }
+          if (next.tag && next.tag != this.tag) { return }
+          if (next.pathName != this.currentPagePath) { return }
 
           this.currentTaskFlag = EVENT_HIDE_RU_PROGRESS
           this.show = false
