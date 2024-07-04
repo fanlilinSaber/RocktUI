@@ -90,6 +90,7 @@ export struct RUPage {
       this.navPathStack = this.queryNavigationInfo()?.pathStack
     }
     this.navOffsetY = px2vp(RUConfig.statusBarHeight) + NAVBAR_HEIGHT
+    AppStorage.setOrCreate(CURRENT_PAGE_TAG, this.getUniqueId())
   }
 
   // MARK: -布局UI
