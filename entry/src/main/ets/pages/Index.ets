@@ -116,4 +116,4 @@ struct Index {
       this.pageStack.pushPathByName(url, params, true)
     }
   }
-｝
+}
