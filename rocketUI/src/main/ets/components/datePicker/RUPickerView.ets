@@ -11,6 +11,7 @@ export struct RUPickerView {
   @State ArrayOptions: PickerOptions[] = []
   @State isExpand: boolean = false
   @State isShow: boolean = false
+  @Prop topHeight: number = 0
   clickSelected: (tag: string, index: number, item?: IPickerViewData) => void = () => {
   }
   onReSet: () => void = () => {
@@ -69,13 +70,20 @@ export struct RUPickerView {
 
   build() {
     Column() {
+
+      Blank()
+        .onClick(() => {
+          this.isExpand = false
+        })
+        .height(this.topHeight)
+
       Column() {
         Row() {
           ForEach(this.ArrayOptions, (item: PickerOptions, index: number) => {
             WheelComponent({
               pickOptions: item,
               optionsSelect: (item: IPickerViewData, index: number, tag: string) => {
-                this.clickSelected(tag, index, item,)
+                this.clickSelected(tag, index, item)
               },
               refreshUI: () => {
                 this.notifyUI(item, index)
@@ -144,7 +152,7 @@ export struct RUPickerView {
       Blank()
         .onClick(() => {
           this.isExpand = false
-        }).zIndex(-1)
+        }).layoutWeight(1)
     }
     .width('100%')
     .height(this.isExpand ? '100%' : 0)

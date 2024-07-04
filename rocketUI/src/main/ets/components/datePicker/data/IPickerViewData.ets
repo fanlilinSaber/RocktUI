@@ -1,11 +1,12 @@
 /**
  * 数据回调接口
  */
-export interface IPickerViewData {
+@Observed
+export class IPickerViewData {
   /**
    * 显示的item内容
    */
-  optionsName: string
+  optionsName: string = ''
   /**
    * 对应的item的数据
    */

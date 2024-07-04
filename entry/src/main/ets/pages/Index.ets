@@ -5,6 +5,7 @@ import { DetailsPage01Builder } from './DetailsPage01';
 import { DetailsPage02Builder } from './DetailsPage02';
 import { DetailsPage03Builder } from './DetailsPage03';
 import RUConfig from '@zjos/rocketUI/src/main/ets/config/RUConfig'
+import { DetailsPage04Builder } from './DetailsPage04';
 
 interface Demo {
   title: string;
@@ -23,6 +24,7 @@ let demos: Demo[] = [
   { title: "选择图片/视频demo", value: "RUSelectPicturesDemo" },
   { title: "条件筛选框", value: "RUFilterDemo" },
   { title: "常用TabDemo", value: "RUTabDemo" },
+  { title: "筛选Demo", value: "RUPicker" }
 ];
 
 let storage = LocalStorage.getShared();
@@ -52,6 +54,8 @@ struct Index {
         DetailsPage02Builder(param, this.pageStack)
       } else if (name === 'pages/DetailsPage03') {
         DetailsPage03Builder(param)
+      } else if (name == 'pages/DetailsPage04') {
+        DetailsPage04Builder(param)
       }
     // }.hideTitleBar(true)
   }
@@ -98,13 +102,17 @@ struct Index {
   }
 
   onDemoClick(item: Demo) {
-    let url = 'pages/DetailsPage02'
-    if (item.title == '加载Loading') {
-      url = 'pages/DetailsPage01'
-    }
-    // router.pushNamedRoute({ name: url })
+    if (item.title == '筛选Demo') {
+      this.pageStack.pushPathByName('pages/DetailsPage04', true)
+    } else {
+      let url = 'pages/DetailsPage02'
+      if (item.title == '加载Loading') {
+        url = 'pages/DetailsPage01'
+      }
+      // router.pushNamedRoute({ name: url })
 
-    let params: Demo = { value: item.value, title: item.title }
-    this.pageStack.pushPathByName(url, params, true)
+      let params: Demo = { value: item.value, title: item.title }
+      this.pageStack.pushPathByName(url, params, true)
+    }
   }
 }
