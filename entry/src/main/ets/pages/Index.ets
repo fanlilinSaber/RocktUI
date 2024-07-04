@@ -5,6 +5,7 @@ import { DetailsPage01Builder } from './DetailsPage01';
 import { DetailsPage02Builder } from './DetailsPage02';
 import { DetailsPage03Builder } from './DetailsPage03';
 import RUConfig from '@zjos/rocketUI/src/main/ets/config/RUConfig'
+import { it } from '@ohos/hypium/src/main/interface';
 import { DetailsPage04Builder } from './DetailsPage04';
 
 interface Demo {
@@ -106,7 +107,7 @@ struct Index {
       this.pageStack.pushPathByName('pages/DetailsPage04', true)
     } else {
       let url = 'pages/DetailsPage02'
-      if (item.title == '加载Loading') {
+      if (item.value == 'LoadingDemo') {
         url = 'pages/DetailsPage01'
       }
       // router.pushNamedRoute({ name: url })
@@ -115,4 +116,4 @@ struct Index {
       this.pageStack.pushPathByName(url, params, true)
     }
   }
-}
+｝

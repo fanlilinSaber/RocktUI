@@ -11,7 +11,8 @@ import { RUNavBar, RUNavBarAppearance,
 import { RUAlertComponent } from '../components/dialog/RUAlertComponent';
 import { RUToast } from '../components/toast/RUToast';
 import { NAVBAR_HEIGHT } from '../constants/RUConstants'
-import { hilog } from '@kit.PerformanceAnalysisKit';
+import RUEventBus from '../utils/RUEventBus'
+import RUConfig from '../config/RUConfig';
 
 @Builder
 function empty() {
@@ -25,9 +26,9 @@ function empty() {
 
 @Component
 export struct RUPage {
-  // 导航栏
+  // 导航栏（如果要自定义title和菜单，请关闭此属性，建议使用`RUNavBar`自定义）
   navBar: boolean = true
-  // 导航栏title
+  // 导航栏标题（会根据左右两边菜单占用的宽度控制是否居中显示，如果居中显示有重叠就不相对屏幕居中显示了）
   @Prop title: string
   titleColor: ResourceColor = Color.White
   titleSize?: number | string = 17
@@ -51,8 +52,8 @@ export struct RUPage {
   // 外观默认模板（appearance、appearanceMode、barColor...等属性互斥，自定义 appearance 优先级最高）
   appearanceMode: RUNavBarAppearanceMode = RUNavBarAppearanceMode.RedMode
 
-  // 如果是基于Navigation的路由管理，必须外部传进来用来做自动显示返回按钮和back操作
-  @State navPathStack?: NavPathStack = undefined
+  // 如果是基于Navigation的路由管理，默认内部做了自动获取，如果有单独的navPathStack可以外部传进来（用来做自动显示返回按钮和back操作）
+  navPathStack?: NavPathStack = undefined
 
   // 左右常规菜单
   leftMemus?: RUNavBarMenuItem[] = undefined
@@ -67,15 +68,27 @@ export struct RUPage {
   // 任务进度能力；默认 = true
   progressAbility: boolean = true
 
+  @Builder private closerBuilder() {}
   // 尾随闭包初始化 (此场景下自定义组件内有且仅有一个使用@BuilderParam装饰的属性。)
   @BuilderParam closer: () => void
 
   // 准备好了，可以在这里下一步操作，比如一进页面要显示快速显示loading：RUProgressUtil.showLoading()（因鸿蒙特性，凡是跟UI相关组件都必须build函数里面，所以想要进入页面就调用快速能力，在这个回调时机最合适）
   onReady?: () => void
-  // 页面显示回调（用了Navigation的方式才有这个回调，需要设置navPathStack）
+  // 页面显示回调（用了Navigation的方式才有这个回调）
   onShown?: () => void
-  // 页面消失回调，(用了Navigation的方式才有这个回调，需要设置navPathStack)
+  // 页面消失回调，(用了Navigation的方式才有这个回调)
   onHidden?: () => void
+
+  private navOffsetY?: number
+
+  // MARK: -aboutToAppear
+  aboutToAppear() {
+    if (!this.navPathStack) {
+      // this指代MyComponent自定义节点，并从该节点向上查找其最近的一个类型为Navigation的父亲节点
+      this.navPathStack = this.queryNavigationInfo()?.pathStack
+    }
+    this.navOffsetY = px2vp(RUConfig.statusBarHeight) + NAVBAR_HEIGHT
+  }
 
   // MARK: -布局UI
   build() {
@@ -84,11 +97,13 @@ export struct RUPage {
         this.contentView()
       }
       .hideTitleBar(true)
-      .onShown(this.onShown)
-      .onHidden(this.onHidden)
-      .onReady((context: NavDestinationContext) => {
-        this.navPathStack = context.pathStack
-        hilog.info(0x00503, `NavDestination`, "页面onReady")
+      .onShown(() => {
+        RUEventBus.currentPathId = this.getUniqueId()
+        this.onShown && this.onShown()
+      })
+      .onHidden(() => {
+        RUEventBus.currentPathId = -1
+        this.onHidden && this.onHidden()
       })
     } else {
       this.contentView()
@@ -116,22 +131,25 @@ export struct RUPage {
           appearanceMode: this.appearanceMode
         })
       }
-      this.closer()
+
+      Column(){
+        this.closer()
+      }.layoutWeight(1)
 
       if (this.loadingAbility) {
-        RUProgress({ show: false, fastAbility: RUProgressFastAbility.Loading, offsetY: this.navBar ? NAVBAR_HEIGHT : 0 })
+        RUProgress({ show: false, fastAbility: RUProgressFastAbility.Loading, offsetY: this.navBar ? this.navOffsetY : 0, parentUniqueId: this.getUniqueId() })
       }
 
       if (this.toastAbility) {
-        RUToast({ show: false, fastAbility: true })
+        RUToast({ show: false, fastAbility: true, parentUniqueId: this.getUniqueId() })
       }
 
       if (this.alertAbility) {
-        RUAlertComponent()
+        RUAlertComponent({ parentUniqueId: this.getUniqueId() })
       }
 
       if (this.progressAbility) {
-        RUProgress({ show: false, fastAbility: RUProgressFastAbility.Progress })
+        RUProgress({ show: false, fastAbility: RUProgressFastAbility.Progress, parentUniqueId: this.getUniqueId() })
       }
     }
     .width('100%').height('100%')
@@ -139,3 +157,6 @@ export struct RUPage {
     .onAppear(this.onReady)
   }
 }
+
+
+

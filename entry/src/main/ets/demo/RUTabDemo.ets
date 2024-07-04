@@ -13,7 +13,7 @@ const dataListDemo:RUTabDataListType[] = [
 ]
 
 @Component
-export  struct RUTabDemo {
+export struct RUTabDemo {
 
   @State UnderlineTabDataList:RUTabDataListType[] = []
   @State UnderlineTabCurrentIndex:number = 0

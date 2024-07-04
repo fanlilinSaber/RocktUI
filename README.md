@@ -56,7 +56,7 @@ windowStage.loadContent('pages/Index', (err, data) => {
 import import { RUPage, RUNavBar, RUProgressUtil } from '@zjos/rocketUI'
 ```
 
-3.使用RUPage
+3.使用RUPage（RUPage提供常用基础功能的快速能力）
 
 在有@Entry装饰的组件使用如下：
 ```
@@ -102,5 +102,17 @@ RUProgressUtil.hideLoading()
 结合arkUI语法，用条件语句控制是否加载
 if(this.isloding) {
    RUProgress()
+}
+```
+5.使用RUToast
+```
+1.配合RUPage使用
+显示toast
+RUToast({ message: "请输入内容" })
+
+2.单独使用
+结合arkUI语法，用条件语句控制是否加载
+if(this.isToast) {
+   RUToast({ message: "请输入内容" })
 }
 ```

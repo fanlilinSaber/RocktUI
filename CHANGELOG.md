@@ -1,3 +1,8 @@
+## v1.0.8
+    1.RUPage适配基于Navigation管理路由栈方式
+    2.RUNavBar适配基于Navigation管理路由栈方式
+    3.RUNavBar优化默认title会根据左右两边菜单占用的宽度自动调节是否居中显示
+
 ## v1.0.7
     1.RUNavBar适配窗口全屏模式
 

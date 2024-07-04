@@ -9,6 +9,7 @@ import emitter from '@ohos.events.emitter'
 import hilog from '@ohos.hilog';
 import router from '@ohos.router';
 
+
 const RU_LOG_DOMAIN = 0x00503;
 
 /**
@@ -22,7 +23,7 @@ export interface RUEvent {
   // 响应事件时的回调, 可通过 RUEventBus.on 第2个参数设置
   callback?: (eventData: RUEventData) => void
   // 谁来响应 谁on就写谁的this
-  target?: any
+  target?: object
 }
 
 /**
@@ -33,13 +34,17 @@ export interface RUEventData {
   eventName: string
   // 当前页面路径
   pathName?: string
+  // 当前Component的UniqueId
+  pathId?: number
   // 数据
-  data?: any
+  data?: object | string
 }
 
 export class RUEventBus {
   private static instance: RUEventBus;
-  private subscribes: Map<string, Map<any, RUEvent>> = new Map()
+  private subscribes: Map<string, Map<object | string, RUEvent>> = new Map()
+  // 用了Navigation管理页面，暂时么有系统的全局获取方法，配合页面显示和消失绑定页面的UniqueId，当前Component的UniqueId。UniqueId为系统为每个组件分配的Id，可保证唯一性，-1 = 无效
+  currentPathId: number = -1
 
   public static getInstance() {
     if(!RUEventBus.instance){
@@ -59,14 +64,14 @@ export class RUEventBus {
     if(!eventName || !this.subscribes.has(eventName)) { return }
 
     let subs = this.subscribes.get(eventName)
-    for (let [key, value] of subs) {
+    subs?.forEach((value) => {
       try {
         value.callback && value.callback(eventData)
         hilog.info(RU_LOG_DOMAIN , `RocketUI`, `RUEventBus.onEvent() 事件${eventName}触发成功`)
       } catch (error) {
         hilog.error(RU_LOG_DOMAIN , `RocketUI`, `RUEventBus.onEvent() 触发失败` + error)
       }
-    }
+    })
   }
 
   /**
@@ -86,9 +91,9 @@ export class RUEventBus {
       let eventTarget = event.target
       let subs = this.subscribes.get(eventName)
       // 如果外部传了 target 则使用 target 作为key来管理消息事件，如果没有则分配随机key管理
-      var subKey = eventTarget ? eventTarget : eventName + "." + subs.size
-      if (!subs.has(subKey)) {
-        subs.set(subKey, event)
+      let subKey = eventTarget ?? eventName + "." + subs?.size
+      if (!subs?.has(subKey)) {
+        subs?.set(subKey, event)
         hilog.info(RU_LOG_DOMAIN , `RocketUI`, `RUEventBus.on() 注册事件${eventName}成功`)
       }
     } catch (error) {
@@ -101,12 +106,13 @@ export class RUEventBus {
    * @param eventName 事件名称
    * @param data 发送的数据
    */
-  public emit(eventName: string, data?: any){
+  public emit(eventName: string, data?: object | string){
     try {
       let routerState = router.getState()
       let eventData: RUEventData = {
         eventName: eventName,
         pathName: routerState.path + routerState.name,
+        pathId: this.currentPathId,
         data: data
       }
       this.onEvent(eventData)
@@ -121,7 +127,7 @@ export class RUEventBus {
    * @param eventName 要取消的事件名称
    * @param target 要取消该事件的目标（this）
    */
-  public off(eventName: string, target?: any){
+  public off(eventName: string, target?: object){
     if (!this.subscribes.has(eventName)) { return }
     // 如果没有指定 target；取消注册该事件的所有目标
     if (!target) {
@@ -132,7 +138,7 @@ export class RUEventBus {
 
     // 如果指定了 target；则单独取消注册该事件的目标
     let subs = this.subscribes.get(eventName)
-    if (subs.has(target)) {
+    if (subs?.has(target)) {
       subs.delete(target);
       hilog.info(RU_LOG_DOMAIN, `RocketUI`, "RUEventBus.off() 关闭事件" + eventName + target)
     }
