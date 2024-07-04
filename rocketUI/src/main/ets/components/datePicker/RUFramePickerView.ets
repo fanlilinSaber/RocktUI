@@ -8,11 +8,15 @@ import { FrameComponent, FrameOptions } from './frame/FrameComponent'
 export struct RUFramePickerView {
   /**筛选控制器**/
   @Link frameOptionsController: FrameOptionsController
+  @Prop topHeight: number = 0
   /**单选结果回调**/
   backSingleResult: (index: number, result: IPickerViewData) => void = (): void => {
   }
   /**多选结果回调**/
   backMultipleResult: (result: Array<IPickerViewData>) => void = (): void => {
+  }
+  /**消失监听**/
+  onDismissListener: () => void = (): void => {
   }
   /**私有变量**/
   @State frameOptions: FrameOptions = new FrameOptions()
@@ -42,8 +46,8 @@ export struct RUFramePickerView {
           this.frameOptions.data[0].optionSelected = true
         } else {
           this.frameOptions.data.forEach((item1: IPickerViewData, index: number) => {
-            selectedData.forEach((item2, IPickerViewData) => {
-              if (item1.optionsName = item2.optionsName) {
+            selectedData.forEach((item2: IPickerViewData) => {
+              if (item1.optionsName == item2.optionsName) {
                 item1.optionSelected = true
               }
             })
@@ -56,6 +60,14 @@ export struct RUFramePickerView {
 
   build() {
     Column() {
+
+      Blank()
+        .onClick(() => {
+          this.isExpand = false
+          this.onDismissListener()
+        })
+        .height(this.topHeight)
+
       Column() {
         FrameComponent({
           isExpand: this.isExpand,
@@ -106,6 +118,7 @@ export struct RUFramePickerView {
               })
               this.backMultipleResult(result)
               this.isExpand = false
+              this.onDismissListener()
             })
         }
         .padding({
@@ -124,6 +137,7 @@ export struct RUFramePickerView {
       Blank()
         .onClick(() => {
           this.isExpand = false
+          this.onDismissListener()
         })
     }
     .width('100%')

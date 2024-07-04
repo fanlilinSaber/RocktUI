@@ -17,7 +17,14 @@ export struct WheelComponent {
           if (this.pickOptions.isMultipleSelect) {
             this.ItemMultipleSelectBuilder(item, index)
           } else {
-            this.ItemSingleSelectBuilder(item, index)
+            ItemSingleSelectBuilder({
+              data: item,
+              index: index,
+              pickOptions: this.pickOptions,
+              optionsSelect: (item: IPickerViewData, index: number, tag: string) => {
+                this.optionsSelect(item, index, tag)
+              }
+            })
           }
         }
       })
@@ -30,38 +37,6 @@ export struct WheelComponent {
     .nestedScroll({
       scrollForward: NestedScrollMode.PARENT_FIRST,
       scrollBackward: NestedScrollMode.SELF_FIRST
-    })
-  }
-
-  @Builder
-  ItemSingleSelectBuilder(item: IPickerViewData, index: number) {
-    Row() {
-      Text(item.optionsName)
-        .fontSize(20)
-        .fontColor(this.pickOptions.currentIndex == index ? $r('app.color.ru_color_FFEF4033') : $r('app.color.ru_color_FF333333'))
-        //.fontWeight(this.pickOptions.currentIndex == index ? FontWeight.Bold : FontWeight.Normal)
-        .height(40)
-        .layoutWeight(1)
-        .textAlign(TextAlign.Start)
-        .maxLines(1)
-        .textOverflow({
-          overflow: TextOverflow.Ellipsis
-        })
-      Image($r('app.media.icon_picker_hook_red'))
-        .width(15)
-        .visibility(this.pickOptions.selectedStyle == SelectedStyle.CHANGE_BACKGROUND && index != 0 ? Visibility.Hidden : this.pickOptions.currentIndex == index ? Visibility.Visible : Visibility.Hidden)
-        .margin({
-          left: 10
-        })
-    }
-    .backgroundColor(this.pickOptions.selectedStyle == SelectedStyle.CHANGE_BACKGROUND && index != 0 ? this.pickOptions.currentIndex == index ? $r('app.color.ru_color_1AEF4033') : Color.White: Color.White)
-    .padding({
-      left: 15,
-      right: 15
-    })
-    .onClick(() => {
-      this.pickOptions.currentIndex = index
-      this.optionsSelect(item, index, this.pickOptions.tag)
     })
   }
 
@@ -112,6 +87,48 @@ export struct WheelComponent {
         }
       }
       this.refreshUI()
+    })
+  }
+}
+
+@Component
+struct ItemSingleSelectBuilder {
+  @ObjectLink data: IPickerViewData
+  @Link pickOptions: PickerOptions
+  @State index: number = -1
+  optionsSelect: (item: IPickerViewData, index: number, tag: string) => void = () => {
+  }
+
+  build() {
+    Row() {
+      Text(this.data.optionsName)
+        .fontSize(20)
+        .fontColor(this.pickOptions.currentIndex == this.index ? $r('app.color.ru_color_FFEF4033') :
+        $r('app.color.ru_color_FF333333'))//.fontWeight(this.pickOptions.currentIndex == index ? FontWeight.Bold : FontWeight.Normal)
+        .height(40)
+        .layoutWeight(1)
+        .textAlign(TextAlign.Start)
+        .maxLines(1)
+        .textOverflow({
+          overflow: TextOverflow.Ellipsis
+        })
+      Image($r('app.media.icon_picker_hook_red'))
+        .width(15)
+        .visibility(this.pickOptions.selectedStyle == SelectedStyle.CHANGE_BACKGROUND && this.index != 0 ?
+        Visibility.Hidden : this.pickOptions.currentIndex == this.index ? Visibility.Visible : Visibility.Hidden)
+        .margin({
+          left: 10
+        })
+    }
+    .backgroundColor(this.pickOptions.selectedStyle == SelectedStyle.CHANGE_BACKGROUND && this.index != 0 ?
+      this.pickOptions.currentIndex == this.index ? $r('app.color.ru_color_1AEF4033') : Color.White : Color.White)
+    .padding({
+      left: 15,
+      right: 15
+    })
+    .onClick(() => {
+      this.pickOptions.currentIndex = this.index
+      this.optionsSelect(this.data, this.index, this.pickOptions.tag)
     })
   }
 }

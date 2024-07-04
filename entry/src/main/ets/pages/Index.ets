@@ -4,6 +4,7 @@ import router from '@ohos.router'
 import { DetailsPage01Builder } from './DetailsPage01';
 import { DetailsPage02Builder } from './DetailsPage02';
 import { DetailsPage03Builder } from './DetailsPage03';
+import { DetailsPage04Builder } from './DetailsPage04';
 import { DetailsPage05Builder } from './DetailsPage05';
 
 interface Demo {
@@ -24,6 +25,7 @@ let demos: Demo[] = [
   { title: "选择图片/视频demo", value: "RUSelectPicturesDemo" },
   { title: "条件筛选框", value: "RUFilterDemo" },
   { title: "常用TabDemo", value: "RUTabDemo" },
+  { title: "筛选Demo", value: "RUPickerDemo" }
 ];
 
 let storage = LocalStorage.getShared();
@@ -53,6 +55,8 @@ struct Index {
       } else if (name === 'pages/DetailsPage03') {
         DetailsPage03Builder(param)
       } else if (name === 'pages/DetailsPage04') {
+        DetailsPage04Builder(param)
+      } else if (name == 'pages/DetailsPage05') {
         DetailsPage05Builder(param)
       }
     // }.hideTitleBar(true)
@@ -100,13 +104,15 @@ struct Index {
   }
 
   onDemoClick(item: Demo) {
+
     let url = 'pages/DetailsPage02'
     if (item.value == 'LoadingDemo') {
       url = 'pages/DetailsPage01'
     } else if (item.value == 'RUPageCustomTitleDemo') {
+      url = 'pages/DetailsPage05'
+    } else if (item.value == 'RUPickerDemo') {
       url = 'pages/DetailsPage04'
     }
-    // router.pushNamedRoute({ name: url })
 
     let params: Demo = { value: item.value, title: item.title }
     this.pageStack.pushPathByName(url, params, true)
