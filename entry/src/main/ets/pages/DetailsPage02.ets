@@ -18,21 +18,18 @@ import { RUToastDemo } from '../demo/RUToastDemo'
 import { RUTabDemo } from "../demo/RUTabDemo"
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { RUFilterDemo } from '../demo/RUFilterDemo';
+import { DemoParams } from './DemoParams';
 
-interface DemoParams{
-  title?: string
-  value?: string
-}
 
 @Builder
-export function DetailsPage02Builder(param: Object, pageStack: NavPathStack) {
-  DetailsPage02({ param: param, pageStack: pageStack })
+export function DetailsPage02Builder(param: Object) {
+  DetailsPage02({ param: param })
 }
 
 // @Entry({ routeName: "pages/DetailsPage02" })
 @Component
 struct DetailsPage02 {
-  pageStack?: NavPathStack
+  @LocalStorageLink("pageStack") pageStack: NavPathStack = new NavPathStack()
   param?: Object
   @State title: string = "";
   value: string = "";
@@ -65,7 +62,7 @@ struct DetailsPage02 {
       if (this.value == 'RULoadingDemo') {
         RULoadingDemo()
       } else if (this.value == 'RUNavBarDemo') {
-        RUNavBarDemo({ pageStack: this.pageStack })
+        RUNavBarDemo()
       } else if (this.value == 'RUItemInputTextDemo') {
         RUItemInputTextDemo()
       } else if (this.value == 'RURefreshDemo') {

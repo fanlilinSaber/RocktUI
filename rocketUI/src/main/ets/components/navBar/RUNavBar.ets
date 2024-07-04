@@ -95,11 +95,11 @@ export struct RUNavBar {
 
   @Builder doNothingBuilder() {}
 
-  // 自定义title（自定义title的视图会处于最顶层位置且不受内部约束影响）
+  // 自定义title（自定义title视图区域受左右两边菜单自适应大小）
   @BuilderParam customTitle: CustomBuilder = this.doNothingBuilder
-  // 自定义左菜单（受内部约束影响，不想被约束就使用`customTitle`）
+  // 自定义左菜单
   @BuilderParam customLeftMemus: CustomBuilder = this.doNothingBuilder
-  // 自定义右菜单（受内部约束影响，不想被约束就使用`customTitle`）
+  // 自定义右菜单
   @BuilderParam customRightMemus: CustomBuilder = this.doNothingBuilder
 
   private attribute?: RUNavBarAttribute

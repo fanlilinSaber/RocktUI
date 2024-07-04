@@ -7,6 +7,7 @@
 import router from '@ohos.router'
 import hilog from '@ohos.hilog'
 import RUEventBus, { RUEventData } from '../../utils/RUEventBus'
+import { CURRENT_PAGE_TAG } from '../../constants/RUConstants'
 
 // show Toast event name
 const EVENT_SHOW_TOAST: string = "showToast"
@@ -40,7 +41,9 @@ export namespace RUToastUtil {
       data['duration'] = message.duration ?? 2000
       data['position'] = message.position ?? RUToastPosition.center
     }
-    RUEventBus.emit(EVENT_SHOW_TOAST, data)
+
+    let aTag = AppStorage.get(CURRENT_PAGE_TAG) as number
+    RUEventBus.emit(EVENT_SHOW_TOAST, data, aTag)
   }
 }
 
@@ -70,8 +73,8 @@ export struct RUToast {
   fontSize: number | string = 16
   // 赋予组件快速能力
   fastAbility: boolean = false
-  // 绑定父组件id（想要赋予快速能力需要绑定父组件的UniqueId）
-  parentUniqueId: number = -1
+  // 组件唯一tag，用于同一个页面存在多个同一源的组件区分
+  tag?: string | number = undefined
   // 是否显示
   @State show: boolean = true
   @State showPositionY: string = '50%'
@@ -147,10 +150,11 @@ export struct RUToast {
       // 注册显示事件
       RUEventBus.on({
         eventName: EVENT_SHOW_TOAST,
+        tag: this.tag,
         target: this, callback: (next: RUEventData) => {
           // 不是当前页面发来的不处理
+          if (next.tag && next.tag != this.tag) { return }
           if (next.pathName != currentPagePath) { return }
-          if (next.pathId != -1 && next.pathId != this.parentUniqueId) { return }
           if (!next.data) { return }
 
           let message = next.data["message"] as string

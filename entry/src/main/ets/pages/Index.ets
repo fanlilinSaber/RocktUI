@@ -4,9 +4,8 @@ import router from '@ohos.router'
 import { DetailsPage01Builder } from './DetailsPage01';
 import { DetailsPage02Builder } from './DetailsPage02';
 import { DetailsPage03Builder } from './DetailsPage03';
-import RUConfig from '@zjos/rocketUI/src/main/ets/config/RUConfig'
-import { it } from '@ohos/hypium/src/main/interface';
 import { DetailsPage04Builder } from './DetailsPage04';
+import { DetailsPage05Builder } from './DetailsPage05';
 
 interface Demo {
   title: string;
@@ -14,8 +13,9 @@ interface Demo {
 }
 
 let demos: Demo[] = [
-  { title: "加载Loading", value: "LoadingDemo" },
+  { title: "普通加载Loading", value: "LoadingDemo" },
   { title: "使用RUPage加载Loading", value: "RULoadingDemo" },
+  { title: "使用RUPage自定义title", value: "RUPageCustomTitleDemo" },
   { title: "消息提示Toast", value: "RUToastDemo" },
   { title: "弹出窗口Popup", value: "RUPopupDemo" },
   { title: "RUNavBar使用", value: "RUNavBarDemo" },
@@ -25,7 +25,7 @@ let demos: Demo[] = [
   { title: "选择图片/视频demo", value: "RUSelectPicturesDemo" },
   { title: "条件筛选框", value: "RUFilterDemo" },
   { title: "常用TabDemo", value: "RUTabDemo" },
-  { title: "筛选Demo", value: "RUPicker" }
+  { title: "筛选Demo", value: "RUPickerDemo" }
 ];
 
 let storage = LocalStorage.getShared();
@@ -35,7 +35,6 @@ let storage = LocalStorage.getShared();
 struct Index {
   @State message: string = 'Hello World';
   @State visible: boolean = false;
-  // pageStack: NavPathStack = new NavPathStack()
   @LocalStorageLink("pageStack") pageStack: NavPathStack = new NavPathStack()
 
   build() {
@@ -52,11 +51,13 @@ struct Index {
         // 路由到hsp包中的登录页面
         DetailsPage01Builder(param)
       } else if (name === 'pages/DetailsPage02') {
-        DetailsPage02Builder(param, this.pageStack)
+        DetailsPage02Builder(param)
       } else if (name === 'pages/DetailsPage03') {
         DetailsPage03Builder(param)
-      } else if (name == 'pages/DetailsPage04') {
+      } else if (name === 'pages/DetailsPage04') {
         DetailsPage04Builder(param)
+      } else if (name == 'pages/DetailsPage05') {
+        DetailsPage05Builder(param)
       }
     // }.hideTitleBar(true)
   }
@@ -103,17 +104,17 @@ struct Index {
   }
 
   onDemoClick(item: Demo) {
-    if (item.title == '筛选Demo') {
-      this.pageStack.pushPathByName('pages/DetailsPage04', true)
-    } else {
-      let url = 'pages/DetailsPage02'
-      if (item.value == 'LoadingDemo') {
-        url = 'pages/DetailsPage01'
-      }
-      // router.pushNamedRoute({ name: url })
 
-      let params: Demo = { value: item.value, title: item.title }
-      this.pageStack.pushPathByName(url, params, true)
+    let url = 'pages/DetailsPage02'
+    if (item.value == 'LoadingDemo') {
+      url = 'pages/DetailsPage01'
+    } else if (item.value == 'RUPageCustomTitleDemo') {
+      url = 'pages/DetailsPage05'
+    } else if (item.value == 'RUPickerDemo') {
+      url = 'pages/DetailsPage04'
     }
+
+    let params: Demo = { value: item.value, title: item.title }
+    this.pageStack.pushPathByName(url, params, true)
   }
 }

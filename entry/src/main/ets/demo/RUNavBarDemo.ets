@@ -20,8 +20,6 @@ export interface DemoTabItem {
 @Component
 export default struct RULoadingDemo {
 
-  pageStack?: NavPathStack
-
   leftMemus: Array<RUNavBarMenuItem> = []
 
   rightMemus: Array<RUNavBarMenuItem> = []
@@ -106,7 +104,7 @@ export default struct RULoadingDemo {
 
         RUNavBar({ title: 'RUNavBar使用', customLeftMemus: this.customLeftMemus01, rightMemus: this.rightMemus, barColor: Color.Gray })
 
-        RUNavBar({ title: 'RUNavBar使用', customTitle: this.customTitle01, barColor: Color.Orange, navPathStack: this.pageStack, forceCenter: true })
+        RUNavBar({ title: 'RUNavBar使用', customTitle: this.customTitle01, barColor: Color.Orange, forceCenter: true })
 
         RUNavBar({
           title: 'RUNavBar使用',
