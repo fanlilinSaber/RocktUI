@@ -10,9 +10,10 @@ import { RUNavBar, RUNavBarAppearance,
   RUNavBarMenuItem } from '../components/navBar/RUNavBar'
 import { RUAlertComponent } from '../components/dialog/RUAlertComponent';
 import { RUToast } from '../components/toast/RUToast';
-import { CURRENT_PAGE_TAG, NAVBAR_HEIGHT } from '../constants/RUConstants'
+import { NEW_PAGE_TAG, NAVBAR_HEIGHT, OLD_PAGE_TAG, RU_LOG_DOMAIN } from '../constants/RUConstants'
 import RUEventBus from '../utils/RUEventBus'
 import RUConfig from '../config/RUConfig';
+import { hilog } from '@kit.PerformanceAnalysisKit';
 
 @Builder
 function empty() {
@@ -82,6 +83,7 @@ export struct RUPage {
   customTitle?: WrappedBuilder<[]>
 
   private navOffsetY?: number
+  private uniqueId?: number
 
   // MARK: -aboutToAppear
   aboutToAppear() {
@@ -90,7 +92,8 @@ export struct RUPage {
       this.navPathStack = this.queryNavigationInfo()?.pathStack
     }
     this.navOffsetY = px2vp(RUConfig.statusBarHeight) + NAVBAR_HEIGHT
-    AppStorage.setOrCreate(CURRENT_PAGE_TAG, this.getUniqueId())
+    this.uniqueId = this.getUniqueId()
+    AppStorage.setOrCreate(NEW_PAGE_TAG, this.uniqueId)
   }
 
   // MARK: -布局UI
@@ -100,14 +103,6 @@ export struct RUPage {
         this.contentView()
       }
       .hideTitleBar(true)
-      .onShown(() => {
-        AppStorage.setOrCreate(CURRENT_PAGE_TAG, this.getUniqueId())
-        this.onShown && this.onShown()
-      })
-      .onHidden(() => {
-        AppStorage.setOrCreate(CURRENT_PAGE_TAG, -1)
-        this.onHidden && this.onHidden()
-      })
     } else {
       this.contentView()
     }
@@ -141,30 +136,44 @@ export struct RUPage {
       }.layoutWeight(1)
 
       if (this.loadingAbility) {
-        RUProgress({ show: false, fastAbility: RUProgressFastAbility.Loading, offsetY: this.navBar ? this.navOffsetY : 0, tag: this.getUniqueId() })
+        RUProgress({ show: false, fastAbility: RUProgressFastAbility.Loading, offsetY: this.navBar ? this.navOffsetY : 0, tag: this.uniqueId })
       }
 
       if (this.toastAbility) {
-        RUToast({ show: false, fastAbility: true, tag: this.getUniqueId() })
+        RUToast({ show: false, fastAbility: true, tag: this.uniqueId })
       }
 
       if (this.alertAbility) {
-        RUAlertComponent({ tag: this.getUniqueId() })
+        RUAlertComponent({ tag: this.uniqueId })
       }
 
       if (this.progressAbility) {
-        RUProgress({ show: false, fastAbility: RUProgressFastAbility.Progress, tag: this.getUniqueId() })
+        RUProgress({ show: false, fastAbility: RUProgressFastAbility.Progress, tag: this.uniqueId })
       }
     }
     .width('100%').height('100%')
     .backgroundColor(this.bgcolor)
     .onAppear(this.onReady)
+    // 通过设置ratios为[0.0, 1.0]，实现当组件完全显示或完全消失在屏幕中时触发回调（解决作为子组件嵌套(比如：`TabContent()`)不会触发NavDestination的`onShow`回调）
+    .onVisibleAreaChange([0.0, 1.0], (isVisible: boolean, currentRatio: number) => {
+      if (isVisible && currentRatio >= 0.0 && currentRatio < 1.0) { // 将要出现(bug：不会触发)
+        hilog.info(RU_LOG_DOMAIN, `RocketUI`, "RUPage page will show")
+      } else if (isVisible && currentRatio >= 1.0) { // 完全出现
+        hilog.info(RU_LOG_DOMAIN, `RocketUI`, "RUPage on show")
+        AppStorage.setOrCreate(NEW_PAGE_TAG, this.uniqueId)
+        this.onShown && this.onShown()
+      } else if (!isVisible && currentRatio > 0.0 && currentRatio < 1.0) { // 将要消失
+        hilog.info(RU_LOG_DOMAIN, `RocketUI`, "RUPage page will hide")
+      } else if (!isVisible && currentRatio <= 0.0) { // 完全消失
+        hilog.info(RU_LOG_DOMAIN, `RocketUI`, "RUPage page on hide")
+        AppStorage.setOrCreate(OLD_PAGE_TAG, this.uniqueId)
+        this.onHidden && this.onHidden()
+      }
+    })
   }
 
   @Builder titleBuilder() {
     this.customTitle?.builder()
   }
 }
-
-
 

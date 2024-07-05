@@ -83,13 +83,13 @@ export default struct RULoadingDemo {
       .fontSize(30)
       .fontWeight(FontWeight.Bold)
       .onClick(() => {
-        RUProgressUtil.showLoading()
-        setTimeout(()=>{
-          RUProgressUtil.hideLoading()
-        },3000)
+        // RUProgressUtil.showLoading()
+        // setTimeout(()=>{
+        //   RUProgressUtil.hideLoading()
+        // },3000)
 
-        // let params: Demo = { title: "使用RUPage加载Loading", value: "RULoadingDemo" }
-        // this.pageStack.pushPathByName('pages/DetailsPage02', params, true)
+        let params: Demo = { title: "使用RUPage加载Loading", value: "RULoadingDemo" }
+        this.pageStack.pushPathByName('pages/DetailsPage02', params, true)
 
         // router.pushNamedRoute({ name: 'pages/DetailsPage01' })
       })

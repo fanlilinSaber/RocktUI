@@ -1,12 +1,7 @@
 import router from '@ohos.router';
-import { CURRENT_PAGE_TAG } from '../../constants/RUConstants';
+import { EVENT_ALERTDIALOG_CLOSE, EVENT_ALERTDIALOG_OPEN, NEW_PAGE_TAG } from '../../constants/RUConstants';
 import RUEventBus, { RUEventData } from '../../utils/RUEventBus'
 import { RUCommonDialogObserved, RUCommonObservedDialog } from './RUCommonDialog';
-
-//显示弹窗广播事件常量
-const EVENT_ALERTDIALOG_OPEN: string = "EVENT_ALERTDIALOG_OPEN"
-//隐藏弹窗广播事件常量
-const EVENT_ALERTDIALOG_CLOSE: string = "EVENT_ALERTDIALOG_CLOSE"
 
 /**
  * 自定义的提示弹窗工具类
@@ -63,7 +58,7 @@ export class RUAlertDialog {
       }
     }
 
-    let aTag = AppStorage.get(CURRENT_PAGE_TAG) as number
+    let aTag = AppStorage.get(NEW_PAGE_TAG) as number
     RUEventBus.emit(EVENT_ALERTDIALOG_OPEN, data, aTag)
   }
 
@@ -71,7 +66,8 @@ export class RUAlertDialog {
    * 隐藏弹窗
    */
   static dismiss() {
-    RUEventBus.emit(EVENT_ALERTDIALOG_CLOSE)
+    let aTag = AppStorage.get(NEW_PAGE_TAG) as number
+    RUEventBus.emit(EVENT_ALERTDIALOG_CLOSE, undefined, aTag)
   }
 }
 

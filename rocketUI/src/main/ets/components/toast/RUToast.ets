@@ -7,10 +7,7 @@
 import router from '@ohos.router'
 import hilog from '@ohos.hilog'
 import RUEventBus, { RUEventData } from '../../utils/RUEventBus'
-import { CURRENT_PAGE_TAG } from '../../constants/RUConstants'
-
-// show Toast event name
-const EVENT_SHOW_TOAST: string = "showToast"
+import { EVENT_SHOW_TOAST, NEW_PAGE_TAG } from '../../constants/RUConstants'
 
 /**
  * RUToast 组件快速调用接口（需要配合RUPage使用）
@@ -42,7 +39,7 @@ export namespace RUToastUtil {
       data['position'] = message.position ?? RUToastPosition.center
     }
 
-    let aTag = AppStorage.get(CURRENT_PAGE_TAG) as number
+    let aTag = AppStorage.get(NEW_PAGE_TAG) as number
     RUEventBus.emit(EVENT_SHOW_TOAST, data, aTag)
   }
 }
@@ -86,7 +83,7 @@ export struct RUToast {
   }
 
   // MARK: - 组件即将销毁
-  aboutToDisappear(){
+  aboutToDisappear() {
     this.unregisterEvent()
   }
 
