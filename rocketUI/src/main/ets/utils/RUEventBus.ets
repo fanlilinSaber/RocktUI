@@ -10,6 +10,8 @@ import hilog from '@ohos.hilog';
 import router from '@ohos.router';
 
 const RU_LOG_DOMAIN = 0x00503;
+export type UData = object | string | undefined
+export type UTag = string | number | undefined
 
 /**
  * 订阅事件接口
@@ -36,14 +38,52 @@ export interface RUEventData {
   // 当前页面路径
   pathName?: string
   // 同一个事件指定不同的标识符来相应（可以和当前Component的UniqueId进行绑定）
-  tag?: string | number
+  tag?: UTag
   // 数据
-  data?: object | string
+  data?: UData
+}
+
+/**
+ * 事件拦截接口
+ */
+export interface RUEventIntercept {
+  // 要拦截的事件名
+  eventNames: Array<string>
+}
+
+/**
+ * 发送的事件拦截
+ */
+export interface RUEventInterceptSendable extends RUEventIntercept {
+  /**
+   * 发送事件前拦截
+   * @param eventName 事件名
+   * @param data 数据源
+   * @param tag tag
+   * @param reform 改造数据源函数（实现的地方调用 reform(data) 即可）
+   * @returns true = 可发送，false = 不可发送
+   */
+  send: <T extends UData>(eventName: string, data: T, tag: UTag, reform: (data: UData) => void) => boolean
+}
+
+/**
+ * 接收的事件拦截
+ */
+export interface RUEventInterceptReceivable extends RUEventIntercept {
+  /**
+   * 接收事件前拦截
+   * @param next 事件源
+   * @param reform 改造数据源函数（实现的地方调用 reform(data) 即可）
+   * @returns true = 可接收，false = 不可接收
+   */
+  receive: (next: RUEventData, reform: (data: RUEventData) => void) => boolean
 }
 
 export class RUEventBus {
   private static instance: RUEventBus;
   private subscribes: Map<string, Map<object | string, RUEvent>> = new Map()
+  private sendInterceptors: Map<string, RUEventInterceptSendable> = new Map()
+  private receivInterceptors: Map<string, RUEventInterceptReceivable> = new Map()
 
   public static getInstance() {
     if(!RUEventBus.instance){
@@ -56,7 +96,7 @@ export class RUEventBus {
    * 接收事件处理
    * @param eventData 事件消息体
    */
-  private onEvent(eventData: RUEventData){
+  private onEvent(eventData: RUEventData) {
     hilog.info(RU_LOG_DOMAIN , `RocketUI`, "RUEventBus.onEvent() 接收事件eventData/" + JSON.stringify(eventData))
 
     let eventName = eventData.eventName
@@ -67,7 +107,17 @@ export class RUEventBus {
       try {
         // 如果接收到tag，但是接收到的tag不是事件对象的tag就跳过当前循环
         if (eventData.tag && eventData.tag != value.tag) { return }
-        value.callback && value.callback(eventData)
+
+        let tempData = eventData
+        if (this.receivInterceptors.has(eventName)) {
+          let receivable = this.receivInterceptors.get(eventName) as RUEventInterceptReceivable
+          let next = receivable.receive(eventData, (data) => {
+            tempData = data
+          }) as boolean
+          if (!next) { return }
+        }
+
+        value.callback && value.callback(tempData)
         hilog.info(RU_LOG_DOMAIN , `RocketUI`, `RUEventBus.onEvent() 事件${eventName}触发成功`)
       } catch (error) {
         hilog.error(RU_LOG_DOMAIN , `RocketUI`, `RUEventBus.onEvent() 触发失败` + error)
@@ -108,15 +158,25 @@ export class RUEventBus {
    * @param data 发送的数据
    * @param tag 唯一标识符（默认取值）
    */
-  public emit(eventName: string, data?: object | string, tag?: string | number){
+  public emit(eventName: string, data?: UData, tag?: UTag) {
     try {
+      let tempData = data
+      if (this.sendInterceptors.has(eventName)) {
+        let sendable = this.sendInterceptors.get(eventName) as RUEventInterceptSendable
+        let next = sendable.send(eventName, data, tag, (data) => {
+          tempData = data
+        }) as boolean
+        if (!next) { return }
+      }
+
       let routerState = router.getState()
       let eventData: RUEventData = {
         eventName: eventName,
         pathName: routerState.path + routerState.name,
         tag: tag,
-        data: data
+        data: tempData
       }
+
       this.onEvent(eventData)
       hilog.info(RU_LOG_DOMAIN , `RocketUI`, "RUEventBus.emit() 发送事件成功/" + JSON.stringify(eventData))
     } catch (error) {
@@ -129,7 +189,7 @@ export class RUEventBus {
    * @param eventName 要取消的事件名称
    * @param target 要取消该事件的目标（this）
    */
-  public off(eventName: string, target?: object){
+  public off(eventName: string, target?: object) {
     if (!this.subscribes.has(eventName)) { return }
     // 如果没有指定 target；取消注册该事件的所有目标
     if (!target) {
@@ -143,6 +203,26 @@ export class RUEventBus {
     if (subs?.has(target)) {
       subs.delete(target);
       hilog.info(RU_LOG_DOMAIN, `RocketUI`, "RUEventBus.off() 关闭事件" + eventName + target)
+    }
+  }
+
+  /**
+   * 添加发送事件消息拦截
+   * @param i 拦截器
+   */
+  public addInterceptor(i: RUEventInterceptSendable | RUEventInterceptReceivable) {
+    try {
+      i.eventNames.forEach((value) => {
+        if ((i as RUEventInterceptSendable).send != undefined) {
+          if (this.sendInterceptors.has(value)) { return }
+          this.sendInterceptors.set(value, i as RUEventInterceptSendable)
+        } else if ((i as RUEventInterceptReceivable).receive != undefined) {
+          if (this.receivInterceptors.has(value)) { return }
+          this.receivInterceptors.set(value, i as RUEventInterceptReceivable)
+        }
+      })
+    } catch (error) {
+      hilog.info(RU_LOG_DOMAIN, `RocketUI`, "RUEventBus.addIntercept() 拦截事件" + i.eventNames)
     }
   }
 }

@@ -12,20 +12,11 @@ import hilog from '@ohos.hilog'
 import RUEventBus, { RUEventData } from '../../utils/RUEventBus'
 import RUConfig from '../../config/RUConfig'
 import resourceManager from '@ohos.resourceManager'
-import { CURRENT_PAGE_TAG } from '../../constants/RUConstants'
-
-// show loading event name
-const EVENT_SHOW_LOADING: string = "showLoading"
-// hide current loading event name
-const EVENT_HIDE_LOADING: string = "hideLoading"
-// show progress event name
-const EVENT_SHOW_PROGRESS: string = "showProgress"
-// hide progress event name
-const EVENT_HIDE_PROGRESS: string = "hideProgress"
-// hide RUProgress event name
-const EVENT_HIDE_RU_PROGRESS: string = "hideRUProgress"
-
-const RU_LOG_DOMAIN = 0x00503;
+import { NEW_PAGE_TAG, EVENT_SHOW_LOADING, EVENT_SHOW_PROGRESS,
+  EVENT_HIDE_LOADING,
+  EVENT_HIDE_PROGRESS,
+  EVENT_HIDE_RU_PROGRESS,
+  RU_LOG_DOMAIN} from '../../constants/RUConstants'
 
 /**
  * RUProgress 组件快速调用接口（需要配合RUPage使用）
@@ -72,7 +63,7 @@ export namespace RUProgressUtil {
       })
     }
 
-    let aTag = tag ?? AppStorage.get(CURRENT_PAGE_TAG)
+    let aTag = tag ?? AppStorage.get(NEW_PAGE_TAG)
     RUEventBus.emit(EVENT_SHOW_LOADING, data, aTag)
   }
 
@@ -82,8 +73,7 @@ export namespace RUProgressUtil {
    * @param tag 指定组件唯一tag
    */
   export function showWindowLoading(options?: RUProgressStyle | RUProgressOptions | RUProgressElement, tag?: string | number) {
-    let data: Record<string, boolean> = {}
-    data['offsetEnable'] = false
+    let data: Record<string, boolean> = {'offsetEnable': false }
     RUProgressUtil.showLoading(options, tag, data)
   }
 
@@ -109,7 +99,7 @@ export namespace RUProgressUtil {
       }
     }
 
-    let aTag = tag ?? AppStorage.get(CURRENT_PAGE_TAG)
+    let aTag = tag ?? AppStorage.get(NEW_PAGE_TAG)
     RUEventBus.emit(EVENT_SHOW_PROGRESS, data, aTag)
   }
 
@@ -120,7 +110,7 @@ export namespace RUProgressUtil {
   export function hideLoading(all: boolean = false, tag?: string | number) {
     let aTag: string | number | undefined = undefined
     if (!all) {
-      aTag = tag ?? AppStorage.get(CURRENT_PAGE_TAG)
+      aTag = tag ?? AppStorage.get(NEW_PAGE_TAG)
     }
     RUEventBus.emit(EVENT_HIDE_LOADING, undefined, aTag)
   }
@@ -133,7 +123,7 @@ export namespace RUProgressUtil {
   export function hideProgress(all: boolean = false, tag?: string | number) {
     let aTag: string | number | undefined = undefined
     if (!all) {
-      aTag = tag ?? AppStorage.get(CURRENT_PAGE_TAG)
+      aTag = tag ?? AppStorage.get(NEW_PAGE_TAG)
     }
     RUEventBus.emit(EVENT_HIDE_PROGRESS, undefined, aTag)
   }
@@ -146,7 +136,7 @@ export namespace RUProgressUtil {
   export function hide(all: boolean = false, tag?: string | number) {
     let aTag: string | number | undefined = undefined
     if (!all) {
-      aTag = tag ?? AppStorage.get(CURRENT_PAGE_TAG)
+      aTag = tag ?? AppStorage.get(NEW_PAGE_TAG)
     }
     RUEventBus.emit(EVENT_HIDE_RU_PROGRESS, undefined, aTag)
   }
@@ -318,7 +308,7 @@ export struct RUProgress {
   }
 
   // MARK: - 组件即将销毁
-  aboutToDisappear(){
+  aboutToDisappear() {
     lottie.destroy(this.animateName)
     this.unregisterEvent()
     hilog.info(0xFFFF00 , `RocketUI`, "RUProgress lottie动画销毁了" )

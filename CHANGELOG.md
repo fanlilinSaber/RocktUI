@@ -1,3 +1,8 @@
+## v1.0.10
+    1.RUEventBus新增拦截机制
+    2.RUPage优化onShown和onHidden时机，作为子TabContent子组件也能触发
+    3.优化RUPage提供的快速能力安全性（防止触发不是当前页面的能力）
+
 ## v1.0.9
     1.RUPage支持使用`WrappedBuilder`自定义title
     2.优化组件快速能力逻辑代码
