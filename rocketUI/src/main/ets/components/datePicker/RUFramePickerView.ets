@@ -36,10 +36,10 @@ export struct RUFramePickerView {
     }
     this.frameOptionsController.closePicker = () => {
       this.isExpand = false
+      this.onDismissListener()
     }
     this.frameOptionsController.setPickerCurrentIndex = (index: number) => {
       this.frameOptions.currentIndex = index
-      this.notifyUI()
     }
     this.frameOptionsController.setPickerSelectedData = (selectedData: Array<IPickerViewData>) => {
       if (this.frameOptions.isMultipleSelect && this.frameOptions.data.length > 0) {
@@ -55,7 +55,7 @@ export struct RUFramePickerView {
           })
         }
       }
-      this.notifyUI()
+      this.frameOptions.currentIndex = Math.ceil(Math.random() * 10000)
     }
   }
 
@@ -74,9 +74,9 @@ export struct RUFramePickerView {
           isExpand: this.isExpand,
           isShow: this.isShow,
           frameOptions: this.frameOptions,
-          backResult: this.backSingleResult,
-          refreshUI: () => {
-            this.notifyUI()
+          backResult: (index: number, result: IPickerViewData) => {
+            this.onDismissListener()
+            this.backSingleResult(index, result)
           }
         })
         Row() {
@@ -99,7 +99,7 @@ export struct RUFramePickerView {
               if (this.frameOptions.isFirstMutex) {
                 this.frameOptions.data[0].optionSelected = true
               }
-              this.notifyUI()
+              this.frameOptions.currentIndex = Math.ceil(Math.random() * 10000)
             })
           Text('确定')
             .fontColor(Color.White)
@@ -149,15 +149,6 @@ export struct RUFramePickerView {
     .visibility(this.isExpand ? Visibility.Visible : this.isShow ? Visibility.Visible : Visibility.None)
   }
 
-  /**刷新UI布局(替换原始数据内容被观察者发生变化后促使UI刷新)**/
-  notifyUI() {
-    let refreshData = new FrameOptions()
-    refreshData.data = this.frameOptions.data
-    refreshData.isMultipleSelect = this.frameOptions.isMultipleSelect
-    refreshData.isFirstMutex = this.frameOptions.isFirstMutex
-    refreshData.currentIndex = this.frameOptions.currentIndex
-    this.frameOptions = refreshData
-  }
 }
 
 export class FrameOptionsController {

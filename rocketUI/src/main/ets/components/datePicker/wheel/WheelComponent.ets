@@ -3,6 +3,7 @@ import { IPickerViewData } from '../data/IPickerViewData'
 @Component
 export struct WheelComponent {
   @ObjectLink pickOptions: PickerOptions
+  @Prop bgColor: ResourceColor
   optionsSelect: (item: IPickerViewData, index: number, tag: string) => void = () => {
   }
   /**私有变量**/
@@ -15,7 +16,11 @@ export struct WheelComponent {
       ForEach(this.pickOptions.data, (item: IPickerViewData, index: number) => {
         ListItem() {
           if (this.pickOptions.isMultipleSelect) {
-            this.ItemMultipleSelectBuilder(item, index)
+            ItemMultipleSelectBuilder({
+              data: item,
+              index: index,
+              pickOptions: this.pickOptions,
+            })
           } else {
             ItemSingleSelectBuilder({
               data: item,
@@ -33,7 +38,7 @@ export struct WheelComponent {
     .edgeEffect(EdgeEffect.None)
     .scrollBar(BarState.Off)
     .height(280)
-    .backgroundColor(Color.White)
+    .backgroundColor(this.bgColor)
     .nestedScroll({
       scrollForward: NestedScrollMode.PARENT_FIRST,
       scrollBackward: NestedScrollMode.SELF_FIRST
@@ -42,11 +47,23 @@ export struct WheelComponent {
 
   @Builder
   ItemMultipleSelectBuilder(item: IPickerViewData, index: number) {
+
+  }
+}
+
+@Component
+struct ItemMultipleSelectBuilder {
+  @ObjectLink data: IPickerViewData
+  @Link pickOptions: PickerOptions
+  @State index: number = -1
+
+  build() {
     Row() {
-      Text(item.optionsName)
-        .fontSize(20)
-        .fontColor(item.optionSelected ? $r('app.color.ru_color_FFEF4033') : $r('app.color.ru_color_FF333333'))
-        //.fontWeight(item.optionSelected ? FontWeight.Bold : FontWeight.Normal)
+      Text(this.data.optionsName)
+        .fontSize(14)
+        .fontColor(this.data.optionSelected ? $r('app.color.ru_color_FFEF4033') :
+        $r('app.color.ru_color_FF333333'))
+        .fontWeight(this.data.optionSelected ? FontWeight.Bold : FontWeight.Normal)
         .height(40)
         .layoutWeight(1)
         .textAlign(TextAlign.Start)
@@ -56,21 +73,23 @@ export struct WheelComponent {
         })
       Image($r('app.media.icon_picker_hook_red'))
         .width(15)
-        .visibility(this.pickOptions.selectedStyle == SelectedStyle.CHANGE_BACKGROUND && index != 0 ? Visibility.Hidden : item.optionSelected ? Visibility.Visible : Visibility.Hidden)
+        .visibility(this.pickOptions.selectedStyle == SelectedStyle.CHANGE_BACKGROUND && this.index != 0 ?
+        Visibility.Hidden : this.data.optionSelected ? Visibility.Visible : Visibility.Hidden)
         .margin({
           left: 10
         })
     }
-    .backgroundColor(this.pickOptions.selectedStyle == SelectedStyle.CHANGE_BACKGROUND && index != 0 ? item.optionSelected ? $r('app.color.ru_color_1AEF4033') : Color.White: Color.White)
+    .backgroundColor(this.pickOptions.selectedStyle == SelectedStyle.CHANGE_BACKGROUND && this.index != 0 ?
+      this.data.optionSelected ? $r('app.color.ru_color_1AEF4033') : Color.White : Color.White)
     .padding({
       left: 15,
       right: 15
     })
     .onClick(() => {
-      item.optionSelected ? item.optionSelected = false : item.optionSelected = true
+      this.data.optionSelected ? this.data.optionSelected = false : this.data.optionSelected = true
       if (this.pickOptions.isMultipleSelect) {
         if (this.pickOptions.isFirstMutex) {
-          if (index == 0) {
+          if (this.index == 0) {
             this.pickOptions.data.forEach((item: IPickerViewData) => {
               item.optionSelected = false
             })
@@ -86,7 +105,7 @@ export struct WheelComponent {
           }
         }
       }
-      this.refreshUI()
+      this.pickOptions.currentIndex = Math.ceil(Math.random() * 10000)
     })
   }
 }
@@ -102,9 +121,10 @@ struct ItemSingleSelectBuilder {
   build() {
     Row() {
       Text(this.data.optionsName)
-        .fontSize(20)
+        .fontSize(14)
         .fontColor(this.pickOptions.currentIndex == this.index ? $r('app.color.ru_color_FFEF4033') :
-        $r('app.color.ru_color_FF333333'))//.fontWeight(this.pickOptions.currentIndex == index ? FontWeight.Bold : FontWeight.Normal)
+        $r('app.color.ru_color_FF333333'))
+        .fontWeight(this.pickOptions.currentIndex == this.index ? FontWeight.Bold : FontWeight.Normal)
         .height(40)
         .layoutWeight(1)
         .textAlign(TextAlign.Start)
@@ -150,7 +170,10 @@ export enum SelectedStyle {
 @Observed
 export class PickerOptions {
   /**
-   * 标识
+   * 标识  PickerOptionsTag
+   *      OPTIONS_ONE 联动列表一
+   *      OPTIONS_TWO 联动列表二
+   *      OPTIONS_THREE 联动列表三
    */
   tag: string = ''
   /**
@@ -162,7 +185,9 @@ export class PickerOptions {
    */
   currentIndex: number = -1
   /**
-   * 选中模式
+   * 选中模式  SelectedStyle
+   *       SHOW_HOOK  勾选模式
+   *       CHANGE_BACKGROUND  背景修改
    */
   selectedStyle: number = SelectedStyle.SHOW_HOOK
   /**

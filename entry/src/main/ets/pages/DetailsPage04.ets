@@ -4,7 +4,8 @@ import {
   RUFramePickerView,
   FrameOptionsController
 } from '@zjos/rocketUI/src/main/ets/components/datePicker/RUFramePickerView';
-import { PickerOptionsController } from '@zjos/rocketUI/src/main/ets/components/datePicker/RUPickerView';
+import { PickerOptionsController,
+  PickerOptionsTag } from '@zjos/rocketUI/src/main/ets/components/datePicker/RUPickerView';
 import { PickerResult } from '@zjos/rocketUI/src/main/ets/components/datePicker/RUPickerView';
 import { RUPickerView } from '@zjos/rocketUI/src/main/ets/components/datePicker/RUPickerView';
 import { PickerOptionsUtils } from '../utils/PickerOptionsUtils';
@@ -24,7 +25,6 @@ export struct DetailsPage04 {
   @State frameOptionsController: FrameOptionsController = new FrameOptionsController()
   @State data: Array<AddressEntity> = new Array
   @State pickerOptionsController: PickerOptionsController = new PickerOptionsController()
-
   @State topHeight: number = 0;
 
   aboutToAppear(): void {
@@ -40,17 +40,17 @@ export struct DetailsPage04 {
       let retStr = textDecoder.decodeWithStream(rawFile, { stream: false });
       console.info('TAG: =================' + retStr);
       this.data = JSON.parse(retStr) as Array<AddressEntity>
-      // PickerOptionsUtils.setFrameOptionsData(0, true, this.data, this.frameOptionsController)
+       PickerOptionsUtils.setFrameOptionsData(0, false, this.data, this.frameOptionsController)
       // this.setPickerOptionsData("省", 1, false, this.data)
-      PickerOptionsUtils.setPickerOptionsData("省", 1, false, this.data, this.pickerOptionsController)
-      this.pickerOptionsController.setPickerCurrentIndex('省', 3)
+      PickerOptionsUtils.setPickerOptionsData(PickerOptionsTag.OPTIONS_ONE, 1, false, this.data, this.pickerOptionsController)
+      //this.pickerOptionsController.setPickerCurrentIndex(PickerOptionsTag.OPTIONS_ONE, 3)
     })
   }
 
   build() {
     Column() {
 
-      Stack({alignContent: Alignment.TopStart}) {
+      Stack({ alignContent: Alignment.TopStart }) {
 
         Text('点击弹出筛选框')
           .fontColor(Color.Brown)
@@ -72,7 +72,7 @@ export struct DetailsPage04 {
             this.pickerOptionsController.showPicker()
           })
           .onAreaChange((oldValue: Area, newValue: Area) => {
-           this.topHeight = Math.ceil(newValue.position.y as number + (newValue.height as number))
+            this.topHeight = Math.ceil(newValue.position.y as number + (newValue.height as number))
           })
           .zIndex(-1)
 
@@ -81,27 +81,23 @@ export struct DetailsPage04 {
           topHeight: this.topHeight,
           clickSelected: (tag: string, index: number, item?: IPickerViewData) => {
             switch (tag) {
-              case "省":
-                PickerOptionsUtils.setPickerOptionsData("市", 2, true, item?.optionChildren as Array<AddressEntity>,
+              case PickerOptionsTag.OPTIONS_ONE:
+                PickerOptionsUtils.setPickerOptionsData(PickerOptionsTag.OPTIONS_TWO, 2, true, item?.optionChildren as Array<AddressEntity>,
                   this.pickerOptionsController)
               //this.setOptionsData("市", [])
-                this.pickerOptionsController.setPickerSelectedData('市', new Array)
+                this.pickerOptionsController.setPickerSelectedData(PickerOptionsTag.OPTIONS_TWO, new Array)
                 break
-              case "市":
+              case PickerOptionsTag.OPTIONS_TWO:
                 break
             }
-          },
-          onReSet: () => {
-            PickerOptionsUtils.setPickerOptionsData("省", 1, false, this.data, this.pickerOptionsController)
-            PickerOptionsUtils.setPickerOptionsData("市", 2, true, [], this.pickerOptionsController)
           },
           backResult: (result: Array<PickerResult>) => {
             result.forEach((item: PickerResult) => {
               switch (item.tag) {
-                case "省":
+                case PickerOptionsTag.OPTIONS_ONE:
                   console.log("===========", "result=============" + item.singleResult?.optionsName)
                   break
-                case "市":
+                case PickerOptionsTag.OPTIONS_TWO:
                   console.log("===========", "result=============" + JSON.stringify(item.multipleResult))
                   break
               }
