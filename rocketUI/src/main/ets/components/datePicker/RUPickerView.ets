@@ -32,6 +32,7 @@ export struct RUPickerView {
         this.showTwoPicker = true
       }
       if (count == 3) {
+        this.showTwoPicker = true
         this.showThreePicker = true
       }
     }
