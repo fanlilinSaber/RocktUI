@@ -8,8 +8,6 @@ export struct WheelComponent {
   }
   /**私有变量**/
   listScroller: Scroller = new Scroller()
-  refreshUI: () => void = () => {
-  }
 
   build() {
     List({ scroller: this.listScroller }) {
