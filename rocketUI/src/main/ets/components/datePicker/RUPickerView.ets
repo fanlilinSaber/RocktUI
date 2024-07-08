@@ -14,6 +14,8 @@ export struct RUPickerView {
   @State PickerOptionsThree: PickerOptions = new PickerOptions()
   @State isExpand: boolean = false
   @State isShow: boolean = false
+  @State showTwoPicker: boolean = false
+  @State showThreePicker: boolean = false
   /**点击事件回调**/
   clickSelected: (tag: string, index: number, item?: IPickerViewData) => void = () => {
   }
@@ -25,6 +27,14 @@ export struct RUPickerView {
   }
 
   aboutToAppear(): void {
+    this.pickerOptionsController.setMultiplePicker = (count: number) => {
+      if (count == 2) {
+        this.showTwoPicker = true
+      }
+      if (count == 3) {
+        this.showThreePicker = true
+      }
+    }
     this.pickerOptionsController.setPickerData =
       (pickerOptions: PickerOptions, setValue: (item: IPickerViewData, index: number) => void) => {
         pickerOptions.data.forEach((item: IPickerViewData, index: number) => {
@@ -126,7 +136,9 @@ export struct RUPickerView {
                 this.clickSelected(tag, index, item)
               }
             }).layoutWeight(1)
-              .layoutWeight(1).visibility(this.PickerOptionsTwo.data.length > 0 ? Visibility.Visible : Visibility.None)
+              .layoutWeight(1)
+              .visibility(this.showTwoPicker ? Visibility.Visible :
+                this.PickerOptionsTwo.data.length > 0 ? Visibility.Visible : Visibility.None)
             WheelComponent({
               pickOptions: this.PickerOptionsThree,
               bgColor: $r('app.color.ru_color_FFF5F5F5'),
@@ -134,7 +146,8 @@ export struct RUPickerView {
                 this.clickSelected(tag, index, item)
               }
             }).layoutWeight(1)
-              .visibility(this.PickerOptionsThree.data.length > 0 ? Visibility.Visible : Visibility.None)
+              .visibility(this.showThreePicker ? Visibility.Visible :
+                this.PickerOptionsThree.data.length > 0 ? Visibility.Visible : Visibility.None)
           }
 
           Row() {
@@ -331,6 +344,11 @@ export class PickerOptionsController {
    * 关闭当前筛选界面
    */
   closePicker: () => void = () => {
+  }
+  /**
+   * 显示多层数据背景
+   */
+  setMultiplePicker: (count: number) => void = () => {
   }
 }
 

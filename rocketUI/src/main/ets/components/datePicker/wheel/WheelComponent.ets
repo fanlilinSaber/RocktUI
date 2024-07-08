@@ -80,7 +80,7 @@ struct ItemMultipleSelectBuilder {
         })
     }
     .backgroundColor(this.pickOptions.selectedStyle == SelectedStyle.CHANGE_BACKGROUND && this.index != 0 ?
-      this.data.optionSelected ? $r('app.color.ru_color_1AEF4033') : Color.White : Color.White)
+      this.data.optionSelected ? $r('app.color.ru_color_1AEF4033') : Color.Transparent : Color.Transparent)
     .padding({
       left: 15,
       right: 15
@@ -141,7 +141,7 @@ struct ItemSingleSelectBuilder {
         })
     }
     .backgroundColor(this.pickOptions.selectedStyle == SelectedStyle.CHANGE_BACKGROUND && this.index != 0 ?
-      this.pickOptions.currentIndex == this.index ? $r('app.color.ru_color_1AEF4033') : Color.White : Color.White)
+      this.pickOptions.currentIndex == this.index ? $r('app.color.ru_color_1AEF4033') : Color.Transparent : Color.Transparent)
     .padding({
       left: 15,
       right: 15
