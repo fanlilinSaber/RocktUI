@@ -77,8 +77,8 @@ export struct RUFramePickerView {
           isShow: this.isShow,
           frameOptions: this.frameOptions,
           backResult: (index: number, result: IPickerViewData) => {
-            this.onDismissListener()
             this.backSingleResult(index, result)
+            this.onDismissListener()
           }
         })
         Row() {
