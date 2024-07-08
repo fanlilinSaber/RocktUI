@@ -47,8 +47,10 @@ export struct RUPickerView {
       this.isExpand ? this.isExpand = false : this.isExpand = true
     }
     this.pickerOptionsController.closePicker = () => {
-      this.isExpand = false
-      this.onDismissListener()
+      if (this.isExpand) {
+        this.isExpand = false
+        this.onDismissListener()
+      }
     }
     this.pickerOptionsController.setPickerCurrentIndex = (tag: string, currentIndex: number) => {
       if (tag == PickerOptionsTag.OPTIONS_ONE) {

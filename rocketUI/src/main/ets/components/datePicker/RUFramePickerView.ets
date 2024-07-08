@@ -35,8 +35,10 @@ export struct RUFramePickerView {
       this.isExpand ? this.isExpand = false : this.isExpand = true
     }
     this.frameOptionsController.closePicker = () => {
-      this.isExpand = false
-      this.onDismissListener()
+      if (this.isExpand) {
+        this.isExpand = false
+        this.onDismissListener()
+      }
     }
     this.frameOptionsController.setPickerCurrentIndex = (index: number) => {
       this.frameOptions.currentIndex = index
