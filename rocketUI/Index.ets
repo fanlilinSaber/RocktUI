@@ -87,6 +87,9 @@ export { IPickerViewData } from './src/main/ets/components/datePicker/data/IPick
 
 export { FrameOptions } from './src/main/ets/components/datePicker/frame/FrameComponent'
 
-export { RUPickerView, PickerOptionsController, PickerResult } from './src/main/ets/components/datePicker/RUPickerView'
+export { RUPickerView,
+  PickerOptionsController,
+  PickerResult,
+  PickerOptionsTag } from './src/main/ets/components/datePicker/RUPickerView'
 
 export { PickerOptions } from './src/main/ets/components/datePicker/wheel/WheelComponent'
