@@ -44,11 +44,6 @@ export struct WheelComponent {
       scrollBackward: NestedScrollMode.SELF_FIRST
     })
   }
-
-  @Builder
-  ItemMultipleSelectBuilder(item: IPickerViewData, index: number) {
-
-  }
 }
 
 @Component
