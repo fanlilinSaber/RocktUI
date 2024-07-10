@@ -8,14 +8,13 @@ import { PickerOptions, WheelComponent } from './wheel/WheelComponent'
 export struct RUPickerView {
   @Link pickerOptionsController: PickerOptionsController
   @Prop topHeight: number = 0
+  @Prop sortCount: number = 0
   /**私有变量**/
   @State PickerOptionsOne: PickerOptions = new PickerOptions()
   @State PickerOptionsTwo: PickerOptions = new PickerOptions()
   @State PickerOptionsThree: PickerOptions = new PickerOptions()
   @State isExpand: boolean = false
   @State isShow: boolean = false
-  @State showTwoPicker: boolean = false
-  @State showThreePicker: boolean = false
   /**点击事件回调**/
   clickSelected: (tag: string, index: number, item?: IPickerViewData) => void = () => {
   }
@@ -28,13 +27,7 @@ export struct RUPickerView {
 
   aboutToAppear(): void {
     this.pickerOptionsController.setMultiplePicker = (count: number) => {
-      if (count == 2) {
-        this.showTwoPicker = true
-      }
-      if (count == 3) {
-        this.showTwoPicker = true
-        this.showThreePicker = true
-      }
+      this.sortCount = count
     }
     this.pickerOptionsController.setPickerData =
       (pickerOptions: PickerOptions, setValue: (item: IPickerViewData, index: number) => void) => {
@@ -140,7 +133,7 @@ export struct RUPickerView {
               }
             }).layoutWeight(1)
               .layoutWeight(1)
-              .visibility(this.showTwoPicker ? Visibility.Visible :
+              .visibility(this.sortCount >= 2 ? Visibility.Visible :
                 this.PickerOptionsTwo.data.length > 0 ? Visibility.Visible : Visibility.None)
             WheelComponent({
               pickOptions: this.PickerOptionsThree,
@@ -149,7 +142,7 @@ export struct RUPickerView {
                 this.clickSelected(tag, index, item)
               }
             }).layoutWeight(1)
-              .visibility(this.showThreePicker ? Visibility.Visible :
+              .visibility(this.sortCount == 3 ? Visibility.Visible :
                 this.PickerOptionsThree.data.length > 0 ? Visibility.Visible : Visibility.None)
           }
 

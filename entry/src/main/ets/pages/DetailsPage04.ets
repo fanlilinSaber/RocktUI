@@ -40,10 +40,11 @@ export struct DetailsPage04 {
       let retStr = textDecoder.decodeWithStream(rawFile, { stream: false });
       console.info('TAG: =================' + retStr);
       this.data = JSON.parse(retStr) as Array<AddressEntity>
+      this.data.splice(23, 99)
        PickerOptionsUtils.setFrameOptionsData(0, false, this.data, this.frameOptionsController)
       // this.setPickerOptionsData("省", 1, false, this.data)
       PickerOptionsUtils.setPickerOptionsData(PickerOptionsTag.OPTIONS_ONE, 1, false, this.data, this.pickerOptionsController)
-      //this.pickerOptionsController.setPickerCurrentIndex(PickerOptionsTag.OPTIONS_ONE, 3)
+      this.pickerOptionsController.setPickerCurrentIndex(PickerOptionsTag.OPTIONS_ONE, 3)
     })
   }
 
@@ -52,33 +53,45 @@ export struct DetailsPage04 {
 
       Stack({ alignContent: Alignment.TopStart }) {
 
-        Text('点击弹出筛选框')
-          .fontColor(Color.Brown)
-          .fontSize(15)
-          .align(Alignment.Center)
-          .border({
-            color: Color.Brown,
-            width: 1,
-            radius: 10
-          })
-          .margin({
-            top: 156
-          })
-          .width('100%')
-          .height(50)
-          .onClick(() => {
-            // this.frameOptionsController.setPickerSelectedData(new Array)
-            //this.frameOptionsController.showPicker()
-            this.pickerOptionsController.showPicker()
-          })
-          .onAreaChange((oldValue: Area, newValue: Area) => {
-            this.topHeight = Math.ceil(newValue.position.y as number + (newValue.height as number))
-          })
-          .zIndex(-1)
+        Scroll(){
+          Column(){
+
+            Blank().height(50)
+
+            Text('点击弹出筛选框')
+              .fontColor(Color.Brown)
+              .fontSize(15)
+              .align(Alignment.Center)
+              .border({
+                color: Color.Brown,
+                width: 1
+              })
+              .margin({
+                top: 156
+              })
+              .width('100%')
+              .height(50)
+              .onClick(() => {
+                // this.frameOptionsController.setPickerSelectedData(new Array)
+                //this.frameOptionsController.showPicker()
+                this.pickerOptionsController.showPicker()
+              })
+              .zIndex(-1)
+
+            Divider().color(Color.Orange).width('100%').height(30)
+              .onAreaChange((oldValue: Area, newValue: Area) => {
+                this.topHeight = Math.ceil(newValue.position.y as number + (newValue.height as number))
+              })
+
+            Blank().height(800)
+          }
+          .height('100%')
+        }
 
         RUPickerView({
           pickerOptionsController: this.pickerOptionsController,
           topHeight: this.topHeight,
+          sortCount: 3,
           clickSelected: (tag: string, index: number, item?: IPickerViewData) => {
             switch (tag) {
               case PickerOptionsTag.OPTIONS_ONE:

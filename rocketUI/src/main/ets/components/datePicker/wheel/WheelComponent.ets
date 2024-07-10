@@ -10,7 +10,7 @@ export struct WheelComponent {
   listScroller: Scroller = new Scroller()
 
   build() {
-    List({ scroller: this.listScroller }) {
+    List({ scroller: this.listScroller, initialIndex: this.pickOptions.currentIndex }) {
       ForEach(this.pickOptions.data, (item: IPickerViewData, index: number) => {
         ListItem() {
           if (this.pickOptions.isMultipleSelect) {
