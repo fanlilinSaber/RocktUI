@@ -7,7 +7,14 @@ export struct WheelComponent {
   optionsSelect: (item: IPickerViewData, index: number, tag: string) => void = () => {
   }
   /**私有变量**/
+  @State wheelOptionsController:WheelOptionsController = new WheelOptionsController()
   listScroller: Scroller = new Scroller()
+
+  aboutToAppear(): void {
+    this.wheelOptionsController.setWheelCurrentIndex = (currentIndex: number) => {
+      this.listScroller.scrollToIndex(currentIndex)
+    }
+  }
 
   build() {
     List({ scroller: this.listScroller, initialIndex: this.pickOptions.currentIndex }) {
@@ -191,4 +198,13 @@ export class PickerOptions {
    * 多选后是否支持头内容互斥
    */
   isFirstMutex: boolean = true
+}
+
+
+export class WheelOptionsController {
+  /**
+   * 设置单选当前位置
+   */
+  setWheelCurrentIndex: (currentIndex: number) => void = () => {
+  }
 }
