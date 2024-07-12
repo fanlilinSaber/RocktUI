@@ -25,7 +25,8 @@ let demos: Demo[] = [
   { title: "选择图片/视频demo", value: "RUSelectPicturesDemo" },
   { title: "条件筛选框", value: "RUFilterDemo" },
   { title: "常用TabDemo", value: "RUTabDemo" },
-  { title: "筛选Demo", value: "RUPickerDemo" }
+  { title: "筛选Demo", value: "RUPickerDemo" },
+  { title: "RUTextInput使用", value: "RUTextInputDemo" }
 ];
 
 let storage = LocalStorage.getShared();

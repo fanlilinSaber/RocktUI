@@ -19,6 +19,7 @@ import { RUTabDemo } from "../demo/RUTabDemo"
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { RUFilterDemo } from '../demo/RUFilterDemo';
 import { DemoParams } from './DemoParams';
+import RUTextInputDemo from '../demo/RUTextInputDemo';
 
 
 @Builder
@@ -79,6 +80,8 @@ struct DetailsPage02 {
         RUFilterDemo()
       } else if (this.value == 'RUTabDemo') {
         RUTabDemo()
+      } else if (this.value == 'RUTextInputDemo') {
+        RUTextInputDemo()
       }
     }
   }

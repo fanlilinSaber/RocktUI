@@ -62,8 +62,8 @@ export enum RUNavBarAppearanceMode {
  */
 @Component
 export struct RUNavBar {
-  // 导航栏标题（会根据左右两边菜单占用的宽度控制是否居中显示，如果居中显示有重叠就不相对屏幕居中显示了）
-  @Prop title: string = ''
+  // 导航栏标题（会根据左右两边菜单占用的宽度控制是否居中显示，如果居中显示有重叠就不相对屏幕居中显示了；自定义WrappedBuilder视图区域受左右两边菜单自适应大小）
+  @Prop title: string | WrappedBuilder<[]> = ''
   titleColor: ResourceColor = Color.White
   titleSize?: number | string = 17
   titleWeight?: number | FontWeight | string = FontWeight.Medium
@@ -101,6 +101,8 @@ export struct RUNavBar {
   @BuilderParam customLeftMemus: CustomBuilder = this.doNothingBuilder
   // 自定义右菜单
   @BuilderParam customRightMemus: CustomBuilder = this.doNothingBuilder
+
+  customTitle1?: WrappedBuilder<[]>
 
   private attribute?: RUNavBarAttribute
   @State containerModifier: RUNavBarModifier = new RUNavBarModifier()
@@ -156,7 +158,8 @@ export struct RUNavBar {
   }
 
   // 左侧菜单栏
-  @Builder leftMemuBar() {
+  @Builder
+  leftMemuBar() {
     Column() {
       Row() {
         // 返回按钮
@@ -185,10 +188,15 @@ export struct RUNavBar {
   }
 
   // 中间标题栏
-  @Builder titleBar() {
-    if (this.customTitle && this.customTitle != this.doNothingBuilder) {
+  @Builder
+  titleBar() {
+    if (typeof this.title === 'object' || (this.customTitle && this.customTitle != this.doNothingBuilder)) {
       Column() {
-        this.customTitle()
+        if (typeof this.title === 'object') {
+          this.title.builder()
+        } else if (this.customTitle) {
+          this.customTitle()
+        }
       }
       .justifyContent(FlexAlign.Center)
       .height('100%')
@@ -196,7 +204,7 @@ export struct RUNavBar {
       .displayPriority(99)
       .id("__titleBar")
       .attributeModifier(this.titleBarModifier as RUNavBarModifier)
-    } else  {
+    } else {
       Column() {
         Text(this.title)
           .align(Alignment.Center)
@@ -222,7 +230,8 @@ export struct RUNavBar {
   }
 
   // 右侧菜单栏
-  @Builder rightMemuBar() {
+  @Builder
+  rightMemuBar() {
     Column() {
       Row() {
         if (this.customRightMemus && this.customRightMemus != this.doNothingBuilder) {
@@ -246,7 +255,8 @@ export struct RUNavBar {
   }
 
   // 默认返回按钮
-  @Builder leftBackBar() {
+  @Builder
+  leftBackBar() {
     Row(){
       Image(this.appearance?.backIcon ?? this.backIcon)
         .width(10).height(20)
@@ -274,7 +284,8 @@ export struct RUNavBar {
    * @param items 数据源
    * @param padding 内边距
    */
-  @Builder normalMemus(items: Array<RUNavBarMenuItem> | undefined, padding: Padding) {
+  @Builder
+  normalMemus(items: Array<RUNavBarMenuItem> | undefined, padding: Padding) {
     Row({ space: 10 }) {
       if (Array.isArray(items)) {
         ForEach(items, (item: RUNavBarMenuItem)  => {
