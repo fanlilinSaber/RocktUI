@@ -1,3 +1,6 @@
+## v1.0.11
+    1.新增RUTextInput组件
+
 ## v1.0.10
     1.RUEventBus新增拦截机制
     2.RUPage优化onShown和onHidden时机，作为子TabContent子组件也能触发
