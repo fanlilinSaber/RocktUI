@@ -93,3 +93,5 @@ export { RUPickerView,
   PickerOptionsTag } from './src/main/ets/components/datePicker/RUPickerView'
 
 export { PickerOptions } from './src/main/ets/components/datePicker/wheel/WheelComponent'
+
+export { RUTextInput, RUTextInputLeftIconType, RUTextInputControl } from './src/main/ets/components/textInput/RUTextInput'

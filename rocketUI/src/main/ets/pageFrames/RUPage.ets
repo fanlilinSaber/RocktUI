@@ -172,7 +172,8 @@ export struct RUPage {
     })
   }
 
-  @Builder titleBuilder() {
+  @Builder
+  titleBuilder() {
     this.customTitle?.builder()
   }
 }

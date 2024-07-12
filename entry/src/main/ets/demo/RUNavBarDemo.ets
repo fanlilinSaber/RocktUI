@@ -4,7 +4,8 @@
  * Descrobe:
  */
 
-import { RUNavBar, RUNavBarMenuItem, RUEventData, RUNavBarAppearanceMode } from '@zjos/rocketUI'
+import { RUNavBar, RUNavBarMenuItem, RUEventData, RUNavBarAppearanceMode, RUTextInput,
+  RUTextInputLeftIconType } from '@zjos/rocketUI'
 import promptAction from '@ohos.promptAction'
 import emitter from '@ohos.events.emitter'
 import hilog from '@ohos.hilog'
@@ -34,9 +35,7 @@ export default struct RULoadingDemo {
   @State keyword: string = '111111'
   scroller: Scroller = new Scroller();
 
-
   aboutToAppear() {
-
     this.leftMemus = [
       {icon: $r('app.media.goods_ic_btn_add_to'), action: (): void => this.addAction() },
       {title: '删除', action: (): void => this.deleteAction() },
@@ -109,9 +108,9 @@ export default struct RULoadingDemo {
         RUNavBar({
           title: 'RUNavBar使用',
           customTitle: (): void => { this.customTitle02() },
-          rightMemus: [{icon: $r('app.media.common_Search'), action: this.searchAction, iconSize: {width:35, height: 35}}], barColor: Color.Yellow })
+          rightMemus: [{icon: $r('app.media.common_Search'), action: (): void => this.searchAction(), iconSize: {width:35, height: 35}}], barColor: Color.Yellow })
 
-        RUNavBar({ customTitle: (): void => { this.customTitle02() }, rightMemus: [{title: '搜索', action: this.searchAction}, {title: '|'}, {title: '发布', action: this.searchAction}], forceCenter: false })
+        RUNavBar({ customTitle: (): void => { this.customTitle02() }, rightMemus: [{title: '搜索', action: (): void => this.searchAction() }, {title: '|'}, {title: '发布', action: (): void => this.searchAction()}], forceCenter: false })
 
         RUNavBar({ title: 'RUNavBar使用', customTitle: (): void => { this.customTitle03() } })
 
@@ -164,7 +163,7 @@ export default struct RULoadingDemo {
   }
 
   searchAction() {
-    promptAction.showToast({ message: 'searchAction' })
+    promptAction.showToast({ message: `searchAction:${this.keyword}` })
   }
 
   publishAction() {
@@ -202,25 +201,29 @@ export default struct RULoadingDemo {
   }
 
   @Builder customTitle02() {
-    Column() {
-      Row() {
-        Image($r('app.media.common_Search'))
-          .height(20).width(20).margin({ left: 10 })
-        TextInput({ text: $$this.keyword, placeholder: '请输入搜索内容'})
-          .backgroundColor(Color.Transparent)
-          .layoutWeight(1)
-          .placeholderFont({ size: 13 })
-          .padding(0)
-          .onChange((value: string) => {console.log('TextInput: ' + value)
-          })
-      }
-      .borderRadius(8)
-      .backgroundColor(Color.White)
-      .height(33)
-      .justifyContent(FlexAlign.Center)
-      .clip(true)
-    }
-    .justifyContent(FlexAlign.Center)
+    // TODO: 第一种方式
+    // Column() {
+      // Row() {
+      //   Image($r('app.media.common_Search'))
+      //     .height(20).width(20).margin({ left: 10 })
+      //   TextInput({ text: $$this.keyword, placeholder: '请输入搜索内容'})
+      //     .backgroundColor(Color.Transparent)
+      //     .layoutWeight(1)
+      //     .placeholderFont({ size: 13 })
+      //     .padding(0)
+      //     .onChange((value: string) => {console.log('TextInput: ' + value)
+      //     })
+      // }
+      // .borderRadius(8)
+      // .backgroundColor(Color.White)
+      // .height(33)
+      // .justifyContent(FlexAlign.Center)
+      // .clip(true)
+    // }
+    // .justifyContent(FlexAlign.Center)
+
+    // TODO: 第二种方式
+    RUTextInput({ text: $keyword, leftIcon: RUTextInputLeftIconType.Search })
   }
 
   @Builder customTitle03() {
