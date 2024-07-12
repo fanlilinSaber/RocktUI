@@ -1,5 +1,5 @@
 import { IPickerViewData } from './data/IPickerViewData';
-import { PickerOptions, WheelComponent } from './wheel/WheelComponent'
+import { PickerOptions, WheelComponent, WheelOptionsController } from './wheel/WheelComponent'
 
 /**
  * 列表多级联动选择器
@@ -24,6 +24,7 @@ export struct RUPickerView {
   /**消失监听**/
   onDismissListener: () => void = (): void => {
   }
+  @State wheelOptionsController:WheelOptionsController = new WheelOptionsController()
 
   aboutToAppear(): void {
     this.pickerOptionsController.setMultiplePicker = (count: number) => {
@@ -121,6 +122,7 @@ export struct RUPickerView {
             WheelComponent({
               pickOptions: this.PickerOptionsOne,
               bgColor: $r('app.color.ru_color_FFFFFFFF'),
+              wheelOptionsController: this.wheelOptionsController,
               optionsSelect: (item: IPickerViewData, index: number, tag: string) => {
                 this.clickSelected(tag, index, item)
               }
@@ -161,6 +163,7 @@ export struct RUPickerView {
               })
               .onClick(() => {
                 this.PickerOptionsOne.currentIndex = 0
+                this.wheelOptionsController.setWheelCurrentIndex(0)
                 this.PickerOptionsTwo.data = []
                 this.PickerOptionsThree.data = []
               })
