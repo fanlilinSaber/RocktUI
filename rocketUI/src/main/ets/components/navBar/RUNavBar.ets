@@ -142,7 +142,7 @@ export struct RUNavBar {
     .backgroundColor(this.appearance?.barColor ?? this.barColor)
     // 设置顶部绘制延伸到状态栏
     // .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP])
-    // .padding({ top: this.safeArea ? `${RUConfig.statusBarHeight}px` : 0 })
+    .padding({ top: `${ RUConfig.statusBarHeight}px` })
     .attributeModifier(this.containerModifier as RUNavBarModifier)
   }
 
