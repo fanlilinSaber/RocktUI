@@ -32,7 +32,7 @@ export class RUNavBarAttribute {
       if (newValue.globalPosition.y as number > 0) {
         containerModifier.padding({ top: 0 })
       } else {
-        containerModifier.padding({ top: `${RUConfig.statusBarHeight}px` })
+        containerModifier.padding({ top: `${ RUConfig.statusBarHeight}px` })
       }
       this.containerArea = newValue
       this.updateLayout()
