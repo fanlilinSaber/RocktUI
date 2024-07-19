@@ -41,10 +41,10 @@ export struct DetailsPage04 {
       console.info('TAG: =================' + retStr);
       this.data = JSON.parse(retStr) as Array<AddressEntity>
       this.data.splice(23, 99)
-       PickerOptionsUtils.setFrameOptionsData(0, false, this.data, this.frameOptionsController)
+       PickerOptionsUtils.setFrameOptionsData(0, true, this.data, this.frameOptionsController)
       // this.setPickerOptionsData("省", 1, false, this.data)
-      PickerOptionsUtils.setPickerOptionsData(PickerOptionsTag.OPTIONS_ONE, 1, false, this.data, this.pickerOptionsController)
-      this.pickerOptionsController.setPickerCurrentIndex(PickerOptionsTag.OPTIONS_ONE, 3)
+      //PickerOptionsUtils.setPickerOptionsData(PickerOptionsTag.OPTIONS_ONE, 1, false, this.data, this.pickerOptionsController)
+      //this.pickerOptionsController.setPickerCurrentIndex(PickerOptionsTag.OPTIONS_ONE, 3)
     })
   }
 
@@ -73,8 +73,8 @@ export struct DetailsPage04 {
               .height(50)
               .onClick(() => {
                 // this.frameOptionsController.setPickerSelectedData(new Array)
-                //this.frameOptionsController.showPicker()
-                this.pickerOptionsController.showPicker()
+                this.frameOptionsController.showPicker()
+                //this.pickerOptionsController.showPicker()
               })
               .zIndex(-1)
 
@@ -88,46 +88,46 @@ export struct DetailsPage04 {
           .height('100%')
         }
 
-        RUPickerView({
-          pickerOptionsController: this.pickerOptionsController,
-          topHeight: this.topHeight,
-          sortCount: 3,
-          clickSelected: (tag: string, index: number, item?: IPickerViewData) => {
-            switch (tag) {
-              case PickerOptionsTag.OPTIONS_ONE:
-                PickerOptionsUtils.setPickerOptionsData(PickerOptionsTag.OPTIONS_TWO, 2, true, item?.optionChildren as Array<AddressEntity>,
-                  this.pickerOptionsController)
-              //this.setOptionsData("市", [])
-                this.pickerOptionsController.setPickerSelectedData(PickerOptionsTag.OPTIONS_TWO, new Array)
-                break
-              case PickerOptionsTag.OPTIONS_TWO:
-                break
-            }
-          },
-          backResult: (result: Array<PickerResult>) => {
-            result.forEach((item: PickerResult) => {
-              switch (item.tag) {
-                case PickerOptionsTag.OPTIONS_ONE:
-                  console.log("===========", "result=============" + item.singleResult?.optionsName)
-                  break
-                case PickerOptionsTag.OPTIONS_TWO:
-                  console.log("===========", "result=============" + JSON.stringify(item.multipleResult))
-                  break
-              }
-            })
-          }
-        })
-        // RUFramePickerView({
-        //   frameOptionsController: this.frameOptionsController,
+        // RUPickerView({
+        //   pickerOptionsController: this.pickerOptionsController,
         //   topHeight: this.topHeight,
-        //   backSingleResult: (index: number, result: IPickerViewData) => {
-        //     let optionsValue = result.optionsValue as string
-        //     console.log("=============", "result=================" + optionsValue)
+        //   sortCount: 3,
+        //   clickSelected: (tag: string, index: number, item?: IPickerViewData) => {
+        //     switch (tag) {
+        //       case PickerOptionsTag.OPTIONS_ONE:
+        //         PickerOptionsUtils.setPickerOptionsData(PickerOptionsTag.OPTIONS_TWO, 2, true, item?.optionChildren as Array<AddressEntity>,
+        //           this.pickerOptionsController)
+        //       //this.setOptionsData("市", [])
+        //         this.pickerOptionsController.setPickerSelectedData(PickerOptionsTag.OPTIONS_TWO, new Array)
+        //         break
+        //       case PickerOptionsTag.OPTIONS_TWO:
+        //         break
+        //     }
         //   },
-        //   backMultipleResult: (result: Array<IPickerViewData>) => {
-        //     console.error("=============", "result=================" + JSON.stringify(result))
+        //   backResult: (result: Array<PickerResult>) => {
+        //     result.forEach((item: PickerResult) => {
+        //       switch (item.tag) {
+        //         case PickerOptionsTag.OPTIONS_ONE:
+        //           console.log("===========", "result=============" + item.singleResult?.optionsName)
+        //           break
+        //         case PickerOptionsTag.OPTIONS_TWO:
+        //           console.log("===========", "result=============" + JSON.stringify(item.multipleResult))
+        //           break
+        //       }
+        //     })
         //   }
         // })
+        RUFramePickerView({
+          frameOptionsController: this.frameOptionsController,
+          topHeight: this.topHeight,
+          backSingleResult: (index: number, result: IPickerViewData) => {
+            let optionsValue = result.optionsValue as string
+            console.log("=============", "result=================" + optionsValue)
+          },
+          backMultipleResult: (result: Array<IPickerViewData>) => {
+            console.error("=============", "result=================" + JSON.stringify(result))
+          }
+        })
       }
     }
     .width('100%')

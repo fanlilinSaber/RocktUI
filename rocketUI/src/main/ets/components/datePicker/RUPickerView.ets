@@ -134,7 +134,6 @@ export struct RUPickerView {
                 this.clickSelected(tag, index, item)
               }
             }).layoutWeight(1)
-              .layoutWeight(1)
               .visibility(this.sortCount >= 2 ? Visibility.Visible :
                 this.PickerOptionsTwo.data.length > 0 ? Visibility.Visible : Visibility.None)
             WheelComponent({
@@ -147,6 +146,8 @@ export struct RUPickerView {
               .visibility(this.sortCount == 3 ? Visibility.Visible :
                 this.PickerOptionsThree.data.length > 0 ? Visibility.Visible : Visibility.None)
           }
+          .layoutWeight(1)
+          .backgroundColor(Color.White)
 
           Row() {
             Text('重置')

@@ -42,7 +42,7 @@ export struct WheelComponent {
     //List设置边缘滑动效果
     .edgeEffect(EdgeEffect.None)
     .scrollBar(BarState.Off)
-    .height(280)
+    .height('100%')
     .backgroundColor(this.bgColor)
     .nestedScroll({
       scrollForward: NestedScrollMode.PARENT_FIRST,
