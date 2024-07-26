@@ -52,6 +52,8 @@ export struct RUPage {
   appearance?: RUNavBarAppearance
   // 外观默认模板（appearance、appearanceMode、barColor...等属性互斥，自定义 appearance 优先级最高）
   appearanceMode: RUNavBarAppearanceMode = RUNavBarAppearanceMode.RedMode
+  // 自定义Title部分是否强制居中显示（如果有自定义Title想保持居中模式，可设置为true，注意自己控制左右区域重叠部分，鸿蒙坑就在不能对布局设置优先级）
+  forceCenter: boolean = false
 
   // 如果是基于Navigation的路由管理，默认内部做了自动获取，如果有单独的navPathStack可以外部传进来（用来做自动显示返回按钮和back操作）
   navPathStack?: NavPathStack = undefined
@@ -127,6 +129,7 @@ export struct RUPage {
           onClickBack: this.onClickBack,
           appearance: this.appearance,
           appearanceMode: this.appearanceMode,
+          forceCenter: this.forceCenter,
           customTitle: this.customTitle ? (): void => { this.titleBuilder() } : undefined
         })
       }
