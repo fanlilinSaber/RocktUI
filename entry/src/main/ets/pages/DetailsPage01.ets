@@ -6,36 +6,39 @@
 
 import router from '@ohos.router';
 import LoadingDemo from '../demo/LoadingDemo'
+import RUConfig from '@zjos/rocketUI/src/main/ets/config/RUConfig'
+import { RUPage } from '@zjos/rocketUI';
+import { DemoParams } from './DemoParams';
 
-interface DemoParams{
-  title?: string
-  value?: string
+@Builder
+export function DetailsPage01Builder(param: Object) {
+  NavDestination() {
+    DetailsPage01({ param: param })
+  }.hideTitleBar(true)
 }
 
-@Entry
+@Entry({ routeName: "pages/DetailsPage01" })
 @Component
-struct DetailsPage {
-
+struct DetailsPage01 {
+  param?: Object
   @State title: string = "";
   @State value: string = "";
+  @LocalStorageLink("pageStack") pageStack: NavPathStack = new NavPathStack()
 
   aboutToAppear(){
-    let params = (router.getParams()||{}) as DemoParams
+    let params = (this.param || {}) as DemoParams
     if(params.title){
-      this.title = params.title;
-      this.value = params.value??"";
+      this.title = params.title
+      this.value = params.value ?? ""
     }
   }
 
   build() {
     Column() {
-      this.buildNavbar()
-      this.buildPageFrame()
-      // Navigation() {
-      //
+      // RUPage({ title: "测试" }) {
+        this.buildNavbar()
+        this.buildPageFrame()
       // }
-      // .title('测试标题')
-      // .hideNavBar(false)
     }
     .width('100%')
     .height('100%')
@@ -58,7 +61,8 @@ struct DetailsPage {
           .width('60')
           .fontSize(20)
           .onClick(() => {
-            router.back()
+            // router.back()
+            this.pageStack.pop()
           })
 
         Text(this.title)
@@ -69,13 +73,15 @@ struct DetailsPage {
           .padding({
             right: 30
           })
-      }.height('100%')
-    }.height('64')
+      }.height('56')
+    }
     .shadow({
       radius: 10,
       color: Color.Gray,
       offsetX: 0,
       offsetY: -1
     })
+    .padding({ top: `${RUConfig.statusBarHeight}px` })
   }
 }
+

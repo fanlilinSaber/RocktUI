@@ -5,65 +5,116 @@
  */
 
 import router from '@ohos.router';
-import { RKTPage, RKTNavBar } from '@zjos/rocketUI'
-import RKTLoadingDemo from '../demo/RKTLoadingDemo'
-import RKTNavBarDemo from '../demo/RKTNavBarDemo';
+import { RUPage, RUNavBar, RUProgressUtil, RUEventBus } from '@zjos/rocketUI'
+import RULoadingDemo from '../demo/RULoadingDemo'
+import RUNavBarDemo from '../demo/RUNavBarDemo';
 import promptAction from '@ohos.promptAction'
-import RKTItemInputTextDemo from '../demo/RKTItemInputTextDemo';
-import RKTRefreshDemo from '../demo/RKTRefreshDemo';
-import { RKTPopupDemo } from '../demo/RKTPopupDemo';
-import RKTDialogDemo from '../demo/RKTDialogDemo';
-import { RKTSelectPicturesDemo } from '../demo/RKTSelectPicturesDemo';
-import RKTToastDemo from '../demo/RKTToastDemo'
+import RUItemInputTextDemo from '../demo/RUItemInputTextDemo';
+import RURefreshDemo from '../demo/RURefreshDemo';
+import { RUPopupDemo } from '../demo/RUPopupDemo';
+import RUDialogDemo from '../demo/RUDialogDemo';
+import { RUSelectPicturesDemo } from '../demo/RUSelectPicturesDemo';
+import { RUToastDemo } from '../demo/RUToastDemo'
+import { RUTabDemo } from "../demo/RUTabDemo"
+import { hilog } from '@kit.PerformanceAnalysisKit';
+import { RUFilterDemo } from '../demo/RUFilterDemo';
+import { DemoParams } from './DemoParams';
+import RUTextInputDemo from '../demo/RUTextInputDemo';
 
-interface DemoParams{
-  title?: string
-  value?: string
+
+@Builder
+export function DetailsPage02Builder(param: Object) {
+  DetailsPage02({ param: param })
 }
 
-@Entry
+// @Entry({ routeName: "pages/DetailsPage02" })
 @Component
 struct DetailsPage02 {
+  @LocalStorageLink("pageStack") pageStack: NavPathStack = new NavPathStack()
+  param?: Object
   @State title: string = "";
   value: string = "";
 
   aboutToAppear() {
-    let params = (router.getParams() || {}) as DemoParams
+    let params = (this.param || {}) as DemoParams
     if (params.title) {
-      this.title = params.title;
-      this.value = params.value??"";
+      this.title = params.title
+      this.value = params.value ?? ""
     }
   }
 
   build() {
-    Column() {
-      RKTPage({ title: this.title, titleColor: Color.Black }) {
-        if (this.value == 'RKTLoadingDemo') {
-          RKTLoadingDemo()
-        } else if (this.value == 'RKTNavBarDemo') {
-          RKTNavBarDemo()
-        } else if (this.value == 'RKTItemInputTextDemo') {
-          RKTItemInputTextDemo()
-        } else if (this.value == 'RKTRefreshDemo') {
-          RKTRefreshDemo()
-        } else if (this.value == 'RKTPopupDemo') {
-          RKTPopupDemo()
-        } else if (this.value == 'RKTDialogDemo') {
-          RKTDialogDemo()
-        } else if (this.value == 'RKTSelectPicturesDemo') {
-          RKTSelectPicturesDemo()
-        } else if (this.value == 'RKTToastDemo') {
-          RKTToastDemo()
-        }
+    RUPage({ title: this.title, titleColor: Color.White,
+      onReady:() => {
+        hilog.info(0x00503, `DetailsPage02`, "页面onReady")
+        RUProgressUtil.showLoading()
+        setTimeout(()=>{
+          RUProgressUtil.hideLoading()
+        }, 1000)
+      },
+      onShown:() => {
+        hilog.info(0x00503, `DetailsPage02`, "页面onShown" + this.title)
+      },
+      onHidden:() => {
+        hilog.info(0x00503, `DetailsPage02`, "页面onHidden")
       }
-
-      // RKTPage({title: this.title, navBar: false }) {
-      //   RKTNavBar({title: `` })
-      //
-      //   Text()
-      // }
+      })
+    {
+      if (this.value == 'RULoadingDemo') {
+        RULoadingDemo()
+      } else if (this.value == 'RUNavBarDemo') {
+        RUNavBarDemo()
+      } else if (this.value == 'RUItemInputTextDemo') {
+        RUItemInputTextDemo()
+      } else if (this.value == 'RURefreshDemo') {
+        RURefreshDemo()
+      } else if (this.value == 'RUPopupDemo') {
+        RUPopupDemo()
+      } else if (this.value == 'RUDialogDemo') {
+        RUDialogDemo()
+      } else if (this.value == 'RUSelectPicturesDemo') {
+        RUSelectPicturesDemo()
+      } else if (this.value == 'RUToastDemo') {
+        RUToastDemo()
+      } else if (this.value == 'RUFilterDemo') {
+        RUFilterDemo()
+      } else if (this.value == 'RUTabDemo') {
+        RUTabDemo()
+      } else if (this.value == 'RUTextInputDemo') {
+        RUTextInputDemo()
+      }
     }
-    .width('100%')
-    .height('100%')
   }
+
+  // build() {
+  //   Column() {
+  //     RUPage({ title: this.title, titleColor: Color.White }) {
+  //       if (this.value == 'RULoadingDemo') {
+  //         RULoadingDemo()
+  //       } else if (this.value == 'RUNavBarDemo') {
+  //         RUNavBarDemo()
+  //       } else if (this.value == 'RUItemInputTextDemo') {
+  //         RUItemInputTextDemo()
+  //       } else if (this.value == 'RURefreshDemo') {
+  //         RURefreshDemo()
+  //       } else if (this.value == 'RUPopupDemo') {
+  //         RUPopupDemo()
+  //       } else if (this.value == 'RUDialogDemo') {
+  //         RUDialogDemo()
+  //       } else if (this.value == 'RUSelectPicturesDemo') {
+  //         RUSelectPicturesDemo()
+  //       } else if (this.value == 'RUToastDemo') {
+  //         RUToastDemo()
+  //       }
+  //     }
+  //
+  //     // RUPage({title: this.title, navBar: false }) {
+  //     //   RUNavBar({title: `` })
+  //     //
+  //     //   Text()
+  //     // }
+  //   }
+  //   .width('100%')
+  //   .height('100%')
+  // }
 }

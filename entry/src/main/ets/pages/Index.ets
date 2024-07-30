@@ -1,58 +1,66 @@
-import { RKTProgress } from "@zjos/rocketUI"
+import { RUProgress } from "@zjos/rocketUI"
 import Prompt from '@system.prompt'
 import router from '@ohos.router'
+import { DetailsPage01Builder } from './DetailsPage01';
+import { DetailsPage02Builder } from './DetailsPage02';
+import { DetailsPage03Builder } from './DetailsPage03';
+import { DetailsPage04Builder } from './DetailsPage04';
+import { DetailsPage05Builder } from './DetailsPage05';
 
 interface Demo {
-  text: string;
+  title: string;
   value: string;
 }
 
 let demos: Demo[] = [
-  { text: "加载Loading", value: "LoadingDemo" },
-  { text: "使用RKTPage加载Loading", value: "RKTLoadingDemo" },
-  { text: "消息提示Toast", value: "RKTToastDemo" },
-  { text: "弹出窗口Popup", value: "RKTPopupDemo" },
-  { text: "RKTNavBar使用", value: "RKTNavBarDemo" },
-  { text: "ItemInputText", value: "RKTItemInputTextDemo" },
-  { text: "下拉刷新/上拉加载更多", value: "RKTRefreshDemo" },
-  { text: "其它弹窗demo", value: "RKTDialogDemo" },
-  { text: "选择图片/视频demo", value: "RKTSelectPicturesDemo" },
-  { text: "条件筛选框", value: "RKTConditionalFilteringDemo" }
+  { title: "普通加载Loading", value: "LoadingDemo" },
+  { title: "使用RUPage加载Loading", value: "RULoadingDemo" },
+  { title: "使用RUPage自定义title", value: "RUPageCustomTitleDemo" },
+  { title: "消息提示Toast", value: "RUToastDemo" },
+  { title: "弹出窗口Popup", value: "RUPopupDemo" },
+  { title: "RUNavBar使用", value: "RUNavBarDemo" },
+  { title: "ItemInputText", value: "RUItemInputTextDemo" },
+  { title: "下拉刷新/上拉加载更多", value: "RURefreshDemo" },
+  { title: "其它弹窗demo", value: "RUDialogDemo" },
+  { title: "选择图片/视频demo", value: "RUSelectPicturesDemo" },
+  { title: "条件筛选框", value: "RUFilterDemo" },
+  { title: "常用TabDemo", value: "RUTabDemo" },
+  { title: "筛选Demo", value: "RUPickerDemo" },
+  { title: "RUTextInput使用", value: "RUTextInputDemo" }
 ];
+
+let storage = LocalStorage.getShared();
 
 @Entry
 @Component
 struct Index {
   @State message: string = 'Hello World';
   @State visible: boolean = false;
+  @LocalStorageLink("pageStack") pageStack: NavPathStack = new NavPathStack()
 
   build() {
-    Column() {
-      // RKTNavBar()
-      // Test001()
+    Navigation(this.pageStack) {
       this.buildContent()
-
-      // Text("加载loding")
-      //   .fontSize(50)
-      //   .fontWeight(FontWeight.Bold)
-      //   .onClick(() => {
-      //     // Prompt.showToast({
-      //     //   message: "测试点击"
-      //     // })
-      //     this.visible = true;
-      //
-      //     setTimeout(()=>{
-      //       this.visible = false;
-      //     },3000)
-      //   })
-      //
-      // if(this.visible) {
-      //   RKTProgress({
-      //   })
-      // }
-      // RKTProgress()
     }
-    .width('100%')
+    .hideTitleBar(true)
+    .navDestination(this.pageMap)
+  }
+
+  @Builder pageMap(name: string, param: Object) {
+    // NavDestination() {
+      if (name === 'pages/DetailsPage01') {
+        // 路由到hsp包中的登录页面
+        DetailsPage01Builder(param)
+      } else if (name === 'pages/DetailsPage02') {
+        DetailsPage02Builder(param)
+      } else if (name === 'pages/DetailsPage03') {
+        DetailsPage03Builder(param)
+      } else if (name === 'pages/DetailsPage04') {
+        DetailsPage04Builder(param)
+      } else if (name == 'pages/DetailsPage05') {
+        DetailsPage05Builder(param)
+      }
+    // }.hideTitleBar(true)
   }
 
   @Builder
@@ -60,12 +68,13 @@ struct Index {
     Text("RocketUI Demo示列")
       .height(64)
       .fontSize(25)
+      .margin({ top: 40 })
 
     List({ space: 10 }) {
       ForEach(demos, (item: Demo, index: number) => {
         ListItem() {
           Row() {
-            Text(item.text);
+            Text(item.title);
           }
           .width('100%')
           .backgroundColor(Color.White)
@@ -96,20 +105,17 @@ struct Index {
   }
 
   onDemoClick(item: Demo) {
+
     let url = 'pages/DetailsPage02'
-    if (item.text == '加载Loading') {
+    if (item.value == 'LoadingDemo') {
       url = 'pages/DetailsPage01'
-    } else if (item.text == "条件筛选框") {
-      url = 'pages/DetailsPage03'
+    } else if (item.value == 'RUPageCustomTitleDemo') {
+      url = 'pages/DetailsPage05'
+    } else if (item.value == 'RUPickerDemo') {
+      url = 'pages/DetailsPage04'
     }
 
-    router.pushUrl({
-      url: url,
-      params: {
-        value: item.value,
-        title: item.text
-      }
-    })
-
+    let params: Demo = { value: item.value, title: item.title }
+    this.pageStack.pushPathByName(url, params, true)
   }
 }

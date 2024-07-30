@@ -48,6 +48,18 @@
     {
       "name": "ru_color_FF5792FD",
       "value": "#FF5792FD"
+    },
+    {
+      "name": "ru_color_FF666666",
+      "value": "#FF666666"
+    },
+    {
+      "name": "ru_color_FFEF4033",
+      "value": "#FFEF4033"
+    },
+    {
+      "name": "ru_color_1AEF4033",
+      "value": "#10EF4033"
     }
   ]
 }

@@ -1,89 +1,96 @@
 import {
   AreaData,
-  RKTFilterAllItemComponent,
-  RKTFilterAreaComponent,
-  RKTFilterBoxComponent,
-  RKTFilterBoxComponentConfig,
-  RKTFilterExpandComponentConfig,
-  RKTFilterExpandViewModel
+  RUFilterAllItemComponent,
+  RUFilterAreaComponent,
+  RUFilterBoxComponent,
+  RUFilterBoxComponentConfig,
+  RUFilterExpandComponentConfig,
+  RUFilterExpandViewModel
 } from '@zjos/rocketUI'
 import {
-  RKTFilterBoxComponentButtonType,
-  RKTFilterBoxViewModel
-} from '@zjos/rocketUI/src/main/ets/components/filterBox/viewModel/RKTFilterBoxViewModel'
+  RUFilterBoxComponentButtonType,
+  RUFilterBoxViewModel
+} from '@zjos/rocketUI/src/main/ets/components/filterBox/viewModel/RUFilterBoxViewModel'
 import {
-  RKTFilterExpandComponentType
-} from '@zjos/rocketUI/src/main/ets/components/filterBox/viewModel/RKTFilterExpandViewModel'
+  RUFilterExpandComponentType
+} from '@zjos/rocketUI/src/main/ets/components/filterBox/viewModel/RUFilterExpandViewModel'
+
+@Builder
+export function DetailsPage03Builder(param: Object) {
+  NavDestination() {
+    DetailsPage03()
+  }.hideTitleBar(true)
+}
 
 @Entry
 @Component
 export struct DetailsPage03 {
-  /*外部引用RKTFilterBoxViewModel，并且@Provide装饰器修饰*/
-  @Provide @Watch("change") filterBoxViewModel: RKTFilterBoxViewModel = new RKTFilterBoxViewModel()
-  /*外部引用RKTFilterExpandViewModel，并且@Provide装饰器修饰*/
-  @Provide filterExpandViewModel: RKTFilterExpandViewModel = new RKTFilterExpandViewModel()
-  item1 = [new RKTFilterExpandComponentConfig({
+  /*外部引用RUFilterBoxViewModel，并且@Provide装饰器修饰*/
+  @Provide @Watch("change") filterBoxViewModel: RUFilterBoxViewModel = new RUFilterBoxViewModel()
+  /*外部引用RUFilterExpandViewModel，并且@Provide装饰器修饰*/
+  @Provide filterExpandViewModel: RUFilterExpandViewModel = new RUFilterExpandViewModel()
+  item1 = [new RUFilterExpandComponentConfig({
     text: "选项1",
     id: "1"
-  }), new RKTFilterExpandComponentConfig({
+  }), new RUFilterExpandComponentConfig({
     text: "选项2",
     id: "2"
-  }), new RKTFilterExpandComponentConfig({
+  }), new RUFilterExpandComponentConfig({
     text: "选项3",
     id: "3"
-  }), new RKTFilterExpandComponentConfig({
+  }), new RUFilterExpandComponentConfig({
     text: "选项4",
     id: "4"
-  }), new RKTFilterExpandComponentConfig({
+  }), new RUFilterExpandComponentConfig({
     text: "选项5",
     id: "5"
-  }), new RKTFilterExpandComponentConfig({
+  }), new RUFilterExpandComponentConfig({
     text: "选项6",
     id: "6"
   })]
-  item2 = [new RKTFilterExpandComponentConfig({
+  item2 = [new RUFilterExpandComponentConfig({
     text: "a选项1",
     id: "1"
-  }), new RKTFilterExpandComponentConfig({
+  }), new RUFilterExpandComponentConfig({
     text: "a选项2",
     id: "2"
-  }), new RKTFilterExpandComponentConfig({
+  }), new RUFilterExpandComponentConfig({
     text: "a选项3",
     id: "3"
-  }), new RKTFilterExpandComponentConfig({
+  }), new RUFilterExpandComponentConfig({
     text: "a选项4",
     id: "4"
-  }), new RKTFilterExpandComponentConfig({
+  }), new RUFilterExpandComponentConfig({
     text: "a选项5",
     id: "5"
-  }), new RKTFilterExpandComponentConfig({
+  }), new RUFilterExpandComponentConfig({
     text: "a选项6",
     id: "6"
   })]
-  item3: RKTFilterExpandComponentConfig[][] = this.getAreaData()
+  item3: RUFilterExpandComponentConfig[][] = this.getAreaData()
 
   /*获取区域数据*/
-  getAreaData(): RKTFilterExpandComponentConfig[][] {
+  getAreaData(): RUFilterExpandComponentConfig[][] {
     let data = AreaData.getData()
     /*添加省数据*/
-    let provinceArr : RKTFilterExpandComponentConfig[] = []
-    let cityArr : RKTFilterExpandComponentConfig[]= []
-    let areaArr : RKTFilterExpandComponentConfig[]= []
+    let provinceArr : RUFilterExpandComponentConfig[] = []
+    let cityArr : RUFilterExpandComponentConfig[]= []
+    let areaArr : RUFilterExpandComponentConfig[]= []
 
     data.forEach(province => {
-      let provinceConfig = new RKTFilterExpandComponentConfig({
+      let provinceConfig = new RUFilterExpandComponentConfig({
         text: province.name,
         id: province.id.toString()
       })
       provinceArr.push(provinceConfig)
       province.children?.forEach(city => {
-        let cityConfig = new RKTFilterExpandComponentConfig({
+        let cityConfig = new RUFilterExpandComponentConfig({
           text: city.name,
           id: city.id.toString()
         })
         cityArr.push(cityConfig)
         city.children?.forEach(area => {
-          let areaConfig = new RKTFilterExpandComponentConfig({
+          let areaConfig = new RUFilterExpandComponentConfig({
             text: area.name,
             id: area.id.toString()
           })
@@ -100,15 +107,15 @@ export struct DetailsPage03 {
       if (this.filterBoxViewModel.clickGoodsFilterBoxComponentConfig.index == 4) {
         this.filterExpandViewModel.isSingle = false
         this.filterExpandViewModel.dataArr = this.item1
-        this.filterExpandViewModel.type = RKTFilterExpandComponentType.other
+        this.filterExpandViewModel.type = RUFilterExpandComponentType.other
       } else if (this.filterBoxViewModel.clickGoodsFilterBoxComponentConfig.index == 5) {
         this.filterExpandViewModel.isSingle = true
         this.filterExpandViewModel.dataArr = this.item2
-        this.filterExpandViewModel.type = RKTFilterExpandComponentType.other
+        this.filterExpandViewModel.type = RUFilterExpandComponentType.other
       } else if (this.filterBoxViewModel.clickGoodsFilterBoxComponentConfig.index == 6) {
         this.filterExpandViewModel.isSingle = true
         this.filterExpandViewModel.dataArr = this.item3
-        this.filterExpandViewModel.type = RKTFilterExpandComponentType.area
+        this.filterExpandViewModel.type = RUFilterExpandComponentType.area
       }
     }
   }
@@ -121,82 +128,82 @@ export struct DetailsPage03 {
 
   /*配置条件筛选点击的下拉菜单的选择毁掉*/
   configExpand() {
-    this.filterExpandViewModel.makeSureCallBack = (sel : RKTFilterExpandComponentConfig[] | RKTFilterExpandComponentConfig[]) => {
+    this.filterExpandViewModel.makeSureCallBack = (sel : RUFilterExpandComponentConfig[] | RUFilterExpandComponentConfig[]) => {
       console.debug("选择内容" + JSON.stringify(sel))
     }
   }
 
   /*配置条件筛选*/
   configFilterBox() {
-    let moreOne: RKTFilterBoxComponentConfig = new RKTFilterBoxComponentConfig({
+    let moreOne: RUFilterBoxComponentConfig = new RUFilterBoxComponentConfig({
       text: "多选1",
       index: 0,
-      type: RKTFilterBoxComponentButtonType.normal,
-      clickCallBack: (item : RKTFilterBoxComponentConfig) => {
+      type: RUFilterBoxComponentButtonType.normal,
+      clickCallBack: (item : RUFilterBoxComponentConfig) => {
         /*点击回调*/
         console.debug(JSON.stringify(item))
       }
     })
-    let moreTwo: RKTFilterBoxComponentConfig = new RKTFilterBoxComponentConfig({
+    let moreTwo: RUFilterBoxComponentConfig = new RUFilterBoxComponentConfig({
       text: "多选2",
       index: 1,
-      type: RKTFilterBoxComponentButtonType.normal,
-      clickCallBack: (item : RKTFilterBoxComponentConfig) => {
+      type: RUFilterBoxComponentButtonType.normal,
+      clickCallBack: (item : RUFilterBoxComponentConfig) => {
         /*点击回调*/
         console.debug(JSON.stringify(item))
       }
     })
 
-    let two: RKTFilterBoxComponentConfig = new RKTFilterBoxComponentConfig({
+    let two: RUFilterBoxComponentConfig = new RUFilterBoxComponentConfig({
       text: "互斥1",
       index: 2,
       mutableId: "1",
-      type: RKTFilterBoxComponentButtonType.normal,
-      clickCallBack: (item : RKTFilterBoxComponentConfig) => {
+      type: RUFilterBoxComponentButtonType.normal,
+      clickCallBack: (item : RUFilterBoxComponentConfig) => {
         /*点击回调*/
         console.debug(JSON.stringify(item))
       }
     })
 
-    let three: RKTFilterBoxComponentConfig = new RKTFilterBoxComponentConfig({
+    let three: RUFilterBoxComponentConfig = new RUFilterBoxComponentConfig({
       text: "互斥2",
       index: 3,
       mutableId: "1",
-      type: RKTFilterBoxComponentButtonType.normal,
-      clickCallBack: (item : RKTFilterBoxComponentConfig) => {
+      type: RUFilterBoxComponentButtonType.normal,
+      clickCallBack: (item : RUFilterBoxComponentConfig) => {
         /*点击回调*/
         console.debug(JSON.stringify(item))
       }
     })
 
-    let otherButton: RKTFilterBoxComponentConfig = new RKTFilterBoxComponentConfig({
+    let otherButton: RUFilterBoxComponentConfig = new RUFilterBoxComponentConfig({
       text: "单选下拉",
       index: 4,
-      type: RKTFilterBoxComponentButtonType.rightButton,
+      type: RUFilterBoxComponentButtonType.rightButton,
       canExpand: true,
-      clickCallBack: (item : RKTFilterBoxComponentConfig) => {
+      clickCallBack: (item : RUFilterBoxComponentConfig) => {
         /*点击回调*/
         console.debug(JSON.stringify(item))
       }
     })
 
-    let otherButton1: RKTFilterBoxComponentConfig = new RKTFilterBoxComponentConfig({
+    let otherButton1: RUFilterBoxComponentConfig = new RUFilterBoxComponentConfig({
       text: "多选下拉",
       index: 5,
-      type: RKTFilterBoxComponentButtonType.rightButton,
+      type: RUFilterBoxComponentButtonType.rightButton,
       canExpand: true,
-      clickCallBack: (item : RKTFilterBoxComponentConfig) => {
+      clickCallBack: (item : RUFilterBoxComponentConfig) => {
         /*点击回调*/
         console.debug(JSON.stringify(item))
       }
     })
 
-    let areaSelected: RKTFilterBoxComponentConfig = new RKTFilterBoxComponentConfig({
+    let areaSelected: RUFilterBoxComponentConfig = new RUFilterBoxComponentConfig({
       text: "选择区域",
       index: 6,
-      type: RKTFilterBoxComponentButtonType.rightButton,
+      type: RUFilterBoxComponentButtonType.rightButton,
       canExpand: true,
-      clickCallBack: (item : RKTFilterBoxComponentConfig) => {
+      clickCallBack: (item : RUFilterBoxComponentConfig) => {
         /*点击回调*/
         console.debug(JSON.stringify(item))
       }
@@ -210,12 +217,12 @@ export struct DetailsPage03 {
     Navigation() {
       Column() {
         Row() {
-          RKTFilterBoxComponent()
+          RUFilterBoxComponent()
         }
 
         /*所有可能会显示的下拉框都在这儿*/
-        RKTFilterAreaComponent()
-        RKTFilterAllItemComponent()
+        RUFilterAreaComponent()
+        RUFilterAllItemComponent()
       }
     }
     .navBarWidth("100%")
