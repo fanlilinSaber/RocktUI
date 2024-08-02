@@ -102,8 +102,6 @@ export struct RUNavBar {
   // 自定义右菜单
   @BuilderParam customRightMemus: CustomBuilder = this.doNothingBuilder
 
-  customTitle1?: WrappedBuilder<[]>
-
   private attribute?: RUNavBarAttribute
   @State containerModifier: RUNavBarModifier = new RUNavBarModifier()
   @State leftMemuBarModifier: RUNavBarModifier = new RUNavBarModifier()
