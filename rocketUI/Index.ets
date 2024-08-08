@@ -96,3 +96,12 @@ export { PickerOptions } from './src/main/ets/components/datePicker/wheel/WheelC
 
 export { RUTextInput, RUTextInputLeftIconType, RUTextInputControl } from './src/main/ets/components/textInput/RUTextInput'
 export { RUCommonItemView } from './src/main/ets/components/common/RUCommonItemView'
+
+export { RUTabBarItem, RUTabBarIndicatorType, RUTabBarIndicatorDelegate } from './src/main/ets/components/newTab/RUTabBar'
+
+export { RUTabBarIndicatorLine, RUTabBarIndicatorLineType, RUTabBarIndicatorLineTopBuilder, RUTabBarIndicatorLineBottomBuilder } from './src/main/ets/components/newTab/RUTabBarIndicatorLine'
+export { RUTabBarAutomaticDimension, RUTabBarIndicatorPosition, RUTabBarIndicator } from './src/main/ets/components/newTab/RUTabBarIndicator'
+export { RUTabBarIndicatorBackground, RUTabBarIndicatorBackgroundBuilder } from './src/main/ets/components/newTab/RUTabBarIndicatorBackground'
+export { RUTabBarIndicatorImage, RUTabBarIndicatorImageBuilder } from './src/main/ets/components/newTab/RUTabBarIndicatorImage'
+
+

@@ -20,6 +20,8 @@ import { hilog } from '@kit.PerformanceAnalysisKit';
 import { RUFilterDemo } from '../demo/RUFilterDemo';
 import { DemoParams } from './DemoParams';
 import RUTextInputDemo from '../demo/RUTextInputDemo';
+import RUTabBarDemo from '../demo/RUTabBarDemo';
+import RUTabBarAndTabsDemo from '../demo/RUTabBarAndTabsDemo';
 
 
 @Builder
@@ -82,6 +84,10 @@ struct DetailsPage02 {
         RUTabDemo()
       } else if (this.value == 'RUTextInputDemo') {
         RUTextInputDemo()
+      } else if (this.value == 'RUTabBarDemo') {
+        RUTabBarDemo()
+      } else if (this.value == 'RUTabBarAndTabsDemo') {
+        RUTabBarAndTabsDemo()
       }
     }
   }

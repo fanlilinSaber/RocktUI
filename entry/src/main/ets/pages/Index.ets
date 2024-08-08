@@ -6,6 +6,7 @@ import { DetailsPage02Builder } from './DetailsPage02';
 import { DetailsPage03Builder } from './DetailsPage03';
 import { DetailsPage04Builder } from './DetailsPage04';
 import { DetailsPage05Builder } from './DetailsPage05';
+import { DetailsPage06Builder } from './DetailsPage06';
 
 interface Demo {
   title: string;
@@ -26,7 +27,10 @@ let demos: Demo[] = [
   { title: "条件筛选框", value: "RUFilterDemo" },
   { title: "常用TabDemo", value: "RUTabDemo" },
   { title: "筛选Demo", value: "RUPickerDemo" },
-  { title: "RUTextInput使用", value: "RUTextInputDemo" }
+  { title: "RUTextInput使用", value: "RUTextInputDemo" },
+  { title: "RUTabBar单独使用", value: "RUTabBarDemo" },
+  { title: "RUTabBar和系统Tabs使用", value: "RUTabBarAndTabsDemo" },
+  { title: "RUTabBar和RUTabs使用", value: "RUTabBar和RUTabs使用" },
 ];
 
 let storage = LocalStorage.getShared();
@@ -59,6 +63,8 @@ struct Index {
         DetailsPage04Builder(param)
       } else if (name == 'pages/DetailsPage05') {
         DetailsPage05Builder(param)
+      } else if (name == 'pages/DetailsPage06') {
+        DetailsPage06Builder(param)
       }
     // }.hideTitleBar(true)
   }
@@ -113,6 +119,8 @@ struct Index {
       url = 'pages/DetailsPage05'
     } else if (item.value == 'RUPickerDemo') {
       url = 'pages/DetailsPage04'
+    } else if (item.value == 'RUTabBar和RUTabs使用') {
+      url = 'pages/DetailsPage06'
     }
 
     let params: Demo = { value: item.value, title: item.title }
